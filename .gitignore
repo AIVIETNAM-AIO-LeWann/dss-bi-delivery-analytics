@@ -6,4 +6,7 @@ __pycache__/
 /data/processed/*
 !/data/processed/.gitkeep
 /.pytest_cache/
+*.egg-info/
+/build/
+/dist/
 .DS_Store

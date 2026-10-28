@@ -7,9 +7,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from schema import DERIVED, EXPECTED_SHA256, ORDER_AGGREGATES, SCHEMA
+from .schema import DERIVED, EXPECTED_SHA256, ORDER_AGGREGATES, SCHEMA
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def verify() -> dict:

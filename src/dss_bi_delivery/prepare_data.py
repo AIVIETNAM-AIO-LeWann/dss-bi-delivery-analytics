@@ -12,9 +12,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from schema import DERIVED, EXPECTED_SHA256, ORDER_AGGREGATES, ORDER_FIELDS, SCHEMA
+from .schema import DERIVED, EXPECTED_SHA256, ORDER_AGGREGATES, ORDER_FIELDS, SCHEMA
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DELIVERY_STATUSES = {"Advance shipping", "Late delivery", "Shipping canceled", "Shipping on time"}
 SHIPPING_MODES = {"Standard Class", "First Class", "Second Class", "Same Day"}
 ORDER_STATUSES = {"COMPLETE", "PENDING", "CLOSED", "PENDING_PAYMENT", "CANCELED",
@@ -264,7 +264,7 @@ def run(source: Path, allow_source_change: bool = False) -> dict:
     csv(dictionary, ROOT / "docs/data_dictionary.csv")
     derived = pd.DataFrame(DERIVED + ORDER_AGGREGATES, columns=["column", "dtype", "measurement_scale", "unit", "role", "formula_or_rule_vi", "availability_at_prediction"])
     csv(derived, ROOT / "docs/derived_variables.csv")
-    dictionary_text = "# Data Dictionary\n\nTự sinh bởi `python scripts/prepare_data.py`. Sửa metadata tại `scripts/schema.py`.\n\n"
+    dictionary_text = "# Data Dictionary\n\nTự sinh bởi `python -m dss_bi_delivery.prepare_data`. Sửa metadata tại `src/dss_bi_delivery/schema.py`.\n\n"
     dictionary_text += "Thang đo: nominal = định danh; nominal_binary = định danh nhị phân; interval = khoảng; ratio = tỷ lệ. Không có biến thứ bậc được xác lập trong bộ này. Mã số vẫn là định danh.\n\n"
     dictionary_text += "`assumed_at_order` là giả định cần kiểm chứng, không phải lịch sử sự kiện đã được nguồn xác nhận. Đơn vị tiền tệ chưa được xác minh; không tự đổi sang VND hoặc mặc định USD.\n\n"
     dictionary_text += "## 53 trường nguồn\n\n" + markdown(dictionary[["source_column", "column", "dtype", "measurement_scale", "unit", "role", "availability_at_prediction", "treatment", "description_vi"]])

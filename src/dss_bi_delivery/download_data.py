@@ -8,9 +8,9 @@ import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-from schema import EXPECTED_SHA256
+from .schema import EXPECTED_SHA256
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 URL = "https://www.kaggle.com/api/v1/datasets/download/saicharankomati/dataco-supply-chain-dataset?datasetVersionNumber=1"
 
 

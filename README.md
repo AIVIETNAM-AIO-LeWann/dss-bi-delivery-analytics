@@ -32,21 +32,23 @@ và điều kiện chọn mẫu. Chi tiết và số đếm ở `reports/baselin
 
 ## Chạy lại
 
-Yêu cầu Python 3.10 trở lên. Chạy trong thư mục repo:
+Yêu cầu Python 3.10 trở lên. Cài package ở chế độ editable để chạy module trong
+`src`. Chạy trong thư mục repo; đầu ra vẫn nằm ở `data/`, `docs/` và `reports/`:
 
 ```powershell
 python -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
-.venv\Scripts\python scripts/download_data.py
-.venv\Scripts\python scripts/prepare_data.py
-.venv\Scripts\python scripts/verify_data.py
+.venv\Scripts\python -m pip install -e .
+.venv\Scripts\python -m dss_bi_delivery.download_data
+.venv\Scripts\python -m dss_bi_delivery.prepare_data
+.venv\Scripts\python -m dss_bi_delivery.verify_data
 ```
 
-Nếu dùng Python đã có pandas/numpy đúng phiên bản:
+Nếu dùng Python đã có pandas/numpy đúng phiên bản, cài package một lần trước khi chạy:
 
 ```powershell
-python scripts/prepare_data.py
-python scripts/verify_data.py
+python -m pip install -e .
+python -m dss_bi_delivery.prepare_data
+python -m dss_bi_delivery.verify_data
 ```
 
 Lệnh tải dùng endpoint công khai của Kaggle, ghim phiên bản 1. Nếu Kaggle yêu cầu
@@ -66,7 +68,7 @@ data/processed/order_items_clean.csv     # 180.519 dòng; 54 cột gồm biến 
 data/processed/orders_clean.csv          # 65.752 đơn; 36 cột
 docs/                                   # tài liệu tiếng Việt, dictionary và giả định
 reports/                                # số liệu kiểm tra, KPI và nhật ký 4 bước
-scripts/                                # tải, schema và xử lý có thể chạy lại
+src/dss_bi_delivery/                     # package tải, schema, xử lý và kiểm chứng
 ```
 
 CSV đầu ra dùng UTF-8 BOM, phù hợp mở bằng Excel/Power BI. Khi import phải đặt các
@@ -74,7 +76,8 @@ cột mã là **Text**; CSV không lưu schema nên mở trực tiếp có thể
 mã thành số. Ngày xuất theo `YYYY-MM-DD HH:MM:SS`, chưa gán múi giờ.
 
 File raw, ZIP và processed đã được `.gitignore`; không thêm chúng bằng `git add -f`.
-Tài liệu, script và báo cáo tổng hợp được theo dõi. Không có remote GitHub được cấu hình.
+Tài liệu, mã nguồn và báo cáo tổng hợp được theo dõi. Repo GitHub:
+<https://github.com/AIVIETNAM-AIO-LeWann/dss-bi-delivery-analytics>.
 
 `verify_data.py` đối chiếu độc lập bảng xuất với nguồn: khóa/dòng truy nguyên,
 tổng theo đơn, nhãn gốc, đơn hủy, Same Day có kế hoạch 0 ngày và lợi nhuận âm.

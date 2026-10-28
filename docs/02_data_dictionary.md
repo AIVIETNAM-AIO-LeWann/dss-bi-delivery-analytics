@@ -1,6 +1,6 @@
 # Data Dictionary
 
-Tự sinh bởi `python scripts/prepare_data.py`. Sửa metadata tại `scripts/schema.py`.
+Tự sinh bởi `python -m dss_bi_delivery.prepare_data`. Sửa metadata tại `src/dss_bi_delivery/schema.py`.
 
 Thang đo: nominal = định danh; nominal_binary = định danh nhị phân; interval = khoảng; ratio = tỷ lệ. Không có biến thứ bậc được xác lập trong bộ này. Mã số vẫn là định danh.
 
