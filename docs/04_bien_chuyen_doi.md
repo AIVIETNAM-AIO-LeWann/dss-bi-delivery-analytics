@@ -3,6 +3,13 @@
 Không dùng Compa-Ratio: chỉ số đó thuộc bài toán nhân sự, không phù hợp DataCo.
 Danh mục đầy đủ, kiểu và thang đo ở [derived_variables.csv](derived_variables.csv).
 
+Bước bàn giao phân tích bổ sung có `order_city_unknown_flag` và
+`order_state_unknown_flag` (định danh nhị phân 0/1). Cờ bằng 1 khi tên địa lý thiếu
+hoặc chứa ký tự không thể khôi phục; nhãn được thay bằng `__UNKNOWN__` ở bảng
+`orders_analysis.csv` mà không sửa nguồn. Hai cờ không nằm trong bộ predictor hiện
+tại. `partition` của bảng model splits là định danh tập, không phải feature.
+Schema cho 26 cột bảng phân tích và danh sách predictor ở `analysis_schema.json`.
+
 ## Nhóm biết tại lúc đặt hàng theo giả định dự án
 
 | Biến | Quy tắc | Lưu ý |

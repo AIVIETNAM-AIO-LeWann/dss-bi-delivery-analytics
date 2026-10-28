@@ -1,0 +1,4 @@
+﻿cohort,orders,late_count,late_rate,same_day_orders
+primary_source_duration,62897,36048,0.5731274941571141,3407
+timestamp_consistent_only,59490,34400,0.5782484451168264,0
+without_first_class_sensitivity,53295,26446,0.4962191575194671,3407

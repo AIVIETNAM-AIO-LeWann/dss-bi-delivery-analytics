@@ -269,6 +269,9 @@ def run(source: Path, allow_source_change: bool = False) -> dict:
     dictionary_text += "`assumed_at_order` là giả định cần kiểm chứng, không phải lịch sử sự kiện đã được nguồn xác nhận. Đơn vị tiền tệ chưa được xác minh; không tự đổi sang VND hoặc mặc định USD.\n\n"
     dictionary_text += "## 53 trường nguồn\n\n" + markdown(dictionary[["source_column", "column", "dtype", "measurement_scale", "unit", "role", "availability_at_prediction", "treatment", "description_vi"]])
     dictionary_text += "\n\n## Biến dẫn xuất và biến tổng hợp cấp đơn\n\n" + markdown(derived) + "\n"
+    dictionary_text += "\nBảng phân tích bổ sung `orders_analysis.csv` có schema và vai trò từng trường tại "
+    dictionary_text += "[analysis_schema.json](analysis_schema.json), bao gồm cờ địa lý unknown và allowlist dự báo. "
+    dictionary_text += "Quy tắc dùng từng bảng tại [07_du_lieu_cho_phan_tich.md](07_du_lieu_cho_phan_tich.md).\n"
     (ROOT / "docs/02_data_dictionary.md").write_text(dictionary_text, encoding="utf-8")
 
     summary = {
@@ -318,6 +321,15 @@ def run(source: Path, allow_source_change: bool = False) -> dict:
     report += "7. Không có tổng kiểm soát độc lập từ doanh nghiệp. Kiểm tra checksum, số dòng và đối chiếu nội bộ không chứng minh dữ liệu đầy đủ so với hệ thống gốc.\n\n"
     report += "## Bằng chứng và nhật ký\n\n`column_profile.csv`: 53 cột và thiếu/miền; `preparation_log.csv`: nhật ký 4 bước và số dòng ảnh hưởng; `order_header_consistency.csv`: nhất quán cấp đơn; `numeric_summary.csv`: thống kê; `initial_distributions.csv`: phân phối sơ bộ; `label_consistency.csv`: nhãn; `baseline_kpis.csv`: KPI.\n"
     (reports / "data_quality_report.md").write_text(report, encoding="utf-8")
+    from .analysis_data import export_analysis
+
+    summary["analysis_stage"] = export_analysis(orders, ROOT)
+    with (reports / "data_quality_report.md").open("a", encoding="utf-8") as output:
+        output.write("\n## Làm sạch bổ sung và bàn giao phân tích\n\n"
+                     "Các bảng trên giữ toàn bộ nguồn để đối chiếu. Bảng dùng cho mô tả/chẩn đoán là "
+                     "`data/processed/orders_analysis.csv`; dữ liệu dự báo được tách feature/label/split. "
+                     "Xem [analysis_readiness_report.md](analysis_readiness_report.md) cho xử lý địa danh hỏng, "
+                     "quy tắc loại mẫu, điều tra theo tháng và kiểm tra bàn giao.\n")
     return summary
 
 

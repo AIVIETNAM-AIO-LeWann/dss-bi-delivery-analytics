@@ -17,6 +17,11 @@ nội bộ” chỉ xác nhận đặc tính file, không xác nhận quy trình
 | A10 | Bảng đơn lấy header chung sau kiểm tra và cộng quantity/giá trị dòng | Không có xung đột ở toàn bộ trường header đã chọn trong bản này | Nếu có xung đột trong bản khác thì để thiếu/gắn cờ; không lấy một dòng tùy ý |
 | A11 | Tọa độ là cửa hàng; không có mạng tuyến được quan sát | Từ điển gốc Latitude/Longitude; đề môn học trang 41 | Chưa tính khoảng cách/tuyến/chi phí; bổ sung dataset thích hợp nếu làm tối ưu tuyến |
 | A12 | Các cặp cột bản sao chỉ cần một cột chuẩn | So sánh toàn bộ giá trị của bản đang dùng | Pipeline dừng nếu cặp cột không còn bằng nhau; không suy rộng sang bản mới |
+| A13 | Địa danh hỏng không được đoán lại; dùng nhóm __UNKNOWN__ có cờ trong bảng phân tích | Không thể đảo ngược dấu hỏi thành tên duy nhất từ nguồn | 37 đơn thiếu độ tin cậy cấp city; 100 đơn cấp state trong mẫu chính; không gọi placeholder là giá trị đã sửa |
+| A14 | Bảng chính dùng duration nguồn; bảng timestamp nhất quán chỉ là độ nhạy | Mọi Same Day đều lệch ±0,5 ngày | Bảng đối chiếu 59.490 đơn mất Same Day; không dùng làm mẫu chính để tránh mất cả phương thức |
+| A15 | Train trước 2017; validation nửa đầu 2017; test từ 01/07/2017; chừa 7 ngày trước cut | Thiết kế đánh giá lịch sử trước huấn luyện; gap lớn hơn duration tối đa nguồn 6 ngày | 761 đơn ở purged_boundary; chưa có thời điểm nhãn thật, shipment chỉ là proxy |
+| A16 | Mô hình dự kiến có điều kiện không hủy; candidate chỉ được giả định biết lúc đặt | Cohort tạo từ snapshot lịch sử có outcome | Chưa xác minh cho vận hành thực; cần mở rộng hủy/ba trạng thái nếu dự báo mọi đơn mới |
+| A17 | Phân vị toàn mẫu chỉ phục vụ khám phá chính sách | Tính từ lịch sử theo vùng/phương thức | Đánh giá ngoài mẫu phải tính lại từ train; chưa đặt chi phí hoặc mục tiêu dịch vụ |
 
 ## Những giả định chưa cần đặt ở bước này
 

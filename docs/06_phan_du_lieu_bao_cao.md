@@ -3,6 +3,29 @@
 Nội dung này phản ánh phạm vi DataCo đã thực hiện. Nhóm cần bổ sung phần Solomon
 nếu triển khai tối ưu tuyến; không mô tả phần đó là đã hoàn thành.
 
+## Cập nhật bàn giao phân tích ngày 28/10/2026
+
+Ngoài các bảng trung gian được mô tả dưới đây, nhóm thực hiện bước kiểm tra và
+làm sạch bổ sung để xuất `orders_analysis.csv`, gồm 62.897 đơn và 26 cột, không
+còn ô trống, trùng mã đơn, số vô hạn hoặc chuỗi địa lý có ký tự hỏng. Các cột ZIP,
+tiền chưa xác minh đơn vị và timestamp shipment/span không cần cho bảng logistics
+chính được loại khỏi bảng này, vẫn giữ ở bảng trung gian để đối chiếu. Tên thành
+phố của 37 đơn và tên bang/tỉnh của 100 đơn không thể phục hồi từ nguồn được đổi
+thành nhóm `__UNKNOWN__` kèm cờ, không diễn giải thành địa danh thật đã được sửa.
+
+Có 2.855 đơn hủy được tách khỏi mẫu phân tích, kèm mã và lý do; không sửa nhãn trễ
+nguồn. Bảng timestamp nhất quán 59.490 đơn chỉ dùng kiểm tra độ nhạy vì mất toàn bộ
+Same Day. First Class trễ 100% được xác nhận xuất hiện qua 37 tháng trong mẫu chính;
+nhóm ghi nhận đặc tính này thay vì tự xóa hoặc sửa nhãn.
+
+Đầu vào dự báo được tách thành file candidate, nhãn và phân chia tập theo thời
+gian; không đưa biến kết quả vào candidate. Train trước năm 2017, validation nửa
+đầu năm 2017, test từ tháng 7/2017, với khoảng đệm bảy ngày trước mỗi mốc cắt.
+Thiết kế hiện tại có điều kiện không hủy và chưa chứng minh candidate đã biết tại
+thời điểm đặt trong hệ thống thực. Phân vị duration theo vùng/phương thức được
+chuẩn bị cho khám phá chính sách; chưa huấn luyện mô hình hoặc công bố lợi ích can
+thiệp. Xem `docs/07_du_lieu_cho_phan_tich.md` và `reports/analysis_readiness_report.md`.
+
 ## Nguồn và đặc điểm dữ liệu
 
 Nhóm sử dụng file DataCoSupplyChainDataset.csv tải từ bộ DataCo Supply Chain dataset

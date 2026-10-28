@@ -65,3 +65,7 @@ Số ngày shipping thực tế (mỗi khối xấp xỉ tỷ trọng so với n
 ## Bằng chứng và nhật ký
 
 `column_profile.csv`: 53 cột và thiếu/miền; `preparation_log.csv`: nhật ký 4 bước và số dòng ảnh hưởng; `order_header_consistency.csv`: nhất quán cấp đơn; `numeric_summary.csv`: thống kê; `initial_distributions.csv`: phân phối sơ bộ; `label_consistency.csv`: nhãn; `baseline_kpis.csv`: KPI.
+
+## Làm sạch bổ sung và bàn giao phân tích
+
+Các bảng trên giữ toàn bộ nguồn để đối chiếu. Bảng dùng cho mô tả/chẩn đoán là `data/processed/orders_analysis.csv`; dữ liệu dự báo được tách feature/label/split. Xem [analysis_readiness_report.md](analysis_readiness_report.md) cho xử lý địa danh hỏng, quy tắc loại mẫu, điều tra theo tháng và kiểm tra bàn giao.

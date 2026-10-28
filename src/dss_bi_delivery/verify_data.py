@@ -63,6 +63,50 @@ def verify() -> dict:
     check("no_personal_names_email_password_street_in_exports", not {
         "customer_email", "customer_first_name", "customer_last_name", "customer_password", "customer_street"
     }.intersection(set(items.columns) | set(orders.columns)))
+    # Inspect saved analysis exports, rather than relying on in-memory validation.
+    from .analysis_data import validate_views
+
+    schema = json.loads((ROOT / "docs/analysis_schema.json").read_text(encoding="utf-8"))
+
+    def read_analysis(name: str) -> pd.DataFrame:
+        path = ROOT / "data/processed" / name
+        header = pd.read_csv(path, encoding="utf-8-sig", nrows=0).columns
+        dtypes = {c: meta["dtype"] for c, meta in schema["columns"].items()
+                  if c in header and meta["dtype"] != "datetime"}
+        dtypes["order_id"] = "string"
+        frame = pd.read_csv(path, encoding="utf-8-sig", dtype=dtypes)
+        if "order_datetime" in frame:
+            frame["order_datetime"] = pd.to_datetime(frame["order_datetime"], format="%Y-%m-%d %H:%M:%S", errors="coerce")
+        return frame
+
+    views = {key: read_analysis(name) for key, name in {
+        "analysis": "orders_analysis.csv", "timestamp_consistent": "orders_timestamp_consistent.csv",
+        "features": "orders_model_features.csv", "labels": "orders_model_labels.csv",
+        "splits": "orders_model_splits.csv", "excluded": "orders_excluded.csv",
+    }.items()}
+    validated = validate_views(views, orders)
+    for name, ok in validated["checks"].items():
+        check(f"analysis_{name}", ok)
+    expected_ids = set(raw.loc[raw["Delivery Status"].ne("Shipping canceled"), "Order Id"])
+    check("analysis_order_ids_match_source_non_canceled_orders", set(views["analysis"].order_id) == expected_ids)
+    raw_headers = raw.drop_duplicates("Order Id").set_index("Order Id")
+    a = views["analysis"]
+    for original, clean in [("Order City", "order_city"), ("Order State", "order_state")]:
+        source_values = a.order_id.map(raw_headers[original])
+        bad = source_values.isna() | source_values.str.contains(r"[?\ufffd\x00-\x1f\x7f-\x9f]", regex=True, na=False)
+        check(f"analysis_{clean}_unknown_flags_match_raw_damage", bad.to_numpy().tolist() == a[f"{clean}_unknown_flag"].eq(1).tolist())
+    source_order_time = pd.to_datetime(a.order_id.map(raw_headers["order date (DateOrders)"]), format="%m/%d/%Y %H:%M")
+    source_ship_time = pd.to_datetime(a.order_id.map(raw_headers["shipping date (DateOrders)"]), format="%m/%d/%Y %H:%M")
+    source_days = pd.to_numeric(a.order_id.map(raw_headers["Days for shipping (real)"]))
+    independent_mismatch = ((source_ship_time - source_order_time).dt.total_seconds() / 86400 - source_days).abs().gt(1e-8)
+    check("timestamp_consistent_ids_reconciled_to_raw", set(views["timestamp_consistent"].order_id) == set(a.loc[~independent_mismatch, "order_id"]))
+    split = views["splits"]
+    source_shipping = pd.to_datetime(split.order_id.map(raw_headers["shipping date (DateOrders)"]), format="%m/%d/%Y %H:%M")
+    for name, cutoff_text in [("train", "2017-01-01"), ("validation", "2017-07-01")]:
+        selected = split.partition.eq(name)
+        cutoff = pd.Timestamp(cutoff_text)
+        check(f"{name}_respects_seven_day_gap", split.loc[selected, "order_datetime"].lt(cutoff - pd.Timedelta(days=7)).all())
+        check(f"{name}_source_shipping_before_cutoff", source_shipping.loc[selected].lt(cutoff).all())
     result = {"checks": checks, "passed": sum(checks.values()), "total": len(checks), "all_passed": all(checks.values())}
     (ROOT / "reports/validation_results.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2))

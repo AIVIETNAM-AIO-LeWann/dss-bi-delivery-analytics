@@ -11,3 +11,8 @@ A09,Encoding làm việc CP1252,Strict decode toàn file,Kiểm tra UTF-8 CP1252
 A10,Header phải nhất quán cấp đơn,Check ORDER_FIELDS trước groupby,order_header_consistency.csv,Bảng orders,Đã đối chiếu nội bộ,0 đơn xung đột; để trống trường xung đột nếu bản khác có
 A11,Tọa độ cửa hàng không phải điểm giao,Không tính tuyến từ Latitude/Longitude,Dictionary gốc Mendeley và đề trang 41,Khoảng cách và VRP,Đã đối chiếu mô tả,Cần thêm dữ liệu xe điểm nhận khung giờ hoặc benchmark Solomon
 A12,Chỉ bỏ bản sao khi bằng nhau,6 cặp cột bằng từng giá trị,duplicate_columns.csv,Lựa chọn cột,Đã đối chiếu nội bộ,Pipeline dừng nếu bản mới không còn bằng nhau
+A13,Địa danh hỏng dùng nhóm không xác định,__UNKNOWN__ kèm cờ,analysis_geography_changes.csv,Nhóm địa lý,Quy ước có truy nguyên,37 city và 100 state trong mẫu chính; không đoán địa danh
+A14,Duration nguồn là chỉ báo chính,Timestamp nhất quán chỉ dùng độ nhạy,analysis_sensitivity.csv,Mẫu và Same Day,Quy ước có kiểm tra độ nhạy,Mẫu 59490 đơn mất toàn bộ Same Day
+A15,Chia theo thời gian và chừa gap,Train trước 2017; validation trước 2017-07; gap 7 ngày,model_split_summary.csv,Đánh giá dự báo,Đã kiểm tra kỹ thuật,761 đơn purged; shipment proxy chưa chứng minh thời điểm ghi nhãn
+A16,Mẫu dự báo có điều kiện không hủy,Không đại diện mọi đơn mới,Quy tắc chọn mẫu từ snapshot,Diễn giải xác suất,Chưa xác minh cho vận hành,Cần mở rộng nhãn hủy hoặc ba trạng thái nếu dùng cho mọi đơn
+A17,Phân vị toàn mẫu chỉ dùng khám phá,Không dùng để tính thành tích test,duration_distribution_by_mode_region.csv,Đề xuất cam kết,Chưa đánh giá chính sách,Phải tính lại bằng train và đánh giá ngoài mẫu

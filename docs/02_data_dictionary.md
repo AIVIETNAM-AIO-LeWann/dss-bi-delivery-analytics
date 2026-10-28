@@ -88,3 +88,5 @@ Thang đo: nominal = định danh; nominal_binary = định danh nhị phân; in
 | sales_gross_total | Float64 | ratio | tiền nguồn chưa xác minh loại tiền | candidate | sum(sales_gross); không cộng nếu có ô thiếu hoặc âm trong đơn | assumed_at_order |
 | item_total_net_sum | Float64 | ratio | tiền nguồn chưa xác minh loại tiền | candidate | sum(item_total_net); không cộng nếu có ô thiếu hoặc âm trong đơn | assumed_at_order |
 | order_header_conflict | Int64 | nominal_binary | 0/1 | quality | 1 nếu các dòng cùng order_id không nhất quán ở ORDER_FIELDS; các trường mâu thuẫn để trống | not_feature |
+
+Bảng phân tích bổ sung `orders_analysis.csv` có schema và vai trò từng trường tại [analysis_schema.json](analysis_schema.json), bao gồm cờ địa lý unknown và allowlist dự báo. Quy tắc dùng từng bảng tại [07_du_lieu_cho_phan_tich.md](07_du_lieu_cho_phan_tich.md).

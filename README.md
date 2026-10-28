@@ -17,13 +17,42 @@ chưa làm dashboard, chưa giải bài toán tuyến.
 | Biến chuyển đổi | [04_bien_chuyen_doi.md](docs/04_bien_chuyen_doi.md), [công thức CSV](docs/derived_variables.csv) |
 | Ghi nhận giả định | [05_so_gia_dinh.md](docs/05_so_gia_dinh.md), [sổ CSV](docs/assumption_log.csv) |
 | Nội dung có thể đưa vào báo cáo | [06_phan_du_lieu_bao_cao.md](docs/06_phan_du_lieu_bao_cao.md) |
+| Dữ liệu cho bốn cấp độ phân tích | [07_du_lieu_cho_phan_tich.md](docs/07_du_lieu_cho_phan_tich.md), [kết quả làm sạch bổ sung](reports/analysis_readiness_report.md) |
+
+## Dùng file nào để phân tích?
+
+**Bảng chính: `data/processed/orders_analysis.csv` — 62.897 đơn, 26 cột.**
+Đây là mẫu không hủy, đã kiểm tra khóa/miền/nhãn, không còn ô trống hay chuỗi địa lý
+chứa ký tự hỏng. Có 37 đơn không khôi phục được tên thành phố và 100 đơn không khôi
+phục được tên bang/tỉnh: các ô đó dùng `__UNKNOWN__` kèm cờ, không phải địa danh đã sửa.
+
+| Công việc | File |
+| --- | --- |
+| Mô tả/chẩn đoán theo đơn | `orders_analysis.csv` |
+| Đầu vào dự báo | `orders_model_features.csv`; chỉ cột trong allowlist, bỏ hai khóa khi fit |
+| Nhãn và cách chia tập | `orders_model_labels.csv`, `orders_model_splits.csv` |
+| Độ nhạy khi yêu cầu timestamp nhất quán | `orders_timestamp_consistent.csv` — 59.490 đơn; mất toàn bộ Same Day |
+| Điều tra đơn không thuộc mẫu chính | `orders_excluded.csv` — 2.855 đơn hủy, có lý do |
+| Đầu vào khám phá cam kết giao theo vùng/phương thức | `reports/duration_distribution_by_mode_region.csv` |
+
+Các file đơn nằm trong `data/processed/`. `orders_clean.csv` và
+`order_items_clean.csv` là bảng trung gian giữ nguồn để đối chiếu; không đưa nguyên
+bảng đó vào mô hình. Bảng analysis bỏ ZIP thiếu, cột tiền chưa rõ đơn vị, timestamp
+shipment/span và các trường không cần cho câu hỏi logistics. Duration chính vẫn
+theo chỉ báo nguồn; các giới hạn ngữ nghĩa không thể giải quyết bằng thao tác làm sạch.
+
+Mẫu dự báo hiện có điều kiện **không hủy** trong dữ liệu lịch sử. Trước khi triển
+khai trên mọi đơn mới cần xử lý riêng khả năng hủy và xác minh thời điểm biết từng
+candidate. Chưa huấn luyện mô hình hoặc chứng minh quan hệ nhân quả. Phần tối ưu
+tuyến cần bổ sung dữ liệu; DataCo chưa đủ đầu vào.
 
 ## Kết quả từ bản nguồn đã kiểm tra
 
 - **180.519 dòng × 53 cột; 65.752 đơn hàng.** Mỗi dòng là một dòng hàng.
 - Khóa dòng: `Order Item Id`; khóa đơn: `Order Id`. Không xóa các dòng chỉ vì cùng mã đơn.
 - Thời điểm đặt từ **01/01/2015 đến 31/01/2018**; shipment đến **06/02/2018**.
-- Không có dòng trùng hoàn toàn; không gán giá trị thiếu; không xóa dòng hàng.
+- Không có dòng trùng hoàn toàn; bảng trung gian không gán giá trị thiếu và không
+  xóa dòng hàng. Bảng phân tích riêng dùng nhóm không xác định cho địa danh hỏng.
 - Tỷ lệ nhãn trễ trên mọi đơn: **54,82%**. Mẫu không hủy và đạt kiểm tra logistics: **57,31%**.
 - `Latitude`/`Longitude` là vị trí cửa hàng theo từ điển nguồn, **không phải điểm giao**.
 
@@ -66,6 +95,10 @@ cột rỗng và cột hằng vẫn phải đạt.
 data/raw/DataCoSupplyChainDataset.csv     # nguồn nguyên vẹn, không theo dõi bằng Git
 data/processed/order_items_clean.csv     # 180.519 dòng; 54 cột gồm biến dẫn xuất
 data/processed/orders_clean.csv          # 65.752 đơn; 36 cột
+data/processed/orders_analysis.csv       # 62.897 đơn; 26 cột, dùng cho phân tích chính
+data/processed/orders_model_features.csv # candidate tại lúc đặt; có khóa join riêng
+data/processed/orders_model_labels.csv   # nhãn nguồn giữ nguyên
+data/processed/orders_model_splits.csv   # train/validation/test và khoảng đệm
 docs/                                   # tài liệu tiếng Việt, dictionary và giả định
 reports/                                # số liệu kiểm tra, KPI và nhật ký 4 bước
 src/dss_bi_delivery/                     # package tải, schema, xử lý và kiểm chứng
@@ -83,6 +116,14 @@ Tài liệu, mã nguồn và báo cáo tổng hợp được theo dõi. Repo Git
 tổng theo đơn, nhãn gốc, đơn hủy, Same Day có kế hoạch 0 ngày và lợi nhuận âm.
 Kết quả lưu tại `reports/validation_results.json`. Script kiểm chứng này ghim số đếm
 của phiên bản đã kiểm tra; khi đổi nguồn phải xem lại các mốc, không nới kiểm tra tùy tiện.
+
+`prepare_data` tự chạy cả bước xuất analysis; không cần lệnh làm sạch bổ sung.
+Kiểm tra các trường hợp có thể làm sai dữ liệu (trùng khóa, thiếu quantity, nhãn
+mâu thuẫn, địa danh hỏng, Same Day và khoảng đệm thời gian):
+
+```powershell
+python -m unittest discover -s tests -v
+```
 
 ## Quyết định phương pháp đang dùng
 

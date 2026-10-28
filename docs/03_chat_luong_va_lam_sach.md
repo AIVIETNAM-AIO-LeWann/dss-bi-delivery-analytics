@@ -4,6 +4,13 @@
 Số dòng bị ảnh hưởng của từng thao tác nằm trong `reports/preparation_log.csv`.
 Kết quả thực chạy nằm trong `reports/data_quality_report.md`.
 
+**Cập nhật 28/10/2026:** bốn bước dưới đây mô tả bảng trung gian giữ đầy đủ nguồn.
+Bước làm sạch bổ sung tạo `orders_analysis.csv` để bàn giao cho phân tích; xem
+[quy tắc và đầu ra](07_du_lieu_cho_phan_tich.md), [kết quả thực chạy](../reports/analysis_readiness_report.md).
+Bảng chính có 62.897 đơn, không ô trống. Địa danh hỏng được chuyển thành nhóm không
+xác định có cờ, không tự đoán lại; đơn hủy tách khỏi mẫu chính. Missing ZIP và các
+trường không cần không xuất hiện trong bảng phân tích.
+
 ## Bước 1 — Đảm bảo chất lượng
 
 - Đọc mọi cột CSV dưới dạng chuỗi trước để giữ mã; dùng CP1252 strict, không bỏ qua
@@ -77,12 +84,15 @@ dữ liệu, kiểm tra theo thời gian và xem lại nguồn trước khi khuy
 
 ## Hợp đồng bàn giao cho phần phân tích
 
-1. Dùng `orders_clean.csv` khi trả lời tỷ lệ trễ **theo đơn**; chọn
-   `delivery_kpi_eligible=1` và báo cáo mẫu số. Giữ thêm KPI toàn nguồn để đối chiếu đề.
+1. Dùng `orders_analysis.csv` khi trả lời tỷ lệ trễ **theo đơn**. Đây là mẫu được
+   kiểm tra bổ sung từ `orders_clean.csv` sau khi lọc eligibility; báo cáo mẫu số.
+   Giữ thêm KPI toàn nguồn để đối chiếu đề.
 2. Dùng `order_items_clean.csv` khi phân tích sản phẩm/danh mục; một đơn có nhiều
    danh mục có thể xuất hiện trong nhiều nhóm. Không cộng số đơn các nhóm rồi gọi
    đó là tổng đơn duy nhất; không tùy ý lấy một danh mục đại diện cho đơn.
-3. Bảng chuẩn chứa cả biến kết quả. **Không đưa cả bảng vào mô hình**.
+3. Bảng chuẩn chứa cả biến kết quả. **Không đưa cả bảng vào mô hình**. Dùng
+   `orders_model_features.csv`, `orders_model_labels.csv` và `orders_model_splits.csv`;
+   chỉ lấy các cột trong `model_feature_columns` của `analysis_schema.json` khi fit.
    `role=candidate` chỉ là danh sách xem xét, không phải danh sách đã được chứng minh
    sẵn có tại thời điểm đặt hàng. ID, cờ chất lượng, trạng thái kết quả, lợi nhuận,
    timestamp shipment và các biến duration thực tế không được tự động thành feature.
