@@ -1,0 +1,10 @@
+{
+  "dataset_slug": "saicharankomati/dataco-supply-chain-dataset",
+  "requested_version": 1,
+  "download_url": "https://www.kaggle.com/api/v1/datasets/download/saicharankomati/dataco-supply-chain-dataset?datasetVersionNumber=1",
+  "retrieved_at_utc": "2026-10-26T13:07:35.817164+00:00",
+  "csv_file": "DataCoSupplyChainDataset.csv",
+  "csv_bytes": 95729629,
+  "csv_sha256": "994b3c8d24049cc46bf20e8161fedece9a9b95376cc0dc929921d76cf6b9bc0d",
+  "archive_sha256": "04c31c9b57a2c35a58f42f90fa0076193c8bf4335f37c798ac8a78cacf5811a3"
+}

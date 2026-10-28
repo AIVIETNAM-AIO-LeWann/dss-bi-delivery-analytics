@@ -1,0 +1,13 @@
+id,assumption_vi,value_or_rule,basis_or_source,affects,status,sensitivity_or_validation
+A01,KPI chính cấp đơn,group by Order Id,Kiểm tra khóa và order_header_consistency.csv,KPI và chia tập,Đã đối chiếu nội bộ,So sánh order_item với order trong baseline_kpis.csv
+A02,Loại đơn hủy khỏi mẫu chính,delivery_kpi_eligible=1,Nhãn Shipping canceled và quy ước dự án,Mẫu số tỷ lệ trễ,Quy ước có kiểm tra độ nhạy,54.8242% toàn đơn;57.3127% mẫu chính;57.4245% COMPLETE/CLOSED
+A03,Giữ nhãn nguồn,Late_delivery_risk không ghi đè,label_consistency.csv,Nhãn và biến trễ,Đã đối chiếu nội bộ,4423 dòng hủy có delay_days>0 nhưng nhãn 0
+A04,Duration chính theo trường shipping,Days for shipping real,Dictionary nguồn và đối chiếu timestamp,Duration và Same Day,Chưa rõ cơ chế nguồn,9737 dòng lệch timestamp; chưa chạy độ nhạy cam kết
+A05,Mốc dự báo lúc đặt hàng,order_datetime,Quy ước câu hỏi dự kiến của dự án,Danh sách predictor,Chưa triển khai mô hình,Loại outcome; chia theo thời gian và kiểm tra nhãn đã quan sát đủ
+A06,Candidate đã biết lúc đặt hàng,assumed_at_order,Giả định nghiệp vụ chưa có event log,Leakage và tính dùng được thực tế,Chưa xác minh,Rà lại từng candidate trước huấn luyện
+A07,Giữ datetime không timezone,Không chuyển UTC;weekend=Saturday/Sunday,Chuỗi nguồn không có offset,Đặc trưng lịch,Quy ước làm việc,Không gọi weekend là ngày nghỉ ở mọi quốc gia
+A08,Đơn vị tiền nhất quán trong đơn,Chưa xác minh loại tiền,Không có mã tiền,Giá trị cộng cấp đơn,Chưa xác minh,Không tự ghi USD/VND hoặc đưa kết luận tài chính toàn cầu
+A09,Encoding làm việc CP1252,Strict decode toàn file,Kiểm tra UTF-8 CP1252 Latin-1,Tên địa lý,Đã kiểm tra giải mã,CP1252 không sinh C1;Latin-1 sinh 20;dấu hỏi chưa phục hồi
+A10,Header phải nhất quán cấp đơn,Check ORDER_FIELDS trước groupby,order_header_consistency.csv,Bảng orders,Đã đối chiếu nội bộ,0 đơn xung đột; để trống trường xung đột nếu bản khác có
+A11,Tọa độ cửa hàng không phải điểm giao,Không tính tuyến từ Latitude/Longitude,Dictionary gốc Mendeley và đề trang 41,Khoảng cách và VRP,Đã đối chiếu mô tả,Cần thêm dữ liệu xe điểm nhận khung giờ hoặc benchmark Solomon
+A12,Chỉ bỏ bản sao khi bằng nhau,6 cặp cột bằng từng giá trị,duplicate_columns.csv,Lựa chọn cột,Đã đối chiếu nội bộ,Pipeline dừng nếu bản mới không còn bằng nhau

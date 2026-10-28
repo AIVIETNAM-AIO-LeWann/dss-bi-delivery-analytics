@@ -1,0 +1,54 @@
+﻿source_column,column,raw_missing,raw_missing_rate,clean_missing,unique_nonmissing,clean_dtype_before_drop,treatment
+Type,payment_type,0,0.0,0,4,string,keep
+Days for shipping (real),shipping_days_actual,0,0.0,0,7,Int64,keep
+Days for shipment (scheduled),shipping_days_scheduled,0,0.0,0,4,Int64,keep
+Benefit per order,benefit_per_order,0,0.0,0,21998,Float64,drop_duplicate
+Sales per customer,sales_per_customer,0,0.0,0,2927,Float64,drop_duplicate
+Delivery Status,delivery_status,0,0.0,0,4,string,keep
+Late_delivery_risk,late_delivery_risk,0,0.0,0,2,Int64,keep
+Category Id,category_id,0,0.0,0,51,string,keep
+Category Name,category_name,0,0.0,0,50,string,keep
+Customer City,customer_city,0,0.0,0,563,string,keep
+Customer Country,customer_country,0,0.0,0,2,string,keep
+Customer Email,customer_email,0,0.0,0,1,string,drop_personal
+Customer Fname,customer_first_name,0,0.0,0,782,string,drop_personal
+Customer Id,customer_id,0,0.0,0,20652,string,keep
+Customer Lname,customer_last_name,8,4.431666472781258e-05,8,1109,string,drop_personal
+Customer Password,customer_password,0,0.0,0,1,string,drop_personal
+Customer Segment,customer_segment,0,0.0,0,3,string,keep
+Customer State,customer_state,0,0.0,0,46,string,keep
+Customer Street,customer_street,0,0.0,0,6953,string,drop_personal
+Customer Zipcode,customer_zipcode,3,1.661874927292972e-05,3,995,string,keep_missing
+Department Id,department_id,0,0.0,0,11,string,keep
+Department Name,department_name,0,0.0,0,11,string,keep
+Latitude,store_latitude,0,0.0,0,11250,Float64,keep
+Longitude,store_longitude,0,0.0,0,4487,Float64,keep
+Market,market,0,0.0,0,5,string,keep
+Order City,order_city,0,0.0,0,3597,string,keep
+Order Country,order_country,0,0.0,0,164,string,keep
+Order Customer Id,order_customer_id,0,0.0,0,20652,string,drop_duplicate
+order date (DateOrders),order_datetime,0,0.0,0,65752,datetime64[ns],keep
+Order Id,order_id,0,0.0,0,65752,string,keep
+Order Item Cardprod Id,order_item_product_id,0,0.0,0,118,string,drop_duplicate
+Order Item Discount,item_discount,0,0.0,0,1017,Float64,keep
+Order Item Discount Rate,item_discount_rate,0,0.0,0,18,Float64,keep
+Order Item Id,order_item_id,0,0.0,0,180519,string,keep
+Order Item Product Price,item_unit_price,0,0.0,0,75,Float64,keep
+Order Item Profit Ratio,item_profit_ratio,0,0.0,0,162,Float64,keep
+Order Item Quantity,item_quantity,0,0.0,0,5,Int64,keep
+Sales,sales_gross,0,0.0,0,193,Float64,keep
+Order Item Total,item_total_net,0,0.0,0,2927,Float64,keep
+Order Profit Per Order,order_profit_per_order,0,0.0,0,21998,Float64,keep
+Order Region,order_region,0,0.0,0,23,string,keep
+Order State,order_state,0,0.0,0,1089,string,keep
+Order Status,order_status,0,0.0,0,9,string,keep
+Order Zipcode,order_zipcode,155679,0.8623967560201419,155679,609,string,keep_missing
+Product Card Id,product_id,0,0.0,0,118,string,keep
+Product Category Id,product_category_id,0,0.0,0,51,string,drop_duplicate
+Product Description,product_description,180519,1.0,180519,0,string,drop_empty
+Product Image,product_image,0,0.0,0,118,string,drop_irrelevant
+Product Name,product_name,0,0.0,0,118,string,keep
+Product Price,product_price,0,0.0,0,75,Float64,drop_duplicate
+Product Status,product_status,0,0.0,0,1,Int64,drop_constant
+shipping date (DateOrders),shipping_datetime,0,0.0,0,63701,datetime64[ns],keep
+Shipping Mode,shipping_mode,0,0.0,0,4,string,keep

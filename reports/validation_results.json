@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "raw_checksum_unchanged": true,
+    "all_source_lines_preserved": true,
+    "order_item_identity_preserved_in_source_order": true,
+    "source_row_trace_complete": true,
+    "orders_are_unique_and_complete": true,
+    "per_order_line_count_reconciles": true,
+    "per_order_total_quantity_reconciles": true,
+    "per_order_sales_gross_total_reconciles": true,
+    "per_order_item_total_net_sum_reconciles": true,
+    "target_labels_unchanged": true,
+    "zero_day_same_day_preserved": true,
+    "canceled_rows_retained_but_excluded_from_primary_kpi": true,
+    "canceled_positive_delay_does_not_overwrite_target": true,
+    "negative_profit_preserved": true,
+    "dates_preserve_original_order_timestamp": true,
+    "item_dictionary_covers_all_exported_columns": true,
+    "order_dictionary_covers_all_exported_columns": true,
+    "primary_order_kpi_reconciles": true,
+    "no_personal_names_email_password_street_in_exports": true
+  },
+  "passed": 19,
+  "total": 19,
+  "all_passed": true
+}

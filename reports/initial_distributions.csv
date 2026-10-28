@@ -1,0 +1,50 @@
+﻿grain,field,value,count
+order,shipping_days_actual,2,20554
+order,shipping_days_actual,6,10460
+order,shipping_days_actual,4,10423
+order,shipping_days_actual,3,10408
+order,shipping_days_actual,5,10336
+order,shipping_days_actual,0,1844
+order,shipping_days_actual,1,1727
+order,shipping_days_scheduled,4,39324
+order,shipping_days_scheduled,2,12778
+order,shipping_days_scheduled,1,10079
+order,shipping_days_scheduled,0,3571
+order,delay_days,1,22120
+order,delay_days,0,12267
+order,delay_days,2,10461
+order,delay_days,-2,7910
+order,delay_days,-1,7877
+order,delay_days,4,2564
+order,delay_days,3,2553
+order,shipping_mode,Standard Class,39324
+order,shipping_mode,Second Class,12778
+order,shipping_mode,First Class,10079
+order,shipping_mode,Same Day,3571
+order,order_region,Western Europe,10010
+order,order_region,Central America,9396
+order,order_region,South America,4979
+order,order_region,Oceania,4362
+order,order_region,Southeast Asia,4356
+order,order_region,Northern Europe,3716
+order,order_region,Southern Europe,3543
+order,order_region,South Asia,3335
+order,order_region,Eastern Asia,3318
+order,order_region,Caribbean,2806
+order,order_region,West of USA,2667
+order,order_region,East of USA,2323
+order,order_region,West Asia,2022
+order,order_region,US Center,1935
+order,order_region,South of  USA,1345
+order,order_region,Eastern Europe,1292
+order,order_region,West Africa,1223
+order,order_region,North Africa,1064
+order,order_region,East Africa,613
+order,order_region,Central Africa,556
+order,order_region,Southern Africa,398
+order,order_region,Canada,309
+order,order_region,Central Asia,184
+order,delivery_status,Late delivery,36048
+order,delivery_status,Advance shipping,15127
+order,delivery_status,Shipping on time,11722
+order,delivery_status,Shipping canceled,2855

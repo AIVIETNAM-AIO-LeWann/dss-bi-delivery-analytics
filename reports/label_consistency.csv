@@ -1,0 +1,6 @@
+﻿delivery_status,late_delivery_risk,is_late_from_days,line_count
+Advance shipping,0,0,41592
+Late delivery,1,1,98977
+Shipping canceled,0,0,3331
+Shipping canceled,0,1,4423
+Shipping on time,0,0,32196
