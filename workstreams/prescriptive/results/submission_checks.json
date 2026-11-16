@@ -1,0 +1,20 @@
+{
+  "scope": "TV5 Phân tích đề xuất only, deadline 2026-11-10",
+  "word_report_pages": 9,
+  "word_report_tables": 5,
+  "word_route_images": 2,
+  "word_all_pages_visually_reviewed": true,
+  "word_render_sha256": "d6970b186784656143a199c5a82fba987dd7e84903ca5a466979d12f51b50e52",
+  "input_copies_match_upstream": true,
+  "readback_check_count": 21,
+  "source_audit_check_count": 238,
+  "standalone_replay_passed": true,
+  "financial_amounts": "scenario assumptions only, no realized ROI claim",
+  "cross_member_audit": "DOI_CHIEU_THANH_VIEN.md; no separate TV1/TV6 report available",
+  "required_deliverables": [
+    "Word report",
+    "README",
+    "TV5 results and source package"
+  ],
+  "complete": true
+}

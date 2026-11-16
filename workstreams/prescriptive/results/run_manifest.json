@@ -1,0 +1,25 @@
+{
+  "python": "3.14.7",
+  "source_sha256": {
+    "TV4-Ngọc Quang/Ngoc_Quang_Chu_de_18/source_snapshot/data/processed/orders_analysis.csv": "5d9c405b35da33deab51a830783e4fea1bf06828ceb7681c7438beeb1b02e2ba",
+    "TV4-Ngọc Quang/Ngoc_Quang_Chu_de_18/inputs/orders_model_splits.csv": "639748939481109ef61c476a26972dbd7bf638e995506e6af372ac8d5c13aed1",
+    "TV4-Ngọc Quang/Ngoc_Quang_Chu_de_18/results/predictions_test.csv": "30b093e89524fc07efe5ba5f07152d607171ea83fc621e03f0aad68d47b1e57d",
+    "TV5_Hoai_Phu/inputs/c101.txt": "bb9cc415285b1f18ed5ba1428c1caa9e31e880c72c7561587b061266229cf077",
+    "TV5_Hoai_Phu/inputs/r101.txt": "6c93fc10138a643d7827da23b74b70cc09f3c5debafd58c81514b4d735d858a0",
+    "TV5_Hoai_Phu/inputs/rc101.txt": "bbf8c5a3e429265d69ed711184054c83788de2f92d376b69da27c898a9a2c472"
+  },
+  "solomon_original_reference": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+  "download_mirror": "https://raw.githubusercontent.com/ashishshukla77/solomon-vrptw-optimization/main/data/solomon/{instance}.txt",
+  "provenance_limit": "SINTEF ZIP returned HTTP 403. Files downloaded from mirror; byte identity with original ZIP not independently verified.",
+  "routing_objective": "minimize scaled distance subject to max fleet, capacity, hard windows; no vehicle fixed cost; no global optimality claim",
+  "routing_time_limit_seconds_per_run": 8,
+  "distance_time_scale": 1000,
+  "rounding": "ceil distance arcs; validate output separately using double Euclidean",
+  "fuel": "all conversion/consumption/price values are illustrative scenario assumptions, not current observed prices",
+  "promise": "all quantiles fit on train; report validation and test separately; service targets not approved; no causal effect claim",
+  "versions": {
+    "pandas": "3.1.1",
+    "numpy": "2.5.4",
+    "ortools": "9.15.6755"
+  }
+}

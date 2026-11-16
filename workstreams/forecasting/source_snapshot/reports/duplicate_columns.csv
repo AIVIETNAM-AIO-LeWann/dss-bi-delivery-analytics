@@ -1,0 +1,7 @@
+﻿left,right,mismatch_rows
+benefit_per_order,order_profit_per_order,0
+sales_per_customer,item_total_net,0
+product_price,item_unit_price,0
+order_customer_id,customer_id,0
+product_category_id,category_id,0
+order_item_product_id,product_id,0

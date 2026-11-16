@@ -1,0 +1,26 @@
+{
+  "checks_passed": 18,
+  "checks": [
+    "Overview count matches full non-canceled population",
+    "Overview late rate matches source",
+    "Mode filter changes overview denominator",
+    "Default threshold produces 4,560 alerts",
+    "Default confusion matrix includes 3,467 false negatives",
+    "Threshold 0.4 alerts all test orders",
+    "No alerts for Standard Class at threshold 0.5",
+    "Undefined precision is blank rather than zero",
+    "No train orders leak into the risk page",
+    "Default promise policy matches TV5 test rate",
+    "Current promise policy preserves test baseline",
+    "Q90 policy has zero retrospective exceedance on the test sample",
+    "Routing distance matches C101 OR-Tools",
+    "Fuel price changes simulated cost",
+    "No-solution distance is missing, not zero",
+    "No-solution case does not show a stale route map",
+    "Mobile page has no horizontal overflow",
+    "No browser JavaScript errors"
+  ],
+  "scope": "Offline preview only, not native Power BI rendering",
+  "browser": "Microsoft Edge headless",
+  "errors": []
+}

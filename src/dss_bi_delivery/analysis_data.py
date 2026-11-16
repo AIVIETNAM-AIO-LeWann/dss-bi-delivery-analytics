@@ -202,11 +202,11 @@ def export_analysis(orders: pd.DataFrame, root: Path) -> dict:
 
     views = build_analysis(orders)
     validation = validate_views(views, orders)
-    reports = root / "reports"
+    reports = root / "reports/data_quality"
     reports.mkdir(parents=True, exist_ok=True)
     (reports / "analysis_validation.json").write_text(json.dumps(validation, indent=2) + "\n", encoding="utf-8")
     if not validation["all_passed"]:
-        raise ValueError("Analysis data failed validation. See reports/analysis_validation.json")
+        raise ValueError("Analysis data failed validation. See reports/data_quality/analysis_validation.json")
     names = {"analysis": "orders_analysis.csv", "timestamp_consistent": "orders_timestamp_consistent.csv",
              "features": "orders_model_features.csv", "labels": "orders_model_labels.csv",
              "splits": "orders_model_splits.csv", "excluded": "orders_excluded.csv"}
@@ -255,7 +255,7 @@ def export_analysis(orders: pd.DataFrame, root: Path) -> dict:
               "forecast_scope": "late delivery conditional on non-cancellation in this historical snapshot",
               "model_split_policy": {"validation_start": "2017-01-01", "test_start": "2017-07-01", "purge_days": 7,
                  "availability_proxy": "shipping_datetime; actual time of outcome recording is not supplied"}}
-    (root / "docs/analysis_schema.json").write_text(json.dumps(schema, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (root / "docs/data_preparation/analysis_schema.json").write_text(json.dumps(schema, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     summary = {"input_orders": len(orders), "analysis_orders": len(a), "analysis_columns": len(a.columns),
                "excluded_orders": len(views["excluded"]), "timestamp_consistent_orders": len(views["timestamp_consistent"]),
                "unknown_city_orders": int(a.order_city_unknown_flag.sum()), "unknown_state_orders": int(a.order_state_unknown_flag.sum()),
@@ -285,6 +285,6 @@ def export_analysis(orders: pd.DataFrame, root: Path) -> dict:
     report += "Same Day có chênh lệch ±0,5 ngày giữa duration và khoảng timestamp. Dữ liệu không chứng minh cơ chế; không ép hai trường bằng nhau. Nếu chỉ giữ timestamp nhất quán thì mất toàn bộ Same Day, vì vậy bảng đó chỉ dùng độ nhạy, không thay mẫu chính.\n\n"
     report += markdown(pd.DataFrame(sensitivity).round(6)) + "\n\n## Chia tập lịch sử\n\n" + markdown(split_summary) + "\n\n"
     report += "Các cut 01/01/2017 và 01/07/2017 được chốt trước huấn luyện. Chừa 7 ngày trước mỗi cut (lớn hơn duration tối đa 6 ngày của bản nguồn); dùng shipping timestamp làm proxy bổ sung. Thời điểm ghi nhận nhãn thật chưa được nguồn cung cấp nên đây chưa là chứng minh hết leakage. Mọi encoding/gán giá trị/scaling và tổng hợp lịch sử phải fit trên train. Không dùng dòng purged_boundary để fit hoặc chấm điểm.\n\n"
-    report += f"Kiểm tra bàn giao: **{validation['passed']}/{validation['total']}**. Xem analysis_validation.json; dictionary và allowlist tại docs/analysis_schema.json.\n"
+    report += f"Kiểm tra bàn giao: **{validation['passed']}/{validation['total']}**. Xem analysis_validation.json; dictionary và allowlist tại docs/data_preparation/analysis_schema.json.\n"
     (reports / "analysis_readiness_report.md").write_text(report, encoding="utf-8")
     return summary

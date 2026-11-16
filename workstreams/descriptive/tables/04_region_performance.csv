@@ -1,0 +1,24 @@
+order_region,market,order_count,order_share_pct,late_count,late_rate_pct,scheduled_mean,actual_mean,delay_mean
+Western Europe,Europe,9563,15.2,5585,58.4,2.92,3.52,0.59
+Central America,LATAM,9001,14.31,5156,57.28,2.94,3.51,0.56
+South America,LATAM,4738,7.53,2696,56.9,2.95,3.5,0.55
+Oceania,Pacific Asia,4175,6.64,2382,57.05,2.93,3.5,0.57
+Southeast Asia,Pacific Asia,4173,6.63,2421,58.02,2.95,3.53,0.57
+Northern Europe,Europe,3564,5.67,1996,56.0,2.95,3.48,0.53
+Southern Europe,Europe,3390,5.39,1895,55.9,2.94,3.45,0.51
+South Asia,Pacific Asia,3219,5.12,1865,57.94,2.9,3.49,0.59
+Eastern Asia,Pacific Asia,3171,5.04,1818,57.33,2.96,3.53,0.57
+Caribbean,LATAM,2675,4.25,1487,55.59,2.96,3.49,0.53
+West of USA,USCA,2536,4.03,1451,57.22,2.94,3.51,0.56
+East of USA,USCA,2219,3.53,1276,57.5,2.93,3.51,0.58
+West Asia,Pacific Asia,1935,3.08,1132,58.5,2.91,3.49,0.59
+US Center,USCA,1852,2.94,1071,57.83,2.89,3.47,0.58
+South of USA,USCA,1280,2.04,753,58.83,2.89,3.51,0.62
+Eastern Europe,Europe,1246,1.98,723,58.03,2.93,3.52,0.59
+West Africa,Africa,1174,1.87,626,53.32,3.0,3.51,0.51
+North Africa,Africa,1013,1.61,578,57.06,2.91,3.46,0.55
+East Africa,Africa,589,0.94,348,59.08,2.9,3.49,0.59
+Central Africa,Africa,533,0.85,320,60.04,2.92,3.54,0.63
+Southern Africa,Africa,380,0.6,214,56.32,3.02,3.49,0.47
+Canada,USCA,291,0.46,153,52.58,2.95,3.38,0.43
+Central Asia,Pacific Asia,180,0.29,102,56.67,2.86,3.5,0.64

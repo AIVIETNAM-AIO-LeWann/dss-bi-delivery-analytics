@@ -1,0 +1,14 @@
+﻿feature,validation_log_loss_increase,repeat_std
+shipping_mode,2.42324190793,0.123048097835
+order_month,0,0
+order_weekday,0,0
+order_is_weekend,0,0
+order_year,0,0
+shipping_days_scheduled,0,0
+market,0,0
+order_region,0,0
+order_country,0,0
+customer_segment,0,0
+payment_type,0,0
+line_count,0,0
+total_quantity,0,0

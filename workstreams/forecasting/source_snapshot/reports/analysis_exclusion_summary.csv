@@ -1,0 +1,13 @@
+﻿reason,excluded_orders
+shipping_canceled,2855
+missing_or_duplicate_order_id,0
+missing_or_damaged_required_category,0
+invalid_shipping_mode,0
+invalid_payment_type,0
+invalid_customer_segment,0
+invalid_market,0
+missing_or_invalid_datetime,0
+invalid_numeric_domain,0
+invalid_or_inconsistent_label,0
+source_validation_failure,0
+order_header_conflict,0

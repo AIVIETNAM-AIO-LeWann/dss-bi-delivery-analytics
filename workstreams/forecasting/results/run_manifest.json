@@ -1,0 +1,72 @@
+{
+  "run_utc": "2026-11-05T10:08:20.201115+00:00",
+  "upstream_commit": "6fd157327b8fc05d6011e71659db86048dead818",
+  "source_sha256": "994b3c8d24049cc46bf20e8161fedece9a9b95376cc0dc929921d76cf6b9bc0d",
+  "python": "3.12.14",
+  "pandas": "2.3.3",
+  "numpy": "2.3.5",
+  "sklearn": "1.7.2",
+  "random_state": 42,
+  "feature_columns": [
+    "order_year",
+    "order_month",
+    "order_weekday",
+    "order_is_weekend",
+    "shipping_days_scheduled",
+    "shipping_mode",
+    "market",
+    "order_region",
+    "order_country",
+    "customer_segment",
+    "payment_type",
+    "line_count",
+    "total_quantity"
+  ],
+  "selected_model": "mode_baseline",
+  "selection": {
+    "selected_model": "mode_baseline",
+    "criterion": "minimum validation log_loss; exact ties prefer earlier simpler model",
+    "threshold": 0.5,
+    "refit_after_selection": false,
+    "selected_before_test_evaluation": true,
+    "candidate_parameters": {
+      "mode_baseline": "<baseline.ModeBaseline object at 0x000001C2A634DAF0>",
+      "logistic_regression": "Pipeline(steps=[('preprocess',\n                 ColumnTransformer(transformers=[('cat',\n                                                  Pipeline(steps=[('impute',\n                                                                   SimpleImputer(strategy='most_frequent')),\n                                                                  ('encode',\n                                                                   OneHotEncoder(handle_unknown='ignore'))]),\n                                                  ['shipping_mode', 'market',\n                                                   'order_region',\n                                                   'order_country',\n                                                   'customer_segment',\n                                                   'payment_type']),\n                                                 ('num',\n                                                  Pipeline(steps=[('impute',\n                                                                   SimpleImputer(strategy='median')),\n                                                                  ('scale',\n                                                                   StandardScaler())]),\n                                                  ['order_year', 'order_month',\n                                                   'order_weekday',\n                                                   'order_is_weekend',\n                                                   'shipping_days_scheduled',\n                                                   'line_count',\n                                                   'total_quantity'])])),\n                ('model',\n                 LogisticRegression(C=1, max_iter=2000, random_state=42))])",
+      "hist_gradient_boosting": "Pipeline(steps=[('preprocess',\n                 ColumnTransformer(sparse_threshold=0,\n                                   transformers=[('cat',\n                                                  Pipeline(steps=[('impute',\n                                                                   SimpleImputer(strategy='most_frequent')),\n                                                                  ('encode',\n                                                                   OrdinalEncoder(handle_unknown='use_encoded_value',\n                                                                                  unknown_value=-1))]),\n                                                  ['shipping_mode', 'market',\n                                                   'order_region',\n                                                   'order_country',\n                                                   'customer_segment',\n                                                   'payment_type']),\n                                                 ('num',\n                                                  SimpleImputer(strategy='median'),\n                                                  ['order_year', 'order_month',\n                                                   'order_weekday',\n                                                   'order_is_weekend',\n                                                   'shipping_days_scheduled',\n                                                   'line_count',\n                                                   'total_quantity'])])),\n                ('model',\n                 HistGradientBoostingClassifier(categorical_features=[0, 1, 2,\n                                                                      3, 4, 5],\n                                                early_stopping=False,\n                                                l2_regularization=10,\n                                                learning_rate=0.07,\n                                                max_iter=150, max_leaf_nodes=15,\n                                                min_samples_leaf=100,\n                                                random_state=42))])"
+    }
+  },
+  "partition_counts": {
+    "train": 39568,
+    "test": 13071,
+    "validation": 9497,
+    "purged_boundary": 761
+  },
+  "test_metrics": {
+    "n": 13071,
+    "late_count": 7524,
+    "late_rate": 0.5756254303419784,
+    "roc_auc": 0.7459707327274433,
+    "average_precision": 0.7878224252187052,
+    "log_loss": 0.5361585875425962,
+    "brier": 0.187500963746236,
+    "accuracy": 0.6962741947823425,
+    "precision": 0.8896929824561404,
+    "recall": 0.5392078681552366,
+    "f1": 0.6714664018536909,
+    "threshold": 0.5,
+    "tn": 5044,
+    "fp": 503,
+    "fn": 3467,
+    "tp": 4057
+  },
+  "majority_baseline_test_accuracy": 0.5756254303419784,
+  "input_sha256": {
+    "analysis_schema.json": "8ced8226b7f697841f9e60073c746c0572abad62c3031bba4af9df1d42f8d094",
+    "orders_model_features.csv": "cbc52af049581d264beca4469c1355411f370ada5fcef81936e77394ab046efb",
+    "orders_model_labels.csv": "e199f6e5fb8b21a273a8f7e6816e34ee5cb116cf5b20a2ac798c740fada047b6",
+    "orders_model_splits.csv": "639748939481109ef61c476a26972dbd7bf638e995506e6af372ac8d5c13aed1"
+  },
+  "purged_rows_fitted_or_scored": 0,
+  "model_reload_matches": true,
+  "business_scope": "late delivery conditional on non-cancellation in this historical snapshot"
+}

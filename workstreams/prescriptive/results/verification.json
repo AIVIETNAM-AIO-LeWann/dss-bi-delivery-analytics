@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "checks": [
+    "q90_min100: test row count, unique keys, exceedance and promise average OK",
+    "q95_min100: test row count, unique keys, exceedance and promise average OK",
+    "current: test row count, unique keys, exceedance and promise average OK",
+    "bounded_plus1_keep_same_day: test row count, unique keys, exceedance and promise average OK",
+    "q80_min100: test row count, unique keys, exceedance and promise average OK",
+    "route_c101_base_nearest_feasible.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "route_c101_base_ortools.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "route_c101_fleet10_ortools.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "route_c101_capacity160_nearest_feasible.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "route_c101_capacity160_ortools.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "route_c101_capacity240_nearest_feasible.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "route_c101_capacity240_ortools.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "route_r101_base_ortools.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "route_rc101_base_ortools.json: 100 customers exactly once, capacity/windows/depot/distance OK",
+    "Fuel scenario costs recomputed OK",
+    "c101/base: source demand, fleet bounds, certification logic OK",
+    "c101/fleet10: source demand, fleet bounds, certification logic OK",
+    "c101/capacity160: source demand, fleet bounds, certification logic OK",
+    "c101/capacity240: source demand, fleet bounds, certification logic OK",
+    "r101/base: source demand, fleet bounds, certification logic OK",
+    "rc101/base: source demand, fleet bounds, certification logic OK"
+  ]
+}

@@ -1,0 +1,11 @@
+group_type,bracket_value,order_count,order_share_pct,late_count,late_rate_pct,actual_mean
+line_count,1,18982,30.18,10928,57.57,3.51
+line_count,2,10937,17.39,6241,57.06,3.49
+line_count,3,10896,17.32,6238,57.25,3.51
+line_count,4,11189,17.79,6352,56.77,3.51
+line_count,5,10893,17.32,6289,57.73,3.48
+quantity_bracket,1 item,13758,21.87,7968,57.92,3.51
+quantity_bracket,2 items,4297,6.83,2401,55.88,3.49
+quantity_bracket,3-5 items,14635,23.27,8375,57.23,3.5
+quantity_bracket,6-10 items,20720,32.94,11836,57.12,3.5
+quantity_bracket,>10 items,9487,15.08,5468,57.64,3.5

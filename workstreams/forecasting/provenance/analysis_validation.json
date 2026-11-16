@@ -1,0 +1,31 @@
+{
+  "checks": {
+    "primary_nonempty": true,
+    "primary_no_missing_cells": true,
+    "primary_no_duplicate_order_ids": true,
+    "primary_no_duplicate_rows": true,
+    "primary_all_numeric_values_finite": true,
+    "primary_no_cancellations": true,
+    "primary_target_agrees_with_days": true,
+    "primary_no_damaged_geographic_labels": true,
+    "unknown_categories_have_explicit_flags": true,
+    "all_source_rows_accounted_for": true,
+    "features_exact_allowlist": true,
+    "features_no_outcomes_or_post_event_flags": true,
+    "feature_label_split_alignment": true,
+    "feature_values_match_analysis_table": true,
+    "label_values_match_analysis_table": true,
+    "split_timestamps_match_analysis_table": true,
+    "features_no_missing_cells": true,
+    "target_labels_preserved_from_source": true,
+    "timestamp_consistent_subset_no_mismatch": true,
+    "strict_partition_accounts_for_mismatch": true,
+    "train_nonempty": true,
+    "validation_nonempty": true,
+    "test_nonempty": true,
+    "partitions_chronological": true
+  },
+  "passed": 24,
+  "total": 24,
+  "all_passed": true
+}

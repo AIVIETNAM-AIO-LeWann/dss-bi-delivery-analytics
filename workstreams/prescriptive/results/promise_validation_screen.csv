@@ -1,0 +1,10 @@
+﻿policy,target,min_train_group,validation_exceedance,passes_target_on_validation
+q80_min50,0.8,50,0.07202274402442876,True
+q80_min100,0.8,100,0.07223333684321365,True
+q80_min200,0.8,200,0.07170685479625145,True
+q90_min50,0.9,50,0.0,True
+q90_min100,0.9,100,0.0,True
+q90_min200,0.9,200,0.0,True
+q95_min50,0.95,50,0.0,True
+q95_min100,0.95,100,0.0,True
+q95_min200,0.95,200,0.0,True

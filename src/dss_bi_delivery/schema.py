@@ -1,7 +1,7 @@
 """Metadata authored for this project; original field names remain traceable.
 
 Descriptions are Vietnamese interpretations, not quotations from the publisher.
-See docs/01_nguon_du_lieu.md for the original dictionary and its ambiguities.
+See docs/data_preparation/01_nguon_du_lieu.md for the original dictionary and its ambiguities.
 """
 
 SOURCE_DICTIONARY = (

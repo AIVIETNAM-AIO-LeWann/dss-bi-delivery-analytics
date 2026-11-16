@@ -16,7 +16,7 @@ URL = "https://www.kaggle.com/api/v1/datasets/download/saicharankomati/dataco-su
 
 def download() -> None:
     target = ROOT / "data/raw/DataCoSupplyChainDataset.csv"
-    manifest_path = ROOT / "docs/source_manifest.json"
+    manifest_path = ROOT / "docs/data_preparation/source_manifest.json"
     if target.exists():
         checksum = hashlib.sha256(target.read_bytes()).hexdigest()
         if checksum != EXPECTED_SHA256:

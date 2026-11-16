@@ -1,0 +1,5 @@
+shipping_mode,order_count,order_share_pct,late_count,late_rate_pct,scheduled_mean,scheduled_std,actual_mean,actual_std,actual_p25,actual_p50,actual_p75,actual_p90,actual_p95,delay_mean
+First Class,9602,15.27,9602,100.0,1.0,0.0,2.0,0.0,2.0,2.0,2.0,2.0,2.0,1.0
+Second Class,12256,19.49,9803,79.99,2.0,0.0,4.0,1.41,3.0,4.0,5.0,6.0,6.0,2.0
+Same Day,3407,5.42,1648,48.37,0.0,0.0,0.48,0.5,0.0,0.0,1.0,1.0,1.0,0.48
+Standard Class,37632,59.83,14995,39.85,4.0,0.0,3.99,1.42,3.0,4.0,5.0,6.0,6.0,-0.01

@@ -1,0 +1,6 @@
+market,order_count,order_share_pct,late_count,late_rate_pct,scheduled_mean,actual_mean,delay_mean
+Europe,17763,28.24,10199,57.42,2.93,3.5,0.56
+Pacific Asia,16853,26.79,9720,57.68,2.93,3.51,0.58
+LATAM,16414,26.1,9339,56.9,2.95,3.5,0.55
+USCA,8178,13.0,4704,57.52,2.92,3.5,0.58
+Africa,3689,5.87,2086,56.55,2.95,3.5,0.55

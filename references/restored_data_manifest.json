@@ -1,0 +1,22 @@
+[
+  {
+    "path": "data/processed/orders_analysis.csv",
+    "source": "workstreams/forecasting/source_snapshot/data/processed/orders_analysis.csv",
+    "sha256": "5d9c405b35da33deab51a830783e4fea1bf06828ceb7681c7438beeb1b02e2ba"
+  },
+  {
+    "path": "data/processed/orders_model_features.csv",
+    "source": "workstreams/forecasting/source_snapshot/data/processed/orders_model_features.csv",
+    "sha256": "cbc52af049581d264beca4469c1355411f370ada5fcef81936e77394ab046efb"
+  },
+  {
+    "path": "data/processed/orders_model_labels.csv",
+    "source": "workstreams/forecasting/source_snapshot/data/processed/orders_model_labels.csv",
+    "sha256": "e199f6e5fb8b21a273a8f7e6816e34ee5cb116cf5b20a2ac798c740fada047b6"
+  },
+  {
+    "path": "data/processed/orders_model_splits.csv",
+    "source": "workstreams/forecasting/source_snapshot/data/processed/orders_model_splits.csv",
+    "sha256": "639748939481109ef61c476a26972dbd7bf638e995506e6af372ac8d5c13aed1"
+  }
+]

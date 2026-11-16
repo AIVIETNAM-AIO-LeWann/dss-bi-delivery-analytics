@@ -1,0 +1,14 @@
+{
+  "report_pages": 4,
+  "report_render_engine": "Microsoft Word 2021 native PDF export and bundled Poppler PNG rendering",
+  "all_pages_visually_reviewed": true,
+  "report_title_border_removed": true,
+  "forecast_tests_passed": 8,
+  "upstream_tests_passed": 7,
+  "source_verification_passed": 51,
+  "analysis_verification_passed": 24,
+  "output_verification_passed": 12,
+  "packaged_input_replay_predictions_byte_identical": true,
+  "saved_model_fresh_process_verified": true,
+  "score_script_rows_verified": 62897
+}

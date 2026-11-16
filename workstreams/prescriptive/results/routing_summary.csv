@@ -1,0 +1,13 @@
+﻿instance,scenario,method,max_vehicles,capacity,status,vehicles_used,distance_units
+c101,base,nearest_feasible,25,200,feasible,21.0,1870.6937996225547
+c101,base,ortools,25,200,feasible,10.0,828.936866942834
+c101,fleet10,nearest_feasible,10,200,no_solution_found,,
+c101,fleet10,ortools,10,200,feasible,10.0,828.9368669428338
+c101,capacity160,nearest_feasible,25,160,feasible,24.0,2111.4228288661634
+c101,capacity160,ortools,25,160,feasible,13.0,1069.1095194920167
+c101,capacity240,nearest_feasible,25,240,feasible,21.0,1870.6937996225547
+c101,capacity240,ortools,25,240,feasible,10.0,828.9368669428338
+r101,base,nearest_feasible,25,200,no_solution_found,,
+r101,base,ortools,25,200,feasible,21.0,1658.8618065066296
+rc101,base,nearest_feasible,25,200,no_solution_found,,
+rc101,base,ortools,25,200,feasible,17.0,1700.09002923046

@@ -1,0 +1,7 @@
+﻿instance,scenario,total_demand,vehicle_capacity,capacity_lower_bound,max_vehicles,feasible_vehicles_used,minimum_fleet_certified,proof
+c101,base,1810,200,10,25,10,True,capacity_bound_equals_verified_feasible_fleet
+c101,fleet10,1810,200,10,10,10,True,capacity_bound_equals_verified_feasible_fleet
+c101,capacity160,1810,160,12,25,13,False,not_certified
+c101,capacity240,1810,240,8,25,10,False,not_certified
+r101,base,1458,200,8,25,21,False,not_certified
+rc101,base,1724,200,9,25,17,False,not_certified

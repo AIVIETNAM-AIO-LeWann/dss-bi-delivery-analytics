@@ -1,0 +1,110 @@
+{
+  "checks_passed": 21,
+  "scope": "DAX executed against the local Power BI Desktop model after native refresh",
+  "all_passed": true,
+  "checks": [
+    {
+      "description": "Native analysis denominator",
+      "expected": 62897,
+      "actual": 62897
+    },
+    {
+      "description": "Native source late count",
+      "expected": 36048,
+      "actual": 36048
+    },
+    {
+      "description": "Native test denominator",
+      "expected": 13071,
+      "actual": 13071
+    },
+    {
+      "description": "Native alerts at default threshold",
+      "expected": 4560,
+      "actual": 4560
+    },
+    {
+      "description": "Native true positives",
+      "expected": 4057,
+      "actual": 4057
+    },
+    {
+      "description": "Native false negatives",
+      "expected": 3467,
+      "actual": 3467
+    },
+    {
+      "description": "Native precision",
+      "expected": 0.8896929824561404,
+      "actual": 0.8896929824561404
+    },
+    {
+      "description": "Native recall",
+      "expected": 0.5392078681552366,
+      "actual": 0.5392078681552366
+    },
+    {
+      "description": "Native threshold 0.4 includes all test orders",
+      "expected": 13071,
+      "actual": 13071
+    },
+    {
+      "description": "Native zero alerts for Standard Class at threshold 0.5",
+      "expected": 0,
+      "actual": 0
+    },
+    {
+      "description": "Native undefined precision stays blank",
+      "actual": null
+    },
+    {
+      "description": "Native default promise exceedance rate",
+      "expected": 0.26815086833448093,
+      "actual": 0.26815086833448093
+    },
+    {
+      "description": "Native promise increase in days",
+      "expected": 0.9440746691148343,
+      "actual": 0.9440746691148344
+    },
+    {
+      "description": "Native scenario denominator does not count all five policies",
+      "expected": 13071,
+      "actual": 13071
+    },
+    {
+      "description": "Native current policy preserves test late rate",
+      "expected": 0.5756254303419784,
+      "actual": 0.5756254303419784
+    },
+    {
+      "description": "Native current policy adds zero days",
+      "expected": 0,
+      "actual": 0.0
+    },
+    {
+      "description": "Native selected route distance",
+      "expected": 828.936866942834,
+      "actual": 828.936866942834
+    },
+    {
+      "description": "Native selected route vehicles",
+      "expected": 10,
+      "actual": 10
+    },
+    {
+      "description": "Native fuel cost with default assumptions",
+      "expected": 1823661.1072742345,
+      "actual": 1823661.1072742345
+    },
+    {
+      "description": "Native fuel price parameter changes cost",
+      "expected": 2155235.8540513683,
+      "actual": 2155235.8540513683
+    },
+    {
+      "description": "Native no-solution distance and cost remain blank",
+      "actual": null
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.xlsx binary
+*.docx binary
+*.pdf binary
+*.png binary
+*.zip binary
+*.joblib binary
+*.pbix binary
+
+# Preserve the exact bytes and intentional whitespace of supplied handoffs.
+workstreams/** -text -whitespace
+references/coursework/assignment_prompts.md -text -whitespace

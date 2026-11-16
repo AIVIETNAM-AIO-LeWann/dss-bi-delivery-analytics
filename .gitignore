@@ -10,3 +10,36 @@ __pycache__/
 /build/
 /dist/
 .DS_Store
+
+# Local source attachments and historical archives
+/archive/handoffs/
+/data/reference/*
+/data/external/*
+/references/team/*.xlsx
+/references/handoffs/*.docx
+# Reproducible handoff data / serialized models
+/workstreams/forecasting/source_snapshot/data/processed/*.csv
+/workstreams/forecasting/inputs/*.csv
+/workstreams/forecasting/models/*.joblib
+/workstreams/forecasting/results/predictions*.csv
+/workstreams/prescriptive/inputs/dataco/*.csv
+/workstreams/prescriptive/results/dashboard_orders_test.csv
+/workstreams/prescriptive/results/promise_orders_*.csv
+**/.venv/
+**/replay*/
+**/.mplconfig/
+**/.ipynb_checkpoints/
+*.pbix
+*.pbi/cache.abf
+.env
+.env.*
+!.env.example
+
+# Rebuildable dashboard data, preview and local validation caches
+/data/dashboard/*
+!/data/dashboard/.gitkeep
+/dashboards/preview/delivery_dashboard.html
+/.cache/
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+**/.pbi/unappliedChanges.json

@@ -64,9 +64,9 @@ def run(source: Path, allow_source_change: bool = False) -> dict:
     expected = [s["source_column"] for s in SCHEMA]
     if list(raw.columns) != expected:
         raise ValueError("CSV columns/order differ from the documented 53-column schema.")
-    reports = ROOT / "reports"
+    reports = ROOT / "reports/data_quality"
     processed = ROOT / "data/processed"
-    for path in (reports, processed, ROOT / "docs"):
+    for path in (reports, processed, ROOT / "docs/data_preparation"):
         path.mkdir(parents=True, exist_ok=True)
     log: list[dict] = []
 
@@ -259,11 +259,11 @@ def run(source: Path, allow_source_change: bool = False) -> dict:
     csv(pd.DataFrame(distributions), reports / "initial_distributions.csv")
 
     dictionary = pd.DataFrame(SCHEMA).merge(profile[["source_column", "raw_missing", "raw_missing_rate", "unique_nonmissing"]], on="source_column", validate="1:1")
-    dictionary["definition_source"] = "Diễn giải tiếng Việt từ tên cột; đối chiếu từ điển gốc và kiểm tra dữ liệu; xem docs/01_nguon_du_lieu.md"
+    dictionary["definition_source"] = "Diễn giải tiếng Việt từ tên cột; đối chiếu từ điển gốc và kiểm tra dữ liệu; xem docs/data_preparation/01_nguon_du_lieu.md"
     dictionary.loc[dictionary["column"].eq("order_zipcode"), "definition_source"] = "Suy luận từ tên cột; chưa có mục tương ứng trong từ điển gốc tham khảo"
-    csv(dictionary, ROOT / "docs/data_dictionary.csv")
+    csv(dictionary, ROOT / "docs/data_preparation/data_dictionary.csv")
     derived = pd.DataFrame(DERIVED + ORDER_AGGREGATES, columns=["column", "dtype", "measurement_scale", "unit", "role", "formula_or_rule_vi", "availability_at_prediction"])
-    csv(derived, ROOT / "docs/derived_variables.csv")
+    csv(derived, ROOT / "docs/data_preparation/derived_variables.csv")
     dictionary_text = "# Data Dictionary\n\nTự sinh bởi `python -m dss_bi_delivery.prepare_data`. Sửa metadata tại `src/dss_bi_delivery/schema.py`.\n\n"
     dictionary_text += "Thang đo: nominal = định danh; nominal_binary = định danh nhị phân; interval = khoảng; ratio = tỷ lệ. Không có biến thứ bậc được xác lập trong bộ này. Mã số vẫn là định danh.\n\n"
     dictionary_text += "`assumed_at_order` là giả định cần kiểm chứng, không phải lịch sử sự kiện đã được nguồn xác nhận. Đơn vị tiền tệ chưa được xác minh; không tự đổi sang VND hoặc mặc định USD.\n\n"
@@ -272,7 +272,7 @@ def run(source: Path, allow_source_change: bool = False) -> dict:
     dictionary_text += "\nBảng phân tích bổ sung `orders_analysis.csv` có schema và vai trò từng trường tại "
     dictionary_text += "[analysis_schema.json](analysis_schema.json), bao gồm cờ địa lý unknown và allowlist dự báo. "
     dictionary_text += "Quy tắc dùng từng bảng tại [07_du_lieu_cho_phan_tich.md](07_du_lieu_cho_phan_tich.md).\n"
-    (ROOT / "docs/02_data_dictionary.md").write_text(dictionary_text, encoding="utf-8")
+    (ROOT / "docs/data_preparation/02_data_dictionary.md").write_text(dictionary_text, encoding="utf-8")
 
     summary = {
         "input_sha256": checksum, "matches_reference_source": checksum == EXPECTED_SHA256,

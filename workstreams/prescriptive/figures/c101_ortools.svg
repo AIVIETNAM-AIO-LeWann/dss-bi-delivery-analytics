@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="720" viewBox="0 0 760 720">
+<rect width="760" height="720" fill="white"/>
+<text x="30" y="25" font-family="sans-serif" font-size="18">c101_ortools: benchmark coordinates (not a road map)</text>
+<polyline points="280,350 220,350 190,350 190,338 178,338 160,350 160,320 178,320 190,320 208,320 208,338 220,338 280,350" fill="none" stroke="#2563eb" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 238,440 238,458 250,458 250,470 232,470 220,458 220,470 208,470 190,470 196,458 190,440 208,440 220,440 280,350" fill="none" stroke="#dc2626" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 172,200 148,200 130,200 130,170 160,170 160,140 172,140 190,140 280,350" fill="none" stroke="#059669" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 322,410 328,410 340,410 340,440 358,440 358,470 340,470 328,470 310,470 322,440 310,440 280,350" fill="none" stroke="#9333ea" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 388,200 400,170 412,170 430,158 442,140 430,140 400,140 370,140 370,170 280,350" fill="none" stroke="#ea580c" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 292,260 292,254 280,254 268,242 250,254 250,236 268,230 280,236 292,242 310,230 310,242 310,260 280,350" fill="none" stroke="#0891b2" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 100,410 88,410 100,440 70,440 52,410 40,410 40,380 70,380 88,380 280,350" fill="none" stroke="#2563eb" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 400,320 430,320 436,320 472,320 490,320 460,302 448,290 430,290 418,302 400,290 280,350" fill="none" stroke="#dc2626" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 280,560 292,560 292,590 304,620 280,620 268,620 250,620 268,560 280,350" fill="none" stroke="#059669" stroke-width="1.4" opacity="0.7"/>
+<polyline points="280,350 550,440 568,440 580,440 610,440 610,470 592,470 568,470 562,470 550,500 280,350" fill="none" stroke="#9333ea" stroke-width="1.4" opacity="0.7"/>
+<circle cx="280" cy="350" r="5" fill="black"/>
+<circle cx="310" cy="242" r="2.5" fill="#334155"/>
+<circle cx="310" cy="230" r="2.5" fill="#334155"/>
+<circle cx="292" cy="254" r="2.5" fill="#334155"/>
+<circle cx="292" cy="242" r="2.5" fill="#334155"/>
+<circle cx="292" cy="260" r="2.5" fill="#334155"/>
+<circle cx="280" cy="236" r="2.5" fill="#334155"/>
+<circle cx="280" cy="254" r="2.5" fill="#334155"/>
+<circle cx="268" cy="242" r="2.5" fill="#334155"/>
+<circle cx="268" cy="230" r="2.5" fill="#334155"/>
+<circle cx="250" cy="254" r="2.5" fill="#334155"/>
+<circle cx="250" cy="236" r="2.5" fill="#334155"/>
+<circle cx="190" cy="140" r="2.5" fill="#334155"/>
+<circle cx="172" cy="200" r="2.5" fill="#334155"/>
+<circle cx="172" cy="140" r="2.5" fill="#334155"/>
+<circle cx="160" cy="170" r="2.5" fill="#334155"/>
+<circle cx="160" cy="140" r="2.5" fill="#334155"/>
+<circle cx="148" cy="200" r="2.5" fill="#334155"/>
+<circle cx="130" cy="200" r="2.5" fill="#334155"/>
+<circle cx="130" cy="170" r="2.5" fill="#334155"/>
+<circle cx="220" cy="350" r="2.5" fill="#334155"/>
+<circle cx="220" cy="338" r="2.5" fill="#334155"/>
+<circle cx="208" cy="338" r="2.5" fill="#334155"/>
+<circle cx="208" cy="320" r="2.5" fill="#334155"/>
+<circle cx="190" cy="350" r="2.5" fill="#334155"/>
+<circle cx="190" cy="338" r="2.5" fill="#334155"/>
+<circle cx="190" cy="320" r="2.5" fill="#334155"/>
+<circle cx="178" cy="338" r="2.5" fill="#334155"/>
+<circle cx="178" cy="320" r="2.5" fill="#334155"/>
+<circle cx="160" cy="350" r="2.5" fill="#334155"/>
+<circle cx="160" cy="320" r="2.5" fill="#334155"/>
+<circle cx="100" cy="440" r="2.5" fill="#334155"/>
+<circle cx="100" cy="410" r="2.5" fill="#334155"/>
+<circle cx="88" cy="410" r="2.5" fill="#334155"/>
+<circle cx="88" cy="380" r="2.5" fill="#334155"/>
+<circle cx="70" cy="440" r="2.5" fill="#334155"/>
+<circle cx="70" cy="380" r="2.5" fill="#334155"/>
+<circle cx="52" cy="410" r="2.5" fill="#334155"/>
+<circle cx="40" cy="410" r="2.5" fill="#334155"/>
+<circle cx="40" cy="380" r="2.5" fill="#334155"/>
+<circle cx="250" cy="470" r="2.5" fill="#334155"/>
+<circle cx="250" cy="458" r="2.5" fill="#334155"/>
+<circle cx="238" cy="458" r="2.5" fill="#334155"/>
+<circle cx="238" cy="440" r="2.5" fill="#334155"/>
+<circle cx="232" cy="470" r="2.5" fill="#334155"/>
+<circle cx="220" cy="470" r="2.5" fill="#334155"/>
+<circle cx="220" cy="458" r="2.5" fill="#334155"/>
+<circle cx="220" cy="440" r="2.5" fill="#334155"/>
+<circle cx="208" cy="470" r="2.5" fill="#334155"/>
+<circle cx="208" cy="440" r="2.5" fill="#334155"/>
+<circle cx="196" cy="458" r="2.5" fill="#334155"/>
+<circle cx="190" cy="470" r="2.5" fill="#334155"/>
+<circle cx="190" cy="440" r="2.5" fill="#334155"/>
+<circle cx="304" cy="620" r="2.5" fill="#334155"/>
+<circle cx="292" cy="590" r="2.5" fill="#334155"/>
+<circle cx="292" cy="560" r="2.5" fill="#334155"/>
+<circle cx="280" cy="620" r="2.5" fill="#334155"/>
+<circle cx="280" cy="560" r="2.5" fill="#334155"/>
+<circle cx="268" cy="620" r="2.5" fill="#334155"/>
+<circle cx="268" cy="560" r="2.5" fill="#334155"/>
+<circle cx="250" cy="620" r="2.5" fill="#334155"/>
+<circle cx="340" cy="470" r="2.5" fill="#334155"/>
+<circle cx="340" cy="440" r="2.5" fill="#334155"/>
+<circle cx="340" cy="410" r="2.5" fill="#334155"/>
+<circle cx="328" cy="470" r="2.5" fill="#334155"/>
+<circle cx="328" cy="410" r="2.5" fill="#334155"/>
+<circle cx="322" cy="440" r="2.5" fill="#334155"/>
+<circle cx="322" cy="410" r="2.5" fill="#334155"/>
+<circle cx="310" cy="470" r="2.5" fill="#334155"/>
+<circle cx="310" cy="440" r="2.5" fill="#334155"/>
+<circle cx="610" cy="470" r="2.5" fill="#334155"/>
+<circle cx="610" cy="440" r="2.5" fill="#334155"/>
+<circle cx="358" cy="470" r="2.5" fill="#334155"/>
+<circle cx="592" cy="470" r="2.5" fill="#334155"/>
+<circle cx="358" cy="440" r="2.5" fill="#334155"/>
+<circle cx="310" cy="260" r="2.5" fill="#334155"/>
+<circle cx="580" cy="440" r="2.5" fill="#334155"/>
+<circle cx="568" cy="470" r="2.5" fill="#334155"/>
+<circle cx="568" cy="440" r="2.5" fill="#334155"/>
+<circle cx="562" cy="470" r="2.5" fill="#334155"/>
+<circle cx="550" cy="500" r="2.5" fill="#334155"/>
+<circle cx="550" cy="440" r="2.5" fill="#334155"/>
+<circle cx="490" cy="320" r="2.5" fill="#334155"/>
+<circle cx="472" cy="320" r="2.5" fill="#334155"/>
+<circle cx="460" cy="302" r="2.5" fill="#334155"/>
+<circle cx="448" cy="290" r="2.5" fill="#334155"/>
+<circle cx="436" cy="320" r="2.5" fill="#334155"/>
+<circle cx="430" cy="320" r="2.5" fill="#334155"/>
+<circle cx="430" cy="290" r="2.5" fill="#334155"/>
+<circle cx="418" cy="302" r="2.5" fill="#334155"/>
+<circle cx="400" cy="320" r="2.5" fill="#334155"/>
+<circle cx="400" cy="290" r="2.5" fill="#334155"/>
+<circle cx="442" cy="140" r="2.5" fill="#334155"/>
+<circle cx="430" cy="140" r="2.5" fill="#334155"/>
+<circle cx="430" cy="158" r="2.5" fill="#334155"/>
+<circle cx="412" cy="170" r="2.5" fill="#334155"/>
+<circle cx="400" cy="170" r="2.5" fill="#334155"/>
+<circle cx="400" cy="140" r="2.5" fill="#334155"/>
+<circle cx="388" cy="200" r="2.5" fill="#334155"/>
+<circle cx="370" cy="170" r="2.5" fill="#334155"/>
+<circle cx="370" cy="140" r="2.5" fill="#334155"/>
+</svg>

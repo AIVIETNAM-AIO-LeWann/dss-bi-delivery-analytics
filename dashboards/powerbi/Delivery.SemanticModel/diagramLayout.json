@@ -1,0 +1,148 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1420.3830500146937,
+            "y": 75
+          },
+          "nodeIndex": "FuelConsumption",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1704.3830500146937,
+            "y": 75
+          },
+          "nodeIndex": "FuelPrice",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1988.3830500146937,
+            "y": 75
+          },
+          "nodeIndex": "KmPerUnit",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2272.3830500146937,
+            "y": 25
+          },
+          "nodeIndex": "ModelMetrics",
+          "nodeLineageTag": "9f30d1d6-a4f6-5b4f-9064-da4d52a69724",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 618.38305001469382,
+            "y": -41.422348979922731
+          },
+          "nodeIndex": "Orders",
+          "nodeLineageTag": "9b9252e7-89df-56e5-85e5-2d20e479ddcc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 62.562761799677233
+          },
+          "nodeIndex": "Policies",
+          "nodeLineageTag": "be9c3bdb-2bc1-5456-bc85-08c27343e83b",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 334.20156119318528,
+            "y": -8.5776510200772123
+          },
+          "nodeIndex": "PromiseScenarios",
+          "nodeLineageTag": "16ff6ead-41d6-5d15-a7b5-68e34cad4c65",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2556.3830500146937,
+            "y": 75
+          },
+          "nodeIndex": "RiskThreshold",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1186.3830500146937,
+            "y": -25
+          },
+          "nodeIndex": "RouteCases",
+          "nodeLineageTag": "9e2e198b-9af5-563c-bd93-7d1cd5f9fd6e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 902.38305001469371,
+            "y": -25
+          },
+          "nodeIndex": "RouteStops",
+          "nodeLineageTag": "bf1abbff-5bdb-5d82-8d77-5b30025097f0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

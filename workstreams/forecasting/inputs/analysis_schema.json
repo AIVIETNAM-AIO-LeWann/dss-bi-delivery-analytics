@@ -1,0 +1,189 @@
+{
+  "grain": "one row per non-canceled validated order",
+  "columns": {
+    "order_id": {
+      "dtype": "string",
+      "role": "identifier",
+      "definition": "Mã đơn; lặp lại hợp lệ qua các dòng hàng; khóa của bảng orders.",
+      "used_as_model_feature": false
+    },
+    "order_datetime": {
+      "dtype": "datetime",
+      "role": "time_index",
+      "definition": "Thời điểm đặt hàng; parse MM/DD/YYYY HH:MM; không tự gán UTC hay múi giờ Việt Nam.",
+      "used_as_model_feature": false
+    },
+    "order_year": {
+      "dtype": "Int64",
+      "role": "candidate",
+      "definition": "year(order_datetime)",
+      "used_as_model_feature": true
+    },
+    "order_month": {
+      "dtype": "Int64",
+      "role": "candidate",
+      "definition": "month(order_datetime); 1–12",
+      "used_as_model_feature": true
+    },
+    "order_weekday": {
+      "dtype": "Int64",
+      "role": "candidate",
+      "definition": "dayofweek(order_datetime); thứ Hai=0 đến Chủ nhật=6",
+      "used_as_model_feature": true
+    },
+    "order_is_weekend": {
+      "dtype": "Int64",
+      "role": "candidate",
+      "definition": "1 nếu weekday thuộc {5;6}; không coi là ngày nghỉ ở mọi quốc gia",
+      "used_as_model_feature": true
+    },
+    "payment_type": {
+      "dtype": "string",
+      "role": "candidate",
+      "definition": "Loại giao dịch thanh toán; không phải phương thức vận chuyển.",
+      "used_as_model_feature": true
+    },
+    "customer_segment": {
+      "dtype": "string",
+      "role": "candidate",
+      "definition": "Phân khúc Consumer; Corporate; Home Office. Giả định phân khúc đã biết khi đặt hàng.",
+      "used_as_model_feature": true
+    },
+    "shipping_mode": {
+      "dtype": "string",
+      "role": "candidate",
+      "definition": "Standard Class; First Class; Second Class; Same Day. Không mã hóa thành thứ bậc số tùy ý.",
+      "used_as_model_feature": true
+    },
+    "market": {
+      "dtype": "string",
+      "role": "candidate",
+      "definition": "Thị trường đích; có 5 giá trị ở bản nguồn.",
+      "used_as_model_feature": true
+    },
+    "order_region": {
+      "dtype": "string",
+      "role": "candidate",
+      "definition": "Vùng đích; chuẩn hóa khoảng trắng hai đầu.",
+      "used_as_model_feature": true
+    },
+    "order_country": {
+      "dtype": "string",
+      "role": "candidate",
+      "definition": "Quốc gia đích; không đồng nhất với Customer Country.",
+      "used_as_model_feature": true
+    },
+    "order_state": {
+      "dtype": "string",
+      "role": "candidate",
+      "definition": "Bang hoặc tỉnh đích; không nhầm với Order Status là trạng thái đơn. Trong orders_analysis: tên không khôi phục được đổi thành __UNKNOWN__, kèm cờ.",
+      "used_as_model_feature": false
+    },
+    "order_city": {
+      "dtype": "string",
+      "role": "candidate",
+      "definition": "Thành phố đích; một số tên có dấu hỏi nên chưa dùng geocoding tự động. Trong orders_analysis: tên không khôi phục được đổi thành __UNKNOWN__, kèm cờ.",
+      "used_as_model_feature": false
+    },
+    "line_count": {
+      "dtype": "Int64",
+      "role": "candidate",
+      "definition": "count(order_item_id) trong đơn",
+      "used_as_model_feature": true
+    },
+    "total_quantity": {
+      "dtype": "Int64",
+      "role": "candidate",
+      "definition": "sum(item_quantity); chỉ tính nếu không thiếu và nguyên dương toàn đơn",
+      "used_as_model_feature": true
+    },
+    "shipping_days_scheduled": {
+      "dtype": "Int64",
+      "role": "candidate",
+      "definition": "Số ngày shipping cam kết; Same Day bằng 0 là giá trị hợp lệ.",
+      "used_as_model_feature": true
+    },
+    "shipping_days_actual": {
+      "dtype": "Int64",
+      "role": "outcome",
+      "definition": "Số ngày shipping thực tế theo chỉ báo nguồn; chưa xác thực là thời gian khách nhận hàng.",
+      "used_as_model_feature": false
+    },
+    "delay_days": {
+      "dtype": "Int64",
+      "role": "outcome",
+      "definition": "shipping_days_actual - shipping_days_scheduled; âm=sớm",
+      "used_as_model_feature": false
+    },
+    "late_days": {
+      "dtype": "Int64",
+      "role": "outcome",
+      "definition": "max(delay_days;0); không ép thành nhãn gốc",
+      "used_as_model_feature": false
+    },
+    "is_late_from_days": {
+      "dtype": "Int64",
+      "role": "outcome",
+      "definition": "1 nếu delay_days>0; NA nếu thiếu duration; vẫn có thể bằng 1 trên đơn hủy",
+      "used_as_model_feature": false
+    },
+    "late_delivery_risk": {
+      "dtype": "Int64",
+      "role": "target",
+      "definition": "Nhãn trễ ghi nhận trong dữ liệu; không phải xác suất dự báo. Đơn hủy có nhãn 0.",
+      "used_as_model_feature": false
+    },
+    "delivery_status": {
+      "dtype": "string",
+      "role": "outcome",
+      "definition": "Kết quả shipping: sớm; trễ; đúng hạn; hủy. Không phải đầu vào dự báo tại lúc đặt hàng.",
+      "used_as_model_feature": false
+    },
+    "order_state_unknown_flag": {
+      "dtype": "Int64",
+      "role": "quality",
+      "definition": "1 nếu order_state thiếu hoặc chứa ký tự hỏng; __UNKNOWN__ không phải địa danh thật.",
+      "used_as_model_feature": false
+    },
+    "order_city_unknown_flag": {
+      "dtype": "Int64",
+      "role": "quality",
+      "definition": "1 nếu order_city thiếu hoặc chứa ký tự hỏng; __UNKNOWN__ không phải địa danh thật.",
+      "used_as_model_feature": false
+    },
+    "duration_mismatch_flag": {
+      "dtype": "Int64",
+      "role": "quality",
+      "definition": "1 nếu timestamp_span_days khác shipping_days_actual quá 1e-8 hoặc thiếu đầu vào",
+      "used_as_model_feature": false
+    }
+  },
+  "model_feature_columns": [
+    "order_year",
+    "order_month",
+    "order_weekday",
+    "order_is_weekend",
+    "shipping_days_scheduled",
+    "shipping_mode",
+    "market",
+    "order_region",
+    "order_country",
+    "customer_segment",
+    "payment_type",
+    "line_count",
+    "total_quantity"
+  ],
+  "join_keys_not_model_features": [
+    "order_id",
+    "order_datetime"
+  ],
+  "unknown_category": "__UNKNOWN__",
+  "source_duration_semantics_unverified": true,
+  "forecast_scope": "late delivery conditional on non-cancellation in this historical snapshot",
+  "model_split_policy": {
+    "validation_start": "2017-01-01",
+    "test_start": "2017-07-01",
+    "purge_days": 7,
+    "availability_proxy": "shipping_datetime; actual time of outcome recording is not supplied"
+  }
+}

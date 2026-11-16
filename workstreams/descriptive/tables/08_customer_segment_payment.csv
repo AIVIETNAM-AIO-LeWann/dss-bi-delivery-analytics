@@ -1,0 +1,8 @@
+group_type,category,order_count,order_share_pct,late_count,late_rate_pct,actual_mean
+customer_segment,Consumer,32614,51.85,18672,57.25,3.51
+customer_segment,Corporate,19017,30.24,10871,57.16,3.49
+customer_segment,Home Office,11266,17.91,6505,57.74,3.51
+payment_type,CASH,7249,11.53,4112,56.73,3.48
+payment_type,DEBIT,25340,40.29,14566,57.48,3.5
+payment_type,PAYMENT,15086,23.99,8661,57.41,3.52
+payment_type,TRANSFER,15222,24.2,8709,57.21,3.49

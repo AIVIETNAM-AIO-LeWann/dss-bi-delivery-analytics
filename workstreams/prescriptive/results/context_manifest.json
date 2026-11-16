@@ -1,0 +1,26 @@
+{
+  "revision_date": "2026-11-06",
+  "scope": "TV5 Phân tích đề xuất; deadline 2026-11-10 only; no work for 2026-11-24",
+  "company_context": "DHL Supply Chain North America; illustrative application, not proprietary DHL data",
+  "workbook": {
+    "path": "/Users/phu/Downloads/HỆ HỖ TRỢ QĐ & TTKD - HK261.xlsx",
+    "sha256": "3ad50ad3458577490a096749e709f89457a2d5db56d3e0fc29039b3657d4b958",
+    "assignment": "PHÂN CÔNG!D13:E13",
+    "company_reference": "CÁC CÔNG TY ĐỀ XUẤT!B4",
+    "dataset_link": "PROMPT!C2"
+  },
+  "dhl_reference": {
+    "authors": "Dang et al.",
+    "year": 2024,
+    "doi": "10.1287/inte.2023.0087",
+    "url": "https://doi.org/10.1287/inte.2023.0087",
+    "verified_detail": "Google OR-Tools plus heuristics explicitly described for Round Trip module, paper page 25"
+  },
+  "dataset_reference_provided_by_user": "https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis",
+  "actual_tv4_source_slug": "saicharankomati/dataco-supply-chain-dataset",
+  "actual_tv4_source_version": 1,
+  "actual_tv4_raw_csv_sha256": "994b3c8d24049cc46bf20e8161fedece9a9b95376cc0dc929921d76cf6b9bc0d",
+  "identity_between_kaggle_uploads_verified": false,
+  "numerical_results_changed": false,
+  "new_derivation": "minimum fleet certified only where capacity lower bound equals saved verified feasible fleet; C101 Q200 = 10"
+}

@@ -1,0 +1,5 @@
+﻿shipping_mode,n,p_late,distinct_scores
+First Class,1974,1.0,1
+Same Day,731,0.460317460317,1
+Second Class,2586,0.80085514382,1
+Standard Class,7780,0.400541043199,1

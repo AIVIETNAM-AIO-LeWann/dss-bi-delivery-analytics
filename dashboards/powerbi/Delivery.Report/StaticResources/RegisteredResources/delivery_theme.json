@@ -1,0 +1,27 @@
+{
+  "name": "delivery_theme.json",
+  "dataColors": [
+    "#1E40AF",
+    "#D97706",
+    "#0F766E",
+    "#7C3AED",
+    "#475569"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#0F172A",
+  "tableAccent": "#1E40AF",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI",
+      "fontSize": 13
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 11
+    },
+    "callout": {
+      "fontFace": "Segoe UI",
+      "fontSize": 28
+    }
+  }
+}

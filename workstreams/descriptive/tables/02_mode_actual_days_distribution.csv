@@ -1,0 +1,5 @@
+shipping_mode,count_day_0,count_day_1,count_day_2,count_day_3,count_day_4,count_day_5,count_day_6,pct_day_0,pct_day_1,pct_day_2,pct_day_3,pct_day_4,pct_day_5,pct_day_6,total_orders
+First Class,0,0,9602,0,0,0,0,0.0,0.0,100.0,0.0,0.0,0.0,0.0,9602
+Same Day,1759,1648,0,0,0,0,0,51.63,48.37,0.0,0.0,0.0,0.0,0.0,3407
+Second Class,0,0,2453,2422,2473,2452,2456,0.0,0.0,20.01,19.76,20.18,20.01,20.04,12256
+Standard Class,0,0,7610,7517,7510,7458,7537,0.0,0.0,20.22,19.98,19.96,19.82,20.03,37632

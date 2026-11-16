@@ -1,0 +1,28 @@
+{
+  "pages": [
+    {
+      "page": "overview",
+      "expected_value_rendered": "62,897",
+      "visual_error_text_detected": false
+    },
+    {
+      "page": "risk",
+      "expected_value_rendered": "13,071",
+      "visual_error_text_detected": false
+    },
+    {
+      "page": "promises",
+      "expected_value_rendered": "26.82%",
+      "visual_error_text_detected": false
+    },
+    {
+      "page": "routing",
+      "expected_value_rendered": "1,823,661",
+      "visual_error_text_detected": false
+    }
+  ],
+  "scope": "Real Power BI Desktop WebView after native refresh; waited for expected KPI values",
+  "all_pages_captured": true,
+  "all_pages_visually_reviewed": true,
+  "review_notes": "Four native pages reviewed; exact KPI values rendered; tables/monthly chart retain standard scroll navigation. Native routing uses a scatter and ordered stop table, while the offline preview adds route polylines."
+}

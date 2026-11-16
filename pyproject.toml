@@ -15,3 +15,6 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[project.optional-dependencies]
+dashboard = ["jsonschema==4.26.0"]

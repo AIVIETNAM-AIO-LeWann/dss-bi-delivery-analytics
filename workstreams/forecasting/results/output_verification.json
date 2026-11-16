@@ -1,0 +1,19 @@
+{
+  "checks": {
+    "test_unique_exact_ids": true,
+    "all_export_ids_exclude_purged": true,
+    "test_context_correct": true,
+    "exported_labels_unchanged": true,
+    "finite_valid_probabilities": true,
+    "predicted_class_matches_threshold": true,
+    "metrics_recomputed_from_csv": true,
+    "confusion_counts_reconcile": true,
+    "selected_by_validation_logloss": true,
+    "fresh_process_model_load_and_predictions": true,
+    "upstream_validation_results": true,
+    "upstream_analysis_validation": true
+  },
+  "passed": 12,
+  "total": 12,
+  "all_passed": true
+}

@@ -1,0 +1,20 @@
+{
+  "completed": true,
+  "promise_summaries_reproduced": true,
+  "risk_groups_reproduced": true,
+  "all_replay_routes_verified": true,
+  "replay_source_audit_passed": true,
+  "timed_heuristic_variations": [
+    {
+      "instance": "rc101",
+      "scenario": "base",
+      "method": "ortools",
+      "published_distance": 1700.09002923046,
+      "replayed_distance": 1718.5463800796606,
+      "published_vehicles": 17.0,
+      "replayed_vehicles": 16.0
+    }
+  ],
+  "published_results_replaced": false,
+  "note": "Time-limited OR-Tools search can return a different feasible route. The submitted report keeps the published run."
+}

@@ -1,0 +1,8 @@
+{
+  "json_schema_files_passed": 68,
+  "visual_references_and_layout_passed": 56,
+  "tables": 10,
+  "measures": 32,
+  "native_power_bi_open_refresh_dax_render": "Not covered by this command; see native_dax_validation.json and native_render_validation.json",
+  "limitations": "Schema checks cannot validate visual-specific role names, DAX/M execution, or native rendering."
+}

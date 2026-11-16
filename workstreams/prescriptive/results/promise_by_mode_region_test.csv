@@ -1,0 +1,141 @@
+﻿policy,shipping_mode,order_region,n,proposed_days,current_days,current_late_rate,proposed_exceedance_rate,fallback_orders
+q80_min100,First Class,Eastern Asia,195,2,1,1.0,0.0,0
+q80_min100,First Class,Northern Europe,221,2,1,1.0,0.0,0
+q80_min100,First Class,Oceania,208,2,1,1.0,0.0,0
+q80_min100,First Class,South Asia,167,2,1,1.0,0.0,0
+q80_min100,First Class,Southeast Asia,242,2,1,1.0,0.0,0
+q80_min100,First Class,Southern Europe,229,2,1,1.0,0.0,0
+q80_min100,First Class,Western Europe,712,2,1,1.0,0.0,0
+q80_min100,Same Day,Eastern Asia,69,1,0,0.5217391304347826,0.0,0
+q80_min100,Same Day,Northern Europe,108,1,0,0.49074074074074076,0.0,108
+q80_min100,Same Day,Oceania,93,1,0,0.5698924731182796,0.0,0
+q80_min100,Same Day,South Asia,65,1,0,0.6,0.0,0
+q80_min100,Same Day,Southeast Asia,73,1,0,0.5205479452054794,0.0,0
+q80_min100,Same Day,Southern Europe,93,1,0,0.5698924731182796,0.0,93
+q80_min100,Same Day,Western Europe,230,1,0,0.5304347826086957,0.0,0
+q80_min100,Second Class,Eastern Asia,235,5,2,0.8127659574468085,0.2170212765957447,0
+q80_min100,Second Class,Northern Europe,320,5,2,0.80625,0.203125,0
+q80_min100,Second Class,Oceania,272,5,2,0.7830882352941176,0.15073529411764705,0
+q80_min100,Second Class,South Asia,219,6,2,0.8036529680365296,0.0,0
+q80_min100,Second Class,Southeast Asia,346,6,2,0.8063583815028902,0.0,0
+q80_min100,Second Class,Southern Europe,320,5,2,0.825,0.2,0
+q80_min100,Second Class,Western Europe,874,6,2,0.8032036613272311,0.0,0
+q80_min100,Standard Class,Eastern Asia,753,6,4,0.4050464807436919,0.0,0
+q80_min100,Standard Class,Northern Europe,995,6,4,0.392964824120603,0.0,0
+q80_min100,Standard Class,Oceania,794,5,4,0.4005037783375315,0.190176322418136,0
+q80_min100,Standard Class,South Asia,637,5,4,0.38461538461538464,0.19623233908948196,0
+q80_min100,Standard Class,Southeast Asia,1012,6,4,0.4090909090909091,0.0,0
+q80_min100,Standard Class,Southern Europe,947,5,4,0.36747624076029567,0.1805702217529039,0
+q80_min100,Standard Class,Western Europe,2642,6,4,0.3981831945495837,0.0,0
+q90_min100,First Class,Eastern Asia,195,2,1,1.0,0.0,0
+q90_min100,First Class,Northern Europe,221,2,1,1.0,0.0,0
+q90_min100,First Class,Oceania,208,2,1,1.0,0.0,0
+q90_min100,First Class,South Asia,167,2,1,1.0,0.0,0
+q90_min100,First Class,Southeast Asia,242,2,1,1.0,0.0,0
+q90_min100,First Class,Southern Europe,229,2,1,1.0,0.0,0
+q90_min100,First Class,Western Europe,712,2,1,1.0,0.0,0
+q90_min100,Same Day,Eastern Asia,69,1,0,0.5217391304347826,0.0,0
+q90_min100,Same Day,Northern Europe,108,1,0,0.49074074074074076,0.0,108
+q90_min100,Same Day,Oceania,93,1,0,0.5698924731182796,0.0,0
+q90_min100,Same Day,South Asia,65,1,0,0.6,0.0,0
+q90_min100,Same Day,Southeast Asia,73,1,0,0.5205479452054794,0.0,0
+q90_min100,Same Day,Southern Europe,93,1,0,0.5698924731182796,0.0,93
+q90_min100,Same Day,Western Europe,230,1,0,0.5304347826086957,0.0,0
+q90_min100,Second Class,Eastern Asia,235,6,2,0.8127659574468085,0.0,0
+q90_min100,Second Class,Northern Europe,320,6,2,0.80625,0.0,0
+q90_min100,Second Class,Oceania,272,6,2,0.7830882352941176,0.0,0
+q90_min100,Second Class,South Asia,219,6,2,0.8036529680365296,0.0,0
+q90_min100,Second Class,Southeast Asia,346,6,2,0.8063583815028902,0.0,0
+q90_min100,Second Class,Southern Europe,320,6,2,0.825,0.0,0
+q90_min100,Second Class,Western Europe,874,6,2,0.8032036613272311,0.0,0
+q90_min100,Standard Class,Eastern Asia,753,6,4,0.4050464807436919,0.0,0
+q90_min100,Standard Class,Northern Europe,995,6,4,0.392964824120603,0.0,0
+q90_min100,Standard Class,Oceania,794,6,4,0.4005037783375315,0.0,0
+q90_min100,Standard Class,South Asia,637,6,4,0.38461538461538464,0.0,0
+q90_min100,Standard Class,Southeast Asia,1012,6,4,0.4090909090909091,0.0,0
+q90_min100,Standard Class,Southern Europe,947,6,4,0.36747624076029567,0.0,0
+q90_min100,Standard Class,Western Europe,2642,6,4,0.3981831945495837,0.0,0
+q95_min100,First Class,Eastern Asia,195,2,1,1.0,0.0,0
+q95_min100,First Class,Northern Europe,221,2,1,1.0,0.0,0
+q95_min100,First Class,Oceania,208,2,1,1.0,0.0,0
+q95_min100,First Class,South Asia,167,2,1,1.0,0.0,0
+q95_min100,First Class,Southeast Asia,242,2,1,1.0,0.0,0
+q95_min100,First Class,Southern Europe,229,2,1,1.0,0.0,0
+q95_min100,First Class,Western Europe,712,2,1,1.0,0.0,0
+q95_min100,Same Day,Eastern Asia,69,1,0,0.5217391304347826,0.0,0
+q95_min100,Same Day,Northern Europe,108,1,0,0.49074074074074076,0.0,108
+q95_min100,Same Day,Oceania,93,1,0,0.5698924731182796,0.0,0
+q95_min100,Same Day,South Asia,65,1,0,0.6,0.0,0
+q95_min100,Same Day,Southeast Asia,73,1,0,0.5205479452054794,0.0,0
+q95_min100,Same Day,Southern Europe,93,1,0,0.5698924731182796,0.0,93
+q95_min100,Same Day,Western Europe,230,1,0,0.5304347826086957,0.0,0
+q95_min100,Second Class,Eastern Asia,235,6,2,0.8127659574468085,0.0,0
+q95_min100,Second Class,Northern Europe,320,6,2,0.80625,0.0,0
+q95_min100,Second Class,Oceania,272,6,2,0.7830882352941176,0.0,0
+q95_min100,Second Class,South Asia,219,6,2,0.8036529680365296,0.0,0
+q95_min100,Second Class,Southeast Asia,346,6,2,0.8063583815028902,0.0,0
+q95_min100,Second Class,Southern Europe,320,6,2,0.825,0.0,0
+q95_min100,Second Class,Western Europe,874,6,2,0.8032036613272311,0.0,0
+q95_min100,Standard Class,Eastern Asia,753,6,4,0.4050464807436919,0.0,0
+q95_min100,Standard Class,Northern Europe,995,6,4,0.392964824120603,0.0,0
+q95_min100,Standard Class,Oceania,794,6,4,0.4005037783375315,0.0,0
+q95_min100,Standard Class,South Asia,637,6,4,0.38461538461538464,0.0,0
+q95_min100,Standard Class,Southeast Asia,1012,6,4,0.4090909090909091,0.0,0
+q95_min100,Standard Class,Southern Europe,947,6,4,0.36747624076029567,0.0,0
+q95_min100,Standard Class,Western Europe,2642,6,4,0.3981831945495837,0.0,0
+current,First Class,Eastern Asia,195,1,1,1.0,1.0,0
+current,First Class,Northern Europe,221,1,1,1.0,1.0,0
+current,First Class,Oceania,208,1,1,1.0,1.0,0
+current,First Class,South Asia,167,1,1,1.0,1.0,0
+current,First Class,Southeast Asia,242,1,1,1.0,1.0,0
+current,First Class,Southern Europe,229,1,1,1.0,1.0,0
+current,First Class,Western Europe,712,1,1,1.0,1.0,0
+current,Same Day,Eastern Asia,69,0,0,0.5217391304347826,0.5217391304347826,0
+current,Same Day,Northern Europe,108,0,0,0.49074074074074076,0.49074074074074076,0
+current,Same Day,Oceania,93,0,0,0.5698924731182796,0.5698924731182796,0
+current,Same Day,South Asia,65,0,0,0.6,0.6,0
+current,Same Day,Southeast Asia,73,0,0,0.5205479452054794,0.5205479452054794,0
+current,Same Day,Southern Europe,93,0,0,0.5698924731182796,0.5698924731182796,0
+current,Same Day,Western Europe,230,0,0,0.5304347826086957,0.5304347826086957,0
+current,Second Class,Eastern Asia,235,2,2,0.8127659574468085,0.8127659574468085,0
+current,Second Class,Northern Europe,320,2,2,0.80625,0.80625,0
+current,Second Class,Oceania,272,2,2,0.7830882352941176,0.7830882352941176,0
+current,Second Class,South Asia,219,2,2,0.8036529680365296,0.8036529680365296,0
+current,Second Class,Southeast Asia,346,2,2,0.8063583815028902,0.8063583815028902,0
+current,Second Class,Southern Europe,320,2,2,0.825,0.825,0
+current,Second Class,Western Europe,874,2,2,0.8032036613272311,0.8032036613272311,0
+current,Standard Class,Eastern Asia,753,4,4,0.4050464807436919,0.4050464807436919,0
+current,Standard Class,Northern Europe,995,4,4,0.392964824120603,0.392964824120603,0
+current,Standard Class,Oceania,794,4,4,0.4005037783375315,0.4005037783375315,0
+current,Standard Class,South Asia,637,4,4,0.38461538461538464,0.38461538461538464,0
+current,Standard Class,Southeast Asia,1012,4,4,0.4090909090909091,0.4090909090909091,0
+current,Standard Class,Southern Europe,947,4,4,0.36747624076029567,0.36747624076029567,0
+current,Standard Class,Western Europe,2642,4,4,0.3981831945495837,0.3981831945495837,0
+bounded_plus1_keep_same_day,First Class,Eastern Asia,195,2,1,1.0,0.0,0
+bounded_plus1_keep_same_day,First Class,Northern Europe,221,2,1,1.0,0.0,0
+bounded_plus1_keep_same_day,First Class,Oceania,208,2,1,1.0,0.0,0
+bounded_plus1_keep_same_day,First Class,South Asia,167,2,1,1.0,0.0,0
+bounded_plus1_keep_same_day,First Class,Southeast Asia,242,2,1,1.0,0.0,0
+bounded_plus1_keep_same_day,First Class,Southern Europe,229,2,1,1.0,0.0,0
+bounded_plus1_keep_same_day,First Class,Western Europe,712,2,1,1.0,0.0,0
+bounded_plus1_keep_same_day,Same Day,Eastern Asia,69,0,0,0.5217391304347826,0.5217391304347826,0
+bounded_plus1_keep_same_day,Same Day,Northern Europe,108,0,0,0.49074074074074076,0.49074074074074076,0
+bounded_plus1_keep_same_day,Same Day,Oceania,93,0,0,0.5698924731182796,0.5698924731182796,0
+bounded_plus1_keep_same_day,Same Day,South Asia,65,0,0,0.6,0.6,0
+bounded_plus1_keep_same_day,Same Day,Southeast Asia,73,0,0,0.5205479452054794,0.5205479452054794,0
+bounded_plus1_keep_same_day,Same Day,Southern Europe,93,0,0,0.5698924731182796,0.5698924731182796,0
+bounded_plus1_keep_same_day,Same Day,Western Europe,230,0,0,0.5304347826086957,0.5304347826086957,0
+bounded_plus1_keep_same_day,Second Class,Eastern Asia,235,3,2,0.8127659574468085,0.6340425531914894,0
+bounded_plus1_keep_same_day,Second Class,Northern Europe,320,3,2,0.80625,0.59375,0
+bounded_plus1_keep_same_day,Second Class,Oceania,272,3,2,0.7830882352941176,0.5551470588235294,0
+bounded_plus1_keep_same_day,Second Class,South Asia,219,3,2,0.8036529680365296,0.6118721461187214,0
+bounded_plus1_keep_same_day,Second Class,Southeast Asia,346,3,2,0.8063583815028902,0.6213872832369942,0
+bounded_plus1_keep_same_day,Second Class,Southern Europe,320,3,2,0.825,0.59375,0
+bounded_plus1_keep_same_day,Second Class,Western Europe,874,3,2,0.8032036613272311,0.6132723112128147,0
+bounded_plus1_keep_same_day,Standard Class,Eastern Asia,753,5,4,0.4050464807436919,0.21115537848605578,0
+bounded_plus1_keep_same_day,Standard Class,Northern Europe,995,5,4,0.392964824120603,0.19798994974874373,0
+bounded_plus1_keep_same_day,Standard Class,Oceania,794,5,4,0.4005037783375315,0.190176322418136,0
+bounded_plus1_keep_same_day,Standard Class,South Asia,637,5,4,0.38461538461538464,0.19623233908948196,0
+bounded_plus1_keep_same_day,Standard Class,Southeast Asia,1012,5,4,0.4090909090909091,0.20652173913043478,0
+bounded_plus1_keep_same_day,Standard Class,Southern Europe,947,5,4,0.36747624076029567,0.1805702217529039,0
+bounded_plus1_keep_same_day,Standard Class,Western Europe,2642,5,4,0.3981831945495837,0.20211960635881907,0

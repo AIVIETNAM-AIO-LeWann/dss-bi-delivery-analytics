@@ -1,0 +1,56 @@
+[
+  {
+    "original_name": "DataCoSupplyChainDataset [Data Raw kèm tính toán].xlsx",
+    "path": "data/reference/dataco_raw_with_calculations.xlsx",
+    "bytes": 85935108,
+    "sha256": "24e5e18256744c5571e41ed08777583c87d4a46204cd18a325ac5476ca4321b2"
+  },
+  {
+    "original_name": "BTN_Prompt.md",
+    "path": "references/coursework/assignment_prompts.md",
+    "bytes": 204470,
+    "sha256": "5ca4c90b30db61514c2a395c3665e0e111306175db9608faa2ee6dc59d17c249"
+  },
+  {
+    "original_name": "BTN_ChuDe.pdf",
+    "path": "references/coursework/assignment_topics.pdf",
+    "bytes": 1064726,
+    "sha256": "5b03d06c3e1e70be14d3bf55e750d5c8ff7bbbf778eee1af41aaf3782af37ef4"
+  },
+  {
+    "original_name": "Ngoc_Quang_P_Late_13071_don_test.csv",
+    "path": "data/external/predictions_test_handoff.csv",
+    "bytes": 2054543,
+    "sha256": "30b093e89524fc07efe5ba5f07152d607171ea83fc621e03f0aad68d47b1e57d"
+  },
+  {
+    "original_name": "Ngoc_Quang_Chu_de_18_Ban_giao.zip",
+    "path": "archive/handoffs/ngoc_quang_forecasting.zip",
+    "bytes": 4791603,
+    "sha256": "f3fee08739fd424e5fc0a9b7af73a9dd0435544a4b44b55d3140493ac2051951"
+  },
+  {
+    "original_name": "Ngọc Quang - Chủ đề 18 - Phân tích dự báo giao trễ và hạn chế.docx",
+    "path": "references/handoffs/ngoc_quang_forecasting_report.docx",
+    "bytes": 163006,
+    "sha256": "1985e88ecce4130e7b1f35728b0be84ed2824a8cffb0bca2fe51ef8116794748"
+  },
+  {
+    "original_name": "thong_ke_mo_ta.zip",
+    "path": "archive/handoffs/hoang_quan_descriptive.zip",
+    "bytes": 1946388,
+    "sha256": "35da2abae59a7c1f59fb9aaa7e3a50660d710d2a27c9847cdee021cff3955b08"
+  },
+  {
+    "original_name": "10-11.zip",
+    "path": "archive/handoffs/hoai_phu_prescriptive.zip",
+    "bytes": 2977473,
+    "sha256": "c9e44423ec6e355890b030b93bf86bbe5d9e33517f9258f14dc45cfd978a856e"
+  },
+  {
+    "original_name": "HỆ HỖ TRỢ QĐ & TTKD - HK261.xlsx",
+    "path": "references/team/team_assignments_hk261.xlsx",
+    "bytes": 249138,
+    "sha256": "9eb46d5e3691276b0dda65b0c71fe6a5bc595409188bb791784179a7d94080ee"
+  }
+]

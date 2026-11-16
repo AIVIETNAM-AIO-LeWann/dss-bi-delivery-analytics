@@ -1,0 +1,21 @@
+shipping_mode,market,order_count,late_count,late_rate_pct
+First Class,Europe,2753,2753,100.0
+First Class,Pacific Asia,2543,2543,100.0
+First Class,LATAM,2498,2498,100.0
+First Class,USCA,1272,1272,100.0
+First Class,Africa,536,536,100.0
+Same Day,Europe,949,457,48.16
+Same Day,Pacific Asia,918,440,47.93
+Same Day,LATAM,870,442,50.8
+Same Day,USCA,447,204,45.64
+Same Day,Africa,223,105,47.09
+Second Class,Europe,3459,2773,80.17
+Second Class,Pacific Asia,3338,2680,80.29
+Second Class,LATAM,3160,2510,79.43
+Second Class,USCA,1614,1289,79.86
+Second Class,Africa,685,551,80.44
+Standard Class,Europe,10602,4216,39.77
+Standard Class,Pacific Asia,10054,4057,40.35
+Standard Class,LATAM,9886,3889,39.34
+Standard Class,USCA,4845,1939,40.02
+Standard Class,Africa,2245,894,39.82

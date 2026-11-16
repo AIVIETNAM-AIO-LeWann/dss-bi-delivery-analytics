@@ -1,0 +1,6 @@
+cohort_name,source_file,description,total_orders,late_orders,late_rate_pct,scheduled_mean,actual_mean,actual_std,delay_mean
+primary_analysis_cohort,orders_analysis.csv,Mau phan tich chinh (da loai 2.855 don huy),62897,36048,57.31,2.94,3.5,1.62,0.57
+all_source_orders,orders_clean.csv,Toan bo nguon gom ca 2.855 don huy,65752,36048,54.82,2.93,3.5,1.62,0.57
+complete_and_closed_orders,"orders_clean.csv (trang thai COMPLETE, CLOSED)",Don hang da hoan tat va dong chu trinh,28965,16633,57.42,2.93,3.49,1.62,0.56
+without_first_class,orders_analysis.csv (loai tru First Class),Mau loai tru 9.602 don First Class,53295,26446,49.62,3.28,3.77,1.62,0.49
+timestamp_consistent_subset,orders_analysis.csv (duration_mismatch_flag == 0),Don khong lech ngay giua timestamp va ngay nguyen,59490,34400,57.82,3.1,3.67,1.49,0.57

@@ -1,139 +1,49 @@
-# DataCo — Dữ liệu ban đầu cho chủ đề 18
+# Phân tích giao hàng và hỗ trợ quyết định
 
-Bài tập lớn môn **Hệ Hỗ trợ Quyết định & Trí tuệ Kinh doanh**.
-Chủ đề: **Giao hàng đúng hẹn và tối ưu tuyến đường**.
+Dự án nhóm 7 môn Hệ Hỗ trợ Quyết định & Trí tuệ Kinh doanh, HK261.
+**Chủ đề 18: giao hàng đúng hẹn và tối ưu tuyến đường**, theo quy trình SOAR.
+Giám đốc Logistics cần cân nhắc điều chỉnh cam kết theo phương thức/vùng và phương án tuyến giao.
+DataCo dùng để phân tích giao hàng; Solomon dùng riêng để thử nghiệm tuyến.
 
-Phạm vi hiện tại là bước **O — Obtain the data**: nguồn dữ liệu, Data Dictionary,
-kiểm tra/làm sạch, biến chuyển đổi và sổ giả định. Chưa huấn luyện mô hình,
-chưa làm dashboard, chưa giải bài toán tuyến.
+## Bắt đầu
 
-## Đọc từ đâu
+1. Đọc [bối cảnh và trạng thái](docs/project/context.md).
+2. Xem [bản đồ thư mục](docs/project/structure.md) để biết đặt và tìm file ở đâu.
+3. Làm theo [hướng dẫn vận hành](docs/project/runbook.md) khi kiểm tra hoặc chạy lại.
+4. Anh Quốc bắt đầu tại [bàn giao Dashboard](dashboards/README.md).
+5. Trước khi gửi thay đổi, xem [quy ước cộng tác](CONTRIBUTING.md).
 
-| Yêu cầu | Tài liệu/bằng chứng |
-| --- | --- |
-| Nguồn và mô tả dữ liệu | [01_nguon_du_lieu.md](docs/01_nguon_du_lieu.md), [manifest](docs/source_manifest.json) |
-| Data Dictionary | [02_data_dictionary.md](docs/02_data_dictionary.md), [CSV 53 cột](docs/data_dictionary.csv) |
-| Kiểm tra và làm sạch | [03_chat_luong_va_lam_sach.md](docs/03_chat_luong_va_lam_sach.md), [kết quả thực chạy](reports/data_quality_report.md), [nhật ký](reports/preparation_log.csv) |
-| Biến chuyển đổi | [04_bien_chuyen_doi.md](docs/04_bien_chuyen_doi.md), [công thức CSV](docs/derived_variables.csv) |
-| Ghi nhận giả định | [05_so_gia_dinh.md](docs/05_so_gia_dinh.md), [sổ CSV](docs/assumption_log.csv) |
-| Nội dung có thể đưa vào báo cáo | [06_phan_du_lieu_bao_cao.md](docs/06_phan_du_lieu_bao_cao.md) |
-| Dữ liệu cho bốn cấp độ phân tích | [07_du_lieu_cho_phan_tich.md](docs/07_du_lieu_cho_phan_tich.md), [kết quả làm sạch bổ sung](reports/analysis_readiness_report.md) |
+## Các phần công việc
 
-## Dùng file nào để phân tích?
+| Phần | Người phụ trách | Điểm vào |
+| --- | --- | --- |
+| Bối cảnh, tổng hợp báo cáo | Phương Quỳnh | `deliverables/report/` — chưa nhận bản riêng |
+| Chuẩn bị dữ liệu | Lê Quang | [Tài liệu](docs/data_preparation/README.md), `src/dss_bi_delivery/` |
+| Mô tả và chẩn đoán | Hoàng Quân | [Bàn giao](workstreams/descriptive/README.md) |
+| Dự báo, hạn chế | Ngọc Quang | [Bàn giao](workstreams/forecasting/README.md) |
+| Đề xuất, benchmark tuyến | Hoài Phú | [Bàn giao](workstreams/prescriptive/README.md) |
+| Dashboard | Anh Quốc | [Đầu vào và tiêu chí](dashboards/README.md) — PBIP đã mở/refresh và kiểm tra native |
+| Slide | Phương Quỳnh, Anh Quốc | `deliverables/slides/` — chưa có bản cuối |
 
-**Bảng chính: `data/processed/orders_analysis.csv` — 62.897 đơn, 26 cột.**
-Đây là mẫu không hủy, đã kiểm tra khóa/miền/nhãn, không còn ô trống hay chuỗi địa lý
-chứa ký tự hỏng. Có 37 đơn không khôi phục được tên thành phố và 100 đơn không khôi
-phục được tên bang/tỉnh: các ô đó dùng `__UNKNOWN__` kèm cờ, không phải địa danh đã sửa.
+## Dữ liệu chính
 
-| Công việc | File |
-| --- | --- |
-| Mô tả/chẩn đoán theo đơn | `orders_analysis.csv` |
-| Đầu vào dự báo | `orders_model_features.csv`; chỉ cột trong allowlist, bỏ hai khóa khi fit |
-| Nhãn và cách chia tập | `orders_model_labels.csv`, `orders_model_splits.csv` |
-| Độ nhạy khi yêu cầu timestamp nhất quán | `orders_timestamp_consistent.csv` — 59.490 đơn; mất toàn bộ Same Day |
-| Điều tra đơn không thuộc mẫu chính | `orders_excluded.csv` — 2.855 đơn hủy, có lý do |
-| Đầu vào khám phá cam kết giao theo vùng/phương thức | `reports/duration_distribution_by_mode_region.csv` |
+`data/processed/orders_analysis.csv`: 62.897 đơn không hủy; 36.048 nhãn trễ (57,31%).
+`workstreams/forecasting/results/predictions_test.csv`: 13.071 đơn test, 01/07/2017–31/01/2018.
+`workstreams/prescriptive/results/dashboard_orders_test.csv`: bảng test ghép kết quả dự báo và kịch bản cam kết.
+Mã `order_id` là Text; tỷ lệ/xác suất lưu 0–1. Mẫu toàn nguồn, mẫu không hủy và test có mẫu số khác nhau.
 
-Các file đơn nằm trong `data/processed/`. `orders_clean.csv` và
-`order_items_clean.csv` là bảng trung gian giữ nguồn để đối chiếu; không đưa nguyên
-bảng đó vào mô hình. Bảng analysis bỏ ZIP thiếu, cột tiền chưa rõ đơn vị, timestamp
-shipment/span và các trường không cần cho câu hỏi logistics. Duration chính vẫn
-theo chỉ báo nguồn; các giới hạn ngữ nghĩa không thể giải quyết bằng thao tác làm sạch.
+Dashboard: mở `dashboards/powerbi/delivery_dashboard.pbip`; hoặc tạo và mở bản xem trước `dashboards/preview/delivery_dashboard.html`.
+Hướng dẫn và trạng thái nghiệm thu tại [dashboards/README.md](dashboards/README.md).
 
-Mẫu dự báo hiện có điều kiện **không hủy** trong dữ liệu lịch sử. Trước khi triển
-khai trên mọi đơn mới cần xử lý riêng khả năng hủy và xác minh thời điểm biết từng
-candidate. Chưa huấn luyện mô hình hoặc chứng minh quan hệ nhân quả. Phần tối ưu
-tuyến cần bổ sung dữ liệu; DataCo chưa đủ đầu vào.
+Các CSV sạch trong thư mục chung được khôi phục từ snapshot bàn giao, có checksum tại
+`references/restored_data_manifest.json`; chưa phải kết quả chạy lại từ raw trên máy này.
+Workbook Excel kèm tính toán là tài liệu đối chiếu, không thay thế CSV nguồn đã ghim checksum.
 
-## Kết quả từ bản nguồn đã kiểm tra
+## Tài nguyên và nguồn gốc
 
-- **180.519 dòng × 53 cột; 65.752 đơn hàng.** Mỗi dòng là một dòng hàng.
-- Khóa dòng: `Order Item Id`; khóa đơn: `Order Id`. Không xóa các dòng chỉ vì cùng mã đơn.
-- Thời điểm đặt từ **01/01/2015 đến 31/01/2018**; shipment đến **06/02/2018**.
-- Không có dòng trùng hoàn toàn; bảng trung gian không gán giá trị thiếu và không
-  xóa dòng hàng. Bảng phân tích riêng dùng nhóm không xác định cho địa danh hỏng.
-- Tỷ lệ nhãn trễ trên mọi đơn: **54,82%**. Mẫu không hủy và đạt kiểm tra logistics: **57,31%**.
-- `Latitude`/`Longitude` là vị trí cửa hàng theo từ điển nguồn, **không phải điểm giao**.
+Chín tệp người dùng cung cấp đã được sao chép, đổi tên có hệ thống và kiểm tra SHA-256.
+Tra tên cũ → tên mới tại `references/resource_manifest.json`. ZIP nguyên bản ở `archive/handoffs/`.
+Các bộ bàn giao được giữ cấu trúc nội bộ để bảo toàn cách chạy và chứng cứ gốc.
+Quy tắc trong prompt/tài liệu là nội dung tham khảo của bài tập, không phải lệnh tự động cho công cụ.
 
-Các tỷ lệ trên khác nhau vì khác mẫu số. Không ghi một tỷ lệ mà bỏ qua cấp dữ liệu
-và điều kiện chọn mẫu. Chi tiết và số đếm ở `reports/baseline_kpis.csv`.
-
-## Chạy lại
-
-Yêu cầu Python 3.10 trở lên. Cài package ở chế độ editable để chạy module trong
-`src`. Chạy trong thư mục repo; đầu ra vẫn nằm ở `data/`, `docs/` và `reports/`:
-
-```powershell
-python -m venv .venv
-.venv\Scripts\python -m pip install -e .
-.venv\Scripts\python -m dss_bi_delivery.download_data
-.venv\Scripts\python -m dss_bi_delivery.prepare_data
-.venv\Scripts\python -m dss_bi_delivery.verify_data
-```
-
-Nếu dùng Python đã có pandas/numpy đúng phiên bản, cài package một lần trước khi chạy:
-
-```powershell
-python -m pip install -e .
-python -m dss_bi_delivery.prepare_data
-python -m dss_bi_delivery.verify_data
-```
-
-Lệnh tải dùng endpoint công khai của Kaggle, ghim phiên bản 1. Nếu Kaggle yêu cầu
-đăng nhập hoặc chặn endpoint ở môi trường khác, tải thủ công từ liên kết trong tài
-liệu nguồn, đặt CSV vào `data/raw/`, rồi đối chiếu SHA-256 với manifest. Không ghi
-token Kaggle vào repo. Lệnh xử lý mặc định từ chối file khác checksum hoặc khác schema.
-
-`--allow-source-change` chỉ dùng sau khi chủ động xem lại nguồn, encoding, schema
-và các giả định; không dùng như cách bỏ qua lỗi tải file. Các kiểm tra bỏ cột trùng,
-cột rỗng và cột hằng vẫn phải đạt.
-
-Đầu ra:
-
-```text
-data/raw/DataCoSupplyChainDataset.csv     # nguồn nguyên vẹn, không theo dõi bằng Git
-data/processed/order_items_clean.csv     # 180.519 dòng; 54 cột gồm biến dẫn xuất
-data/processed/orders_clean.csv          # 65.752 đơn; 36 cột
-data/processed/orders_analysis.csv       # 62.897 đơn; 26 cột, dùng cho phân tích chính
-data/processed/orders_model_features.csv # candidate tại lúc đặt; có khóa join riêng
-data/processed/orders_model_labels.csv   # nhãn nguồn giữ nguyên
-data/processed/orders_model_splits.csv   # train/validation/test và khoảng đệm
-docs/                                   # tài liệu tiếng Việt, dictionary và giả định
-reports/                                # số liệu kiểm tra, KPI và nhật ký 4 bước
-src/dss_bi_delivery/                     # package tải, schema, xử lý và kiểm chứng
-```
-
-CSV đầu ra dùng UTF-8 BOM, phù hợp mở bằng Excel/Power BI. Khi import phải đặt các
-cột mã là **Text**; CSV không lưu schema nên mở trực tiếp có thể khiến Excel suy diễn
-mã thành số. Ngày xuất theo `YYYY-MM-DD HH:MM:SS`, chưa gán múi giờ.
-
-File raw, ZIP và processed đã được `.gitignore`; không thêm chúng bằng `git add -f`.
-Tài liệu, mã nguồn và báo cáo tổng hợp được theo dõi. Repo GitHub:
-<https://github.com/AIVIETNAM-AIO-LeWann/dss-bi-delivery-analytics>.
-
-`verify_data.py` đối chiếu độc lập bảng xuất với nguồn: khóa/dòng truy nguyên,
-tổng theo đơn, nhãn gốc, đơn hủy, Same Day có kế hoạch 0 ngày và lợi nhuận âm.
-Kết quả lưu tại `reports/validation_results.json`. Script kiểm chứng này ghim số đếm
-của phiên bản đã kiểm tra; khi đổi nguồn phải xem lại các mốc, không nới kiểm tra tùy tiện.
-
-`prepare_data` tự chạy cả bước xuất analysis; không cần lệnh làm sạch bổ sung.
-Kiểm tra các trường hợp có thể làm sai dữ liệu (trùng khóa, thiếu quantity, nhãn
-mâu thuẫn, địa danh hỏng, Same Day và khoảng đệm thời gian):
-
-```powershell
-python -m unittest discover -s tests -v
-```
-
-## Quyết định phương pháp đang dùng
-
-1. KPI logistics mặc định ở **cấp đơn**; bảng dòng hàng phục vụ phân tích danh mục/sản phẩm.
-2. `late_delivery_risk` là nhãn kết quả gốc; `is_late_from_days` là biến tính lại, giữ riêng.
-3. Mẫu KPI chính loại `Shipping canceled`; vẫn báo cáo tỷ lệ trên toàn nguồn và độ nhạy
-   khi chỉ dùng trạng thái `COMPLETE`/`CLOSED`.
-4. Mốc dự báo dự kiến là lúc đặt hàng. Các trường kết quả và cờ chọn mẫu không phải predictor.
-5. DataCo phục vụ phân tích hiệu suất. Nếu nhóm triển khai tối ưu tuyến, cần thêm Solomon
-   hoặc dữ liệu đủ xe/điểm nhận/khung giờ; chưa ghép hay tạo dữ liệu tuyến giả trong repo này.
-
-Nguồn dataset giữ giấy phép riêng; repo chưa tự cấp giấy phép cho dữ liệu bên thứ ba.
-Ghi công nguồn và các thay đổi theo hướng dẫn tại `docs/01_nguon_du_lieu.md`.
+Tài liệu và dữ liệu bên thứ ba giữ giấy phép riêng. Không tự cấp giấy phép chung cho chúng.

@@ -1,0 +1,805 @@
+{
+  "name": "Delivery",
+  "compatibilityLevel": 1567,
+  "model": {
+    "culture": "en-US",
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "expressions": [
+      {
+        "name": "RepoRoot",
+        "kind": "m",
+        "expression": "\"D:/Projects/dss-bi-delivery-analytics\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]"
+      }
+    ],
+    "tables": [
+      {
+        "name": "Orders",
+        "lineageTag": "9b9252e7-89df-56e5-85e5-2d20e479ddcc",
+        "columns": [
+          {
+            "name": "order_id",
+            "dataType": "string",
+            "sourceColumn": "order_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "order_date",
+            "dataType": "dateTime",
+            "sourceColumn": "order_date",
+            "summarizeBy": "none",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "year_month",
+            "dataType": "string",
+            "sourceColumn": "year_month",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "shipping_mode",
+            "dataType": "string",
+            "sourceColumn": "shipping_mode",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "market",
+            "dataType": "string",
+            "sourceColumn": "market",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "order_region",
+            "dataType": "string",
+            "sourceColumn": "order_region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "customer_segment",
+            "dataType": "string",
+            "sourceColumn": "customer_segment",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "shipping_days_scheduled",
+            "dataType": "int64",
+            "sourceColumn": "shipping_days_scheduled",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "shipping_days_actual",
+            "dataType": "int64",
+            "sourceColumn": "shipping_days_actual",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "late_delivery_risk",
+            "dataType": "int64",
+            "sourceColumn": "late_delivery_risk",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "partition",
+            "dataType": "string",
+            "sourceColumn": "partition",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "P_Late",
+            "dataType": "double",
+            "sourceColumn": "P_Late",
+            "summarizeBy": "none",
+            "formatString": "0.00%"
+          },
+          {
+            "name": "duration_mismatch_flag",
+            "dataType": "int64",
+            "sourceColumn": "duration_mismatch_flag",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Orders",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/orders.csv\"), [Delimiter=\",\", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"order_id\", type text}, {\"order_date\", type date}, {\"year_month\", type text}, {\"shipping_mode\", type text}, {\"market\", type text}, {\"order_region\", type text}, {\"customer_segment\", type text}, {\"shipping_days_scheduled\", Int64.Type}, {\"shipping_days_actual\", Int64.Type}, {\"late_delivery_risk\", Int64.Type}, {\"partition\", type text}, {\"P_Late\", type number}, {\"duration_mismatch_flag\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Số đơn",
+            "expression": "COALESCE(COUNTROWS(Orders), 0)",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Số đơn trễ",
+            "expression": "COALESCE(SUM(Orders[late_delivery_risk]), 0)",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Tỷ lệ trễ",
+            "expression": "DIVIDE([Số đơn trễ], [Số đơn])",
+            "formatString": "0.00%"
+          },
+          {
+            "name": "Cam kết TB",
+            "expression": "AVERAGE(Orders[shipping_days_scheduled])",
+            "formatString": "0.00\" ngày\""
+          },
+          {
+            "name": "Thực tế TB",
+            "expression": "AVERAGE(Orders[shipping_days_actual])",
+            "formatString": "0.00\" ngày\""
+          },
+          {
+            "name": "Đơn test",
+            "expression": "CALCULATE([Số đơn], Orders[partition] = \"test\")",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Ngưỡng cảnh báo",
+            "expression": "SELECTEDVALUE(RiskThreshold[Value], 0.5)",
+            "formatString": "0.00"
+          },
+          {
+            "name": "Cảnh báo",
+            "expression": "VAR t = [Ngưỡng cảnh báo] RETURN CALCULATE([Đơn test], KEEPFILTERS(Orders[P_Late] >= t), KEEPFILTERS(NOT ISBLANK(Orders[P_Late])))",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Cảnh báo đúng",
+            "expression": "CALCULATE([Cảnh báo], Orders[late_delivery_risk] = 1)",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Đơn trễ test",
+            "expression": "CALCULATE([Số đơn trễ], Orders[partition] = \"test\")",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Precision theo ngưỡng",
+            "expression": "DIVIDE([Cảnh báo đúng], [Cảnh báo])",
+            "formatString": "0.00%"
+          },
+          {
+            "name": "Recall theo ngưỡng",
+            "expression": "DIVIDE([Cảnh báo đúng], [Đơn trễ test])",
+            "formatString": "0.00%"
+          },
+          {
+            "name": "Bỏ sót",
+            "expression": "[Đơn trễ test] - [Cảnh báo đúng]",
+            "formatString": "#,0"
+          },
+          {
+            "name": "P_Late TB test",
+            "expression": "CALCULATE(AVERAGE(Orders[P_Late]), Orders[partition] = \"test\")",
+            "formatString": "0.00%"
+          }
+        ]
+      },
+      {
+        "name": "PromiseScenarios",
+        "lineageTag": "16ff6ead-41d6-5d15-a7b5-68e34cad4c65",
+        "columns": [
+          {
+            "name": "order_id",
+            "dataType": "string",
+            "sourceColumn": "order_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "policy_id",
+            "dataType": "string",
+            "sourceColumn": "policy_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "proposed_days",
+            "dataType": "int64",
+            "sourceColumn": "proposed_days",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "exceed_proposed",
+            "dataType": "int64",
+            "sourceColumn": "exceed_proposed",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "fallback",
+            "dataType": "int64",
+            "sourceColumn": "fallback",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "added_days",
+            "dataType": "int64",
+            "sourceColumn": "added_days",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "PromiseScenarios",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/promise_scenarios.csv\"), [Delimiter=\",\", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"order_id\", type text}, {\"policy_id\", type text}, {\"proposed_days\", Int64.Type}, {\"exceed_proposed\", Int64.Type}, {\"fallback\", Int64.Type}, {\"added_days\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Chính sách đang xem",
+            "expression": "SELECTEDVALUE(Policies[policy_label], \"+1 ngày, giữ Same Day\")"
+          },
+          {
+            "name": "Đơn kịch bản",
+            "expression": "VAR p = SELECTEDVALUE(Policies[policy_id], \"bounded_plus1_keep_same_day\") RETURN CALCULATE(COUNTROWS(PromiseScenarios), KEEPFILTERS(Policies[policy_id] = p))",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Vượt hẹn tính lại",
+            "expression": "VAR p = SELECTEDVALUE(Policies[policy_id], \"bounded_plus1_keep_same_day\") RETURN DIVIDE(CALCULATE(SUM(PromiseScenarios[exceed_proposed]), KEEPFILTERS(Policies[policy_id] = p)), [Đơn kịch bản])",
+            "formatString": "0.00%"
+          },
+          {
+            "name": "Cam kết mới TB",
+            "expression": "VAR p = SELECTEDVALUE(Policies[policy_id], \"bounded_plus1_keep_same_day\") RETURN CALCULATE(AVERAGE(PromiseScenarios[proposed_days]), KEEPFILTERS(Policies[policy_id] = p))",
+            "formatString": "0.00\" ngày\""
+          },
+          {
+            "name": "Tăng cam kết TB",
+            "expression": "VAR p = SELECTEDVALUE(Policies[policy_id], \"bounded_plus1_keep_same_day\") RETURN CALCULATE(AVERAGE(PromiseScenarios[added_days]), KEEPFILTERS(Policies[policy_id] = p))",
+            "formatString": "0.00\" ngày\""
+          },
+          {
+            "name": "Trễ hiện trạng test",
+            "expression": "DIVIDE([Đơn trễ test], [Đơn test])",
+            "formatString": "0.00%"
+          },
+          {
+            "name": "Giảm vượt hẹn (điểm %)",
+            "expression": "IF([Đơn kịch bản] > 0, ([Trễ hiện trạng test] - [Vượt hẹn tính lại]) * 100)",
+            "formatString": "0.00\" điểm %\""
+          }
+        ]
+      },
+      {
+        "name": "Policies",
+        "lineageTag": "be9c3bdb-2bc1-5456-bc85-08c27343e83b",
+        "columns": [
+          {
+            "name": "policy_id",
+            "dataType": "string",
+            "sourceColumn": "policy_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "policy_label",
+            "dataType": "string",
+            "sourceColumn": "policy_label",
+            "summarizeBy": "none",
+            "sortByColumn": "sort_order"
+          },
+          {
+            "name": "sort_order",
+            "dataType": "int64",
+            "sourceColumn": "sort_order",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Policies",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/policies.csv\"), [Delimiter=\",\", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"policy_id\", type text}, {\"policy_label\", type text}, {\"sort_order\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RouteCases",
+        "lineageTag": "9e2e198b-9af5-563c-bd93-7d1cd5f9fd6e",
+        "columns": [
+          {
+            "name": "case_id",
+            "dataType": "string",
+            "sourceColumn": "case_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "instance",
+            "dataType": "string",
+            "sourceColumn": "instance",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "scenario",
+            "dataType": "string",
+            "sourceColumn": "scenario",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "method",
+            "dataType": "string",
+            "sourceColumn": "method",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "max_vehicles",
+            "dataType": "int64",
+            "sourceColumn": "max_vehicles",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "capacity",
+            "dataType": "int64",
+            "sourceColumn": "capacity",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "status",
+            "dataType": "string",
+            "sourceColumn": "status",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "vehicles_used",
+            "dataType": "int64",
+            "sourceColumn": "vehicles_used",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "distance_units",
+            "dataType": "double",
+            "sourceColumn": "distance_units",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "RouteCases",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/route_cases.csv\"), [Delimiter=\",\", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"case_id\", type text}, {\"instance\", type text}, {\"scenario\", type text}, {\"method\", type text}, {\"max_vehicles\", Int64.Type}, {\"capacity\", Int64.Type}, {\"status\", type text}, {\"vehicles_used\", Int64.Type}, {\"distance_units\", type number}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Quãng đường benchmark",
+            "expression": "IF(HASONEVALUE(RouteCases[case_id]) && SELECTEDVALUE(RouteCases[status]) = \"feasible\", SELECTEDVALUE(RouteCases[distance_units]))",
+            "formatString": "0.00"
+          },
+          {
+            "name": "Số xe sử dụng",
+            "expression": "IF(HASONEVALUE(RouteCases[case_id]) && SELECTEDVALUE(RouteCases[status]) = \"feasible\", SELECTEDVALUE(RouteCases[vehicles_used]))",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Km mô phỏng",
+            "expression": "[Quãng đường benchmark] * SELECTEDVALUE(KmPerUnit[Value], 1)",
+            "formatString": "0.00"
+          },
+          {
+            "name": "Nhiên liệu mô phỏng",
+            "expression": "[Km mô phỏng] * SELECTEDVALUE(FuelConsumption[Value], 10) / 100 * SELECTEDVALUE(FuelPrice[Value], 22000)",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Trạng thái tuyến",
+            "expression": "IF(HASONEVALUE(RouteCases[case_id]), IF(SELECTEDVALUE(RouteCases[status]) = \"feasible\", \"Có tuyến khả thi — chưa chứng minh tối ưu\", \"Chưa tìm được lời giải — không quy về 0\"), \"Chọn đúng một case_id để xem tuyến và chi phí\")"
+          }
+        ]
+      },
+      {
+        "name": "RouteStops",
+        "lineageTag": "bf1abbff-5bdb-5d82-8d77-5b30025097f0",
+        "columns": [
+          {
+            "name": "sequence",
+            "dataType": "int64",
+            "sourceColumn": "sequence",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "node",
+            "dataType": "int64",
+            "sourceColumn": "node",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "x",
+            "dataType": "double",
+            "sourceColumn": "x",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "y",
+            "dataType": "double",
+            "sourceColumn": "y",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "vehicle",
+            "dataType": "string",
+            "sourceColumn": "vehicle",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "case_id",
+            "dataType": "string",
+            "sourceColumn": "case_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "stop_key",
+            "dataType": "string",
+            "sourceColumn": "stop_key",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "RouteStops",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/route_stops.csv\"), [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"sequence\", Int64.Type}, {\"node\", Int64.Type}, {\"x\", type number}, {\"y\", type number}, {\"vehicle\", type text}, {\"case_id\", type text}, {\"stop_key\", type text}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Node tuyến",
+            "expression": "SELECTEDVALUE(RouteStops[node])",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Thứ tự dừng",
+            "expression": "SELECTEDVALUE(RouteStops[sequence])",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Tọa độ X",
+            "expression": "IF(HASONEVALUE(RouteCases[case_id]), AVERAGE(RouteStops[x]))",
+            "formatString": "0.0"
+          },
+          {
+            "name": "Tọa độ Y",
+            "expression": "IF(HASONEVALUE(RouteCases[case_id]), AVERAGE(RouteStops[y]))",
+            "formatString": "0.0"
+          }
+        ]
+      },
+      {
+        "name": "ModelMetrics",
+        "lineageTag": "9f30d1d6-a4f6-5b4f-9064-da4d52a69724",
+        "columns": [
+          {
+            "name": "model",
+            "dataType": "string",
+            "sourceColumn": "model",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "partition",
+            "dataType": "string",
+            "sourceColumn": "partition",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "n",
+            "dataType": "int64",
+            "sourceColumn": "n",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "late_count",
+            "dataType": "int64",
+            "sourceColumn": "late_count",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "late_rate",
+            "dataType": "double",
+            "sourceColumn": "late_rate",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "roc_auc",
+            "dataType": "double",
+            "sourceColumn": "roc_auc",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "average_precision",
+            "dataType": "double",
+            "sourceColumn": "average_precision",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "log_loss",
+            "dataType": "double",
+            "sourceColumn": "log_loss",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "brier",
+            "dataType": "double",
+            "sourceColumn": "brier",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "accuracy",
+            "dataType": "double",
+            "sourceColumn": "accuracy",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "precision",
+            "dataType": "double",
+            "sourceColumn": "precision",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "recall",
+            "dataType": "double",
+            "sourceColumn": "recall",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "f1",
+            "dataType": "double",
+            "sourceColumn": "f1",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "threshold",
+            "dataType": "double",
+            "sourceColumn": "threshold",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "tn",
+            "dataType": "int64",
+            "sourceColumn": "tn",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "fp",
+            "dataType": "int64",
+            "sourceColumn": "fp",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "fn",
+            "dataType": "int64",
+            "sourceColumn": "fn",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "tp",
+            "dataType": "int64",
+            "sourceColumn": "tp",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "ModelMetrics",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/model_metrics.csv\"), [Delimiter=\",\", Columns=18, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"model\", type text}, {\"partition\", type text}, {\"n\", Int64.Type}, {\"late_count\", Int64.Type}, {\"late_rate\", type number}, {\"roc_auc\", type number}, {\"average_precision\", type number}, {\"log_loss\", type number}, {\"brier\", type number}, {\"accuracy\", type number}, {\"precision\", type number}, {\"recall\", type number}, {\"f1\", type number}, {\"threshold\", type number}, {\"tn\", Int64.Type}, {\"fp\", Int64.Type}, {\"fn\", Int64.Type}, {\"tp\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "AUC baseline test",
+            "expression": "CALCULATE(MAX(ModelMetrics[roc_auc]), ModelMetrics[model] = \"mode_baseline\", ModelMetrics[partition] = \"test\")",
+            "formatString": "0.000"
+          },
+          {
+            "name": "Log loss baseline test",
+            "expression": "CALCULATE(MAX(ModelMetrics[log_loss]), ModelMetrics[model] = \"mode_baseline\", ModelMetrics[partition] = \"test\")",
+            "formatString": "0.000"
+          }
+        ]
+      },
+      {
+        "name": "RiskThreshold",
+        "columns": [
+          {
+            "name": "Value",
+            "dataType": "decimal",
+            "type": "calculatedTableColumn",
+            "sourceColumn": "[Value]",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "RiskThreshold",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "GENERATESERIES(CURRENCY(0), CURRENCY(1), CURRENCY(0.01))"
+            }
+          }
+        ]
+      },
+      {
+        "name": "KmPerUnit",
+        "columns": [
+          {
+            "name": "Value",
+            "dataType": "double",
+            "type": "calculatedTableColumn",
+            "sourceColumn": "[Value]",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "KmPerUnit",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "GENERATESERIES(0.5, 1.5, 0.1)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "FuelConsumption",
+        "columns": [
+          {
+            "name": "Value",
+            "dataType": "double",
+            "type": "calculatedTableColumn",
+            "sourceColumn": "[Value]",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FuelConsumption",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "GENERATESERIES(8, 14, 1)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "FuelPrice",
+        "columns": [
+          {
+            "name": "Value",
+            "dataType": "int64",
+            "type": "calculatedTableColumn",
+            "sourceColumn": "[Value]",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FuelPrice",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "GENERATESERIES(18000, 26000, 1000)"
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "PromiseScenarios_order_id_Orders",
+        "fromTable": "PromiseScenarios",
+        "fromColumn": "order_id",
+        "toTable": "Orders",
+        "toColumn": "order_id",
+        "fromCardinality": "many",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "PromiseScenarios_policy_id_Policies",
+        "fromTable": "PromiseScenarios",
+        "fromColumn": "policy_id",
+        "toTable": "Policies",
+        "toColumn": "policy_id",
+        "fromCardinality": "many",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "RouteStops_case_id_RouteCases",
+        "fromTable": "RouteStops",
+        "fromColumn": "case_id",
+        "toTable": "RouteCases",
+        "toColumn": "case_id",
+        "fromCardinality": "many",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"Orders\", \"PromiseScenarios\", \"Policies\", \"RouteCases\", \"RouteStops\", \"ModelMetrics\", \"RepoRoot\"]"
+      }
+    ]
+  }
+}

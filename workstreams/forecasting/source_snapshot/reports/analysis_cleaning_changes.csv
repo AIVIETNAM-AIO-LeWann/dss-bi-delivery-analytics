@@ -1,0 +1,11 @@
+﻿column,action,affected_orders
+payment_type,normalize_NFC_and_whitespace,0
+customer_segment,normalize_NFC_and_whitespace,0
+shipping_mode,normalize_NFC_and_whitespace,0
+market,normalize_NFC_and_whitespace,0
+order_region,normalize_NFC_and_whitespace,1345
+order_country,normalize_NFC_and_whitespace,0
+order_state,normalize_NFC_and_whitespace,0
+order_city,normalize_NFC_and_whitespace,0
+order_state,unknown_category_with_flag,105
+order_city,unknown_category_with_flag,38

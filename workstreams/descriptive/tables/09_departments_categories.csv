@@ -1,0 +1,32 @@
+level,name,item_count,item_share_pct,late_count,late_rate_pct,total_revenue
+Department,Fan Shop,66861,37.04,36623,54.77,15378581.71
+Department,Apparel,48998,27.14,26825,54.75,7167654.21
+Department,Golf,33220,18.4,18198,54.78,4142100.96
+Department,Footwear,14525,8.05,7949,54.73,3599468.83
+Department,Outdoors,9686,5.37,5375,55.49,1125953.44
+Department,Fitness,2479,1.37,1377,55.55,357158.26
+Department,Discs Shop,2026,1.12,1103,54.44,205675.9
+Department,Technology,1465,0.81,806,55.02,933829.24
+Department,Pet Shop,492,0.27,290,58.94,37318.3
+Department,Book Shop,405,0.22,229,56.54,11303.42
+Department,Health and Beauty,362,0.2,202,55.8,95358.11
+Category,Cleats,24551,13.6,13496,54.97,3982856.5
+Category,Men's Footwear,22246,12.32,12121,54.49,2598494.42
+Category,Women's Apparel,21035,11.65,11476,54.56,2828708.5
+Category,Indoor/Outdoor Games,19298,10.69,10565,54.75,2596454.02
+Category,Fishing,17325,9.6,9516,54.93,6226935.29
+Category,Water Sports,15540,8.61,8517,54.81,2798044.18
+Category,Camping & Hiking,13729,7.61,7487,54.53,3700783.63
+Category,Cardio Equipment,12487,6.92,6805,54.5,3320250.7
+Category,Shop By Sport,10984,6.08,6058,55.15,1177185.63
+Category,Electronics,3156,1.75,1770,56.08,333327.26
+Category,Accessories,1780,0.99,1014,56.97,119712.55
+Category,Golf Balls,1475,0.82,805,54.58,69341.25
+Category,Girls' Apparel,1201,0.67,664,55.29,136206.83
+Category,Golf Gloves,1070,0.59,602,56.26,104787.4
+Category,Trade-In,974,0.54,542,55.65,61667.54
+Category,Video Games,838,0.46,455,54.3,29919.2
+Category,Children's Clothing,652,0.36,348,53.37,209268.38
+Category,Women's Clothing,650,0.36,367,56.46,126006.93
+Category,Baseball & Softball,632,0.35,349,55.22,84367.27
+Category,Hockey,614,0.34,329,53.58,43618.36

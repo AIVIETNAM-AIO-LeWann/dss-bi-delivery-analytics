@@ -66,7 +66,7 @@ def verify() -> dict:
     # Inspect saved analysis exports, rather than relying on in-memory validation.
     from .analysis_data import validate_views
 
-    schema = json.loads((ROOT / "docs/analysis_schema.json").read_text(encoding="utf-8"))
+    schema = json.loads((ROOT / "docs/data_preparation/analysis_schema.json").read_text(encoding="utf-8"))
 
     def read_analysis(name: str) -> pd.DataFrame:
         path = ROOT / "data/processed" / name
@@ -108,10 +108,10 @@ def verify() -> dict:
         check(f"{name}_respects_seven_day_gap", split.loc[selected, "order_datetime"].lt(cutoff - pd.Timedelta(days=7)).all())
         check(f"{name}_source_shipping_before_cutoff", source_shipping.loc[selected].lt(cutoff).all())
     result = {"checks": checks, "passed": sum(checks.values()), "total": len(checks), "all_passed": all(checks.values())}
-    (ROOT / "reports/validation_results.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    (ROOT / "reports/data_quality/validation_results.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2))
     if not result["all_passed"]:
-        raise AssertionError("Export reconciliation failed; see reports/validation_results.json")
+        raise AssertionError("Export reconciliation failed; see reports/data_quality/validation_results.json")
     return result
 
 

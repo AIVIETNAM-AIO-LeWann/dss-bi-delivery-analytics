@@ -1,0 +1,10 @@
+variable,variable_label,chi2_stat,df,p_value,p_value_formatted,cramers_v,association_strength,statistically_significant
+shipping_mode,Phuong thuc van chuyen,14530.75,3,0.0,< 0.0001,0.4807,Rat manh,Co (p < 0.05)
+order_region,Vung dia ly nhan hang (23 vung),30.67,22,0.10314414282542374,0.1031,0.0221,Khong dang ke,Khong (p >= 0.05)
+market,Thi truong (5 chau luc),3.18,4,0.5289306219550841,0.5289,0.0071,Khong dang ke,Khong (p >= 0.05)
+customer_segment,Phan khuc khach hang,1.06,2,0.588152671630585,0.5882,0.0041,Khong dang ke,Khong (p >= 0.05)
+payment_type,Hinh thuc thanh toan,1.44,3,0.6957618938792456,0.6958,0.0048,Khong dang ke,Khong (p >= 0.05)
+line_count,So dong hang trong don (1-5),2.95,4,0.566416576213265,0.5664,0.0068,Khong dang ke,Khong (p >= 0.05)
+order_is_weekend,Cuoi tuan vs Ngay thuong,0.02,1,0.898132968448429,0.8981,0.0005,Khong dang ke,Khong (p >= 0.05)
+order_weekday,Thu trong tuan (Thu 2 - Chu Nhat),1.69,6,0.946089332542054,0.9461,0.0052,Khong dang ke,Khong (p >= 0.05)
+order_year,Nam dat hang (2015-2018),3.12,3,0.37408041319386987,0.3741,0.007,Khong dang ke,Khong (p >= 0.05)

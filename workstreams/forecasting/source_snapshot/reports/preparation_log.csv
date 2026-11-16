@@ -1,0 +1,120 @@
+﻿stage,rule,field,affected_rows,action,reason_vi
+1_quality,trim,payment_type,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,shipping_days_actual,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,shipping_days_actual,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,shipping_days_scheduled,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,shipping_days_scheduled,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,benefit_per_order,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,benefit_per_order,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,sales_per_customer,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,sales_per_customer,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,delivery_status,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,late_delivery_risk,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,late_delivery_risk,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,category_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,category_name,1475,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_city,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_country,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_email,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_first_name,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_last_name,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_password,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_segment,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_state,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_street,1829,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,customer_zipcode,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,zipcode_string,customer_zipcode,0,chuỗi; bỏ hậu tố .0,Không đoán hay khôi phục số 0 đầu bị mất từ nguồn.
+1_quality,trim,department_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,department_name,362,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,store_latitude,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,store_latitude,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,store_longitude,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,store_longitude,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,market,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,order_city,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,order_country,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,order_customer_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,order_datetime,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,datetime_parse,order_datetime,0,parse định dạng tường minh; lỗi thành NaT,Không tự suy diễn DD/MM hoặc múi giờ.
+1_quality,trim,order_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,order_item_product_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,item_discount,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,item_discount,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,item_discount_rate,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,item_discount_rate,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,order_item_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,item_unit_price,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,item_unit_price,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,item_profit_ratio,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,item_profit_ratio,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,item_quantity,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,item_quantity,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,sales_gross,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,sales_gross,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,item_total_net,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,item_total_net,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,order_profit_per_order,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,order_profit_per_order,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,order_region,17925,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,order_state,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,order_status,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,order_zipcode,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,zipcode_string,order_zipcode,0,chuỗi; bỏ hậu tố .0,Không đoán hay khôi phục số 0 đầu bị mất từ nguồn.
+1_quality,trim,product_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,product_category_id,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,product_description,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,product_image,886,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,product_name,1774,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,trim,product_price,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,product_price,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,product_status,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,numeric_parse,product_status,0,NA nếu không parse; giữ raw,Không gán trung bình/trung vị.
+1_quality,trim,shipping_datetime,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+1_quality,datetime_parse,shipping_datetime,0,parse định dạng tường minh; lỗi thành NaT,Không tự suy diễn DD/MM hoặc múi giờ.
+1_quality,trim,shipping_mode,0,strip đầu/cuối; rỗng thành NA,Không đổi nội dung bên trong hay tự sửa tên địa lý.
+2_validate,duplicate_column_verified,benefit_per_order,180519,giữ order_profit_per_order,"Đã đối chiếu toàn bộ giá trị, không dựa vào tên cột."
+2_validate,duplicate_column_verified,sales_per_customer,180519,giữ item_total_net,"Đã đối chiếu toàn bộ giá trị, không dựa vào tên cột."
+2_validate,duplicate_column_verified,product_price,180519,giữ item_unit_price,"Đã đối chiếu toàn bộ giá trị, không dựa vào tên cột."
+2_validate,duplicate_column_verified,order_customer_id,180519,giữ customer_id,"Đã đối chiếu toàn bộ giá trị, không dựa vào tên cột."
+2_validate,duplicate_column_verified,product_category_id,180519,giữ category_id,"Đã đối chiếu toàn bộ giá trị, không dựa vào tên cột."
+2_validate,duplicate_column_verified,order_item_product_id,180519,giữ product_id,"Đã đối chiếu toàn bộ giá trị, không dựa vào tên cột."
+2_validate,missing_core,"order_id, order_item_id, order_datetime, shipping_datetime, shipping_days_actual, shipping_days_scheduled, late_delivery_risk, shipping_mode, delivery_status, order_status",0,gắn cờ; loại khỏi KPI chuẩn,Không xóa nguồn hay tự điền nhãn.
+2_validate,duplicate_item_id,order_item_id,0,gắn cờ tất cả bản ghi trùng khóa,Order Id lặp không phải lỗi; Order Item Id mới là khóa dòng.
+2_validate,category_domain,delivery_status,0,gắn cờ giá trị ngoài miền,Miền của phiên bản được ghi nhận; không tự thay nhãn mới.
+2_validate,category_domain,shipping_mode,0,gắn cờ giá trị ngoài miền,Miền của phiên bản được ghi nhận; không tự thay nhãn mới.
+2_validate,category_domain,order_status,0,gắn cờ giá trị ngoài miền,Miền của phiên bản được ghi nhận; không tự thay nhãn mới.
+2_validate,category_domain,late_delivery_risk,0,gắn cờ giá trị ngoài miền,Miền của phiên bản được ghi nhận; không tự thay nhãn mới.
+2_validate,negative_duration,shipping_days_actual; scheduled; timestamps,0,gắn cờ,Khoảng thời gian thực tế âm cần xem lại nguồn.
+2_validate,label_consistency,delivery_status; late_delivery_risk; delay_days,0,gắn cờ lỗi nhất quán,Không bắt nhãn trễ của đơn hủy phải bằng chênh lệch ngày.
+2_validate,duration_comparison,timestamps vs shipping_days_actual,9737,chỉ gắn cờ; không tự sửa duration,Nguồn có chênh 0.5 ngày; chưa rõ cơ chế làm tròn hay ngữ nghĩa.
+2_validate,coordinate_range,store_latitude,0,chỉ báo chất lượng,Tọa độ cửa hàng; không coi là điểm dừng giao hàng.
+2_validate,coordinate_range,store_longitude,0,chỉ báo chất lượng,Tọa độ cửa hàng; không coi là điểm dừng giao hàng.
+2_validate,numeric_business_domain,item_quantity,0,ghi nhận; không tự sửa hoặc xóa dòng,Quantity phải dương; giá/giảm giá phải không âm trong quy ước hiện tại.
+2_validate,numeric_business_domain,item_unit_price,0,ghi nhận; không tự sửa hoặc xóa dòng,Quantity phải dương; giá/giảm giá phải không âm trong quy ước hiện tại.
+2_validate,numeric_business_domain,sales_gross,0,ghi nhận; không tự sửa hoặc xóa dòng,Quantity phải dương; giá/giảm giá phải không âm trong quy ước hiện tại.
+2_validate,numeric_business_domain,item_total_net,0,ghi nhận; không tự sửa hoặc xóa dòng,Quantity phải dương; giá/giảm giá phải không âm trong quy ước hiện tại.
+2_validate,numeric_business_domain,item_discount,0,ghi nhận; không tự sửa hoặc xóa dòng,Quantity phải dương; giá/giảm giá phải không âm trong quy ước hiện tại.
+2_validate,discount_rate_domain,item_discount_rate,0,ghi nhận ngoài miền [0;1],Không tự chia 100 khi chưa xác minh cách lưu nguồn.
+2_validate,gross_equals_price_times_quantity,sales_gross; item_total_net; item_discount; price; quantity,0,"đối chiếu nội bộ, dung sai tuyệt đối 0.011 đơn vị tiền",Giữ nguyên giá trị nguồn; kiểm tra này không xác thực loại tiền hay chuẩn mực kế toán.
+2_validate,net_equals_gross_less_discount,sales_gross; item_total_net; item_discount; price; quantity,0,"đối chiếu nội bộ, dung sai tuyệt đối 0.011 đơn vị tiền",Giữ nguyên giá trị nguồn; kiểm tra này không xác thực loại tiền hay chuẩn mực kế toán.
+4_explore,negative_value_review,sales_gross,0,giữ; thống kê riêng,Lợi nhuận âm có thể hợp lệ; không xóa bằng quy tắc IQR tùy tiện.
+4_explore,negative_value_review,item_total_net,0,giữ; thống kê riêng,Lợi nhuận âm có thể hợp lệ; không xóa bằng quy tắc IQR tùy tiện.
+4_explore,negative_value_review,order_profit_per_order,33784,giữ; thống kê riêng,Lợi nhuận âm có thể hợp lệ; không xóa bằng quy tắc IQR tùy tiện.
+4_explore,negative_value_review,item_profit_ratio,33784,giữ; thống kê riêng,Lợi nhuận âm có thể hợp lệ; không xóa bằng quy tắc IQR tùy tiện.
+3_clean,drop_duplicate,benefit_per_order,180519,loại khỏi bảng chuẩn; giữ file raw,Trùng giá trị với Order Profit Per Order trong bản đã kiểm tra; không cộng cả hai.
+3_clean,drop_duplicate,sales_per_customer,180519,loại khỏi bảng chuẩn; giữ file raw,Trùng Order Item Total; không diễn giải thành tổng chi tiêu suốt đời khách hàng.
+3_clean,drop_personal,customer_email,180519,loại khỏi bảng chuẩn; giữ file raw,Email trong nguồn; không cần cho câu hỏi logistics.
+3_clean,drop_personal,customer_first_name,180519,loại khỏi bảng chuẩn; giữ file raw,Tên khách; không cần cho câu hỏi logistics.
+3_clean,drop_personal,customer_last_name,180519,loại khỏi bảng chuẩn; giữ file raw,Họ khách; thiếu 8 dòng ở bản nguồn này; loại cột thay vì gán tên.
+3_clean,drop_personal,customer_password,180519,loại khỏi bảng chuẩn; giữ file raw,Trường khóa được che theo nguồn; không phục vụ phân tích.
+3_clean,drop_personal,customer_street,180519,loại khỏi bảng chuẩn; giữ file raw,Địa chỉ đường trong thông tin khách; không cần cho bài hiện tại.
+3_clean,drop_duplicate,order_customer_id,180519,loại khỏi bảng chuẩn; giữ file raw,Bằng Customer Id ở toàn bộ bản nguồn; giữ Customer Id làm cột chuẩn.
+3_clean,drop_duplicate,order_item_product_id,180519,loại khỏi bảng chuẩn; giữ file raw,Mã sản phẩm trên dòng hàng; bằng Product Card Id ở bản nguồn.
+3_clean,drop_duplicate,product_category_id,180519,loại khỏi bảng chuẩn; giữ file raw,Bằng Category Id ở bản đã kiểm tra; giữ Category Id.
+3_clean,drop_empty,product_description,180519,loại khỏi bảng chuẩn; giữ file raw,Mô tả sản phẩm; thiếu toàn bộ ở bản nguồn nên không gán nội dung.
+3_clean,drop_irrelevant,product_image,180519,loại khỏi bảng chuẩn; giữ file raw,Đường dẫn ảnh; không phục vụ câu hỏi dữ liệu ban đầu.
+3_clean,drop_duplicate,product_price,180519,loại khỏi bảng chuẩn; giữ file raw,Bằng Order Item Product Price ở toàn bộ bản nguồn; giữ đơn giá dòng hàng.
+3_clean,drop_constant,product_status,180519,loại khỏi bảng chuẩn; giữ file raw,Chỉ báo tồn khả dụng theo nguồn; toàn 0 ở bản này nên không tạo thông tin phân biệt.
+3_clean,order_aggregation,order_id,114767,đổi cấp dữ liệu; không gọi là xóa dòng trùng,Kiểm tra nhất quán header trước; giữ bảng dòng hàng riêng.
+3_clean,missing_values,all retained columns,0,không gán giá trị thay thế,Cột thiếu không thiết yếu để NA; không tạo dữ liệu giả.
