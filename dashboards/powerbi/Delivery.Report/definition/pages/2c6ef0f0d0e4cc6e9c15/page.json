@@ -1,9 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.4.0/schema.json",
   "name": "2c6ef0f0d0e4cc6e9c15",
-  "displayName": "02  Dự báo rủi ro — chỉ tập test",
+  "displayName": "Rủi ro",
   "displayOption": "FitToPage",
-  "height": 960,
+  "height": 884,
   "width": 1440,
   "objects": {
     "background": [
@@ -14,7 +14,7 @@
               "color": {
                 "expr": {
                   "Literal": {
-                    "Value": "'#F1F5F9'"
+                    "Value": "'#F3F6F6'"
                   }
                 }
               }

@@ -1,0 +1,205 @@
+{
+  "all_passed": true,
+  "scope": "Actual native Power BI WebView geometry, not HTML preview or only source rectangles",
+  "limitations": "Checks visible default states at two render sizes. Route stop tables intentionally scroll; chart interpretation and intentional map layers still require visual review.",
+  "records": [
+    {
+      "page": "overview",
+      "viewport": {
+        "width": 2400,
+        "height": 1580
+      },
+      "foreground_visuals_checked": 23,
+      "text_rectangles_checked": 19,
+      "chart_labels_checked": 4,
+      "axis_labels_checked": 10,
+      "table_cells_checked": 20,
+      "tables": [
+        {
+          "columns": 5,
+          "coverage": 0.971
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "risk",
+      "viewport": {
+        "width": 2400,
+        "height": 1580
+      },
+      "foreground_visuals_checked": 24,
+      "text_rectangles_checked": 20,
+      "chart_labels_checked": 8,
+      "axis_labels_checked": 19,
+      "table_cells_checked": 12,
+      "tables": [
+        {
+          "columns": 4,
+          "coverage": 0.971
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "promises",
+      "viewport": {
+        "width": 2400,
+        "height": 1580
+      },
+      "foreground_visuals_checked": 23,
+      "text_rectangles_checked": 19,
+      "chart_labels_checked": 8,
+      "axis_labels_checked": 10,
+      "table_cells_checked": 31,
+      "tables": [
+        {
+          "columns": 3,
+          "coverage": 0.923
+        },
+        {
+          "columns": 4,
+          "coverage": 0.971
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "routing",
+      "viewport": {
+        "width": 2400,
+        "height": 1580
+      },
+      "foreground_visuals_checked": 26,
+      "text_rectangles_checked": 22,
+      "chart_labels_checked": 2,
+      "axis_labels_checked": 6,
+      "table_cells_checked": 6,
+      "tables": [
+        {
+          "columns": 3,
+          "coverage": 0.941
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "routing_detail",
+      "viewport": {
+        "width": 2400,
+        "height": 1580
+      },
+      "foreground_visuals_checked": 21,
+      "text_rectangles_checked": 18,
+      "chart_labels_checked": 0,
+      "axis_labels_checked": 0,
+      "table_cells_checked": 100,
+      "tables": [
+        {
+          "columns": 5,
+          "coverage": 0.942
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "overview",
+      "viewport": {
+        "width": 1366,
+        "height": 900
+      },
+      "foreground_visuals_checked": 23,
+      "text_rectangles_checked": 19,
+      "chart_labels_checked": 4,
+      "axis_labels_checked": 10,
+      "table_cells_checked": 20,
+      "tables": [
+        {
+          "columns": 5,
+          "coverage": 0.972
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "risk",
+      "viewport": {
+        "width": 1366,
+        "height": 900
+      },
+      "foreground_visuals_checked": 24,
+      "text_rectangles_checked": 20,
+      "chart_labels_checked": 8,
+      "axis_labels_checked": 19,
+      "table_cells_checked": 12,
+      "tables": [
+        {
+          "columns": 4,
+          "coverage": 0.972
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "promises",
+      "viewport": {
+        "width": 1366,
+        "height": 900
+      },
+      "foreground_visuals_checked": 23,
+      "text_rectangles_checked": 19,
+      "chart_labels_checked": 8,
+      "axis_labels_checked": 10,
+      "table_cells_checked": 31,
+      "tables": [
+        {
+          "columns": 3,
+          "coverage": 0.925
+        },
+        {
+          "columns": 4,
+          "coverage": 0.972
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "routing",
+      "viewport": {
+        "width": 1366,
+        "height": 900
+      },
+      "foreground_visuals_checked": 26,
+      "text_rectangles_checked": 22,
+      "chart_labels_checked": 2,
+      "axis_labels_checked": 6,
+      "table_cells_checked": 6,
+      "tables": [
+        {
+          "columns": 3,
+          "coverage": 0.943
+        }
+      ],
+      "issues": []
+    },
+    {
+      "page": "routing_detail",
+      "viewport": {
+        "width": 1366,
+        "height": 900
+      },
+      "foreground_visuals_checked": 21,
+      "text_rectangles_checked": 18,
+      "chart_labels_checked": 0,
+      "axis_labels_checked": 0,
+      "table_cells_checked": 100,
+      "tables": [
+        {
+          "columns": 5,
+          "coverage": 0.942
+        }
+      ],
+      "issues": []
+    }
+  ]
+}

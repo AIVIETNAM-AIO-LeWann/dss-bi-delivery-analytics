@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "0a7d423f42a254314964",
   "position": {
-    "x": 32,
-    "y": 648,
+    "x": 960,
+    "y": 154,
     "z": 13,
-    "height": 184,
-    "width": 1376,
+    "width": 200,
+    "height": 22,
     "tabOrder": 13
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "textbox",
     "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
@@ -19,21 +19,35 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'So sánh cấu hình và phương pháp'"
+                  "Value": "''"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "13D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
@@ -42,16 +56,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0F172A'"
+                      "Value": "'#142D3B'"
                     }
                   }
-                }
-              }
-            },
-            "fontFamily": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Segoe UI'"
                 }
               }
             },
@@ -71,7 +78,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -105,6 +112,24 @@
                   "Value": "false"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#DFE7E7'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
             }
           }
         }
@@ -115,28 +140,41 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "0D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "0D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "0D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -144,152 +182,25 @@
         }
       ]
     },
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "instance"
-                }
-              },
-              "queryRef": "RouteCases.instance",
-              "nativeQueryRef": "instance",
-              "displayName": "Bộ mẫu"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "scenario"
-                }
-              },
-              "queryRef": "RouteCases.scenario",
-              "nativeQueryRef": "scenario",
-              "displayName": "Cấu hình"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "method"
-                }
-              },
-              "queryRef": "RouteCases.method",
-              "nativeQueryRef": "method",
-              "displayName": "Phương pháp"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "max_vehicles"
-                }
-              },
-              "queryRef": "RouteCases.max_vehicles",
-              "nativeQueryRef": "max_vehicles",
-              "displayName": "Giới hạn xe"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "capacity"
-                }
-              },
-              "queryRef": "RouteCases.capacity",
-              "nativeQueryRef": "capacity",
-              "displayName": "Sức chở"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "status"
-                }
-              },
-              "queryRef": "RouteCases.status",
-              "nativeQueryRef": "status",
-              "displayName": "Trạng thái"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "vehicles_used"
-                }
-              },
-              "queryRef": "RouteCases.vehicles_used",
-              "nativeQueryRef": "vehicles_used",
-              "displayName": "Xe dùng"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "distance_units"
-                }
-              },
-              "queryRef": "RouteCases.distance_units",
-              "nativeQueryRef": "distance_units",
-              "displayName": "Quãng đường"
-            }
-          ]
-        }
-      }
-    },
     "objects": {
-      "grid": [
+      "general": [
         {
           "properties": {
-            "textSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "12D"
-                }
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Lít trên 100 km",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "12pt",
+                      "color": "#142D3B",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
               }
-            },
-            "rowPadding": {
-              "expr": {
-                "Literal": {
-                  "Value": "5D"
-                }
-              }
-            }
+            ]
           }
         }
       ]

@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "88bfb19856d63fbdd4f9",
   "position": {
-    "x": 716,
-    "y": 344,
+    "x": 432,
+    "y": 154,
     "z": 11,
-    "height": 270,
-    "width": 692,
+    "width": 296,
+    "height": 22,
     "tabOrder": 11
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "textbox",
     "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
@@ -19,21 +19,35 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Đánh đổi giữa các chính sách (xóa bộ lọc chính sách để so sánh tất cả)'"
+                  "Value": "''"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "13D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
@@ -42,16 +56,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0F172A'"
+                      "Value": "'#142D3B'"
                     }
                   }
-                }
-              }
-            },
-            "fontFamily": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Segoe UI'"
                 }
               }
             },
@@ -71,7 +78,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -105,6 +112,24 @@
                   "Value": "false"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#DFE7E7'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
             }
           }
         }
@@ -115,28 +140,41 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "0D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "0D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "0D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -144,89 +182,25 @@
         }
       ]
     },
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Policies"
-                    }
-                  },
-                  "Property": "policy_label"
-                }
-              },
-              "queryRef": "Policies.policy_label",
-              "nativeQueryRef": "policy_label",
-              "displayName": "Chính sách"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "PromiseScenarios"
-                    }
-                  },
-                  "Property": "Vượt hẹn tính lại"
-                }
-              },
-              "queryRef": "PromiseScenarios.Vượt hẹn tính lại",
-              "nativeQueryRef": "Vượt hẹn tính lại"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "PromiseScenarios"
-                    }
-                  },
-                  "Property": "Cam kết mới TB"
-                }
-              },
-              "queryRef": "PromiseScenarios.Cam kết mới TB",
-              "nativeQueryRef": "Cam kết mới TB"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "PromiseScenarios"
-                    }
-                  },
-                  "Property": "Tăng cam kết TB"
-                }
-              },
-              "queryRef": "PromiseScenarios.Tăng cam kết TB",
-              "nativeQueryRef": "Tăng cam kết TB"
-            }
-          ]
-        }
-      }
-    },
     "objects": {
-      "grid": [
+      "general": [
         {
           "properties": {
-            "textSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "12D"
-                }
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Phương thức giao",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "12pt",
+                      "color": "#142D3B",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
               }
-            },
-            "rowPadding": {
-              "expr": {
-                "Literal": {
-                  "Value": "5D"
-                }
-              }
-            }
+            ]
           }
         }
       ]

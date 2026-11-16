@@ -1,8 +1,8 @@
 # Phần VI — Kết quả và thông điệp hỗ trợ quyết định
 
 Bản nháp để Phương Quỳnh, Lê Quang và Hoàng Quân biên tập chung.
-Số liệu được đối chiếu từ các đầu ra bàn giao; Dashboard đã được mở và refresh trong Power BI Desktop; 21 kiểm tra DAX native đã đạt.
-Bản preview có đường nối tuyến; Power BI native dùng điểm dừng và bảng thứ tự.
+Số liệu được đối chiếu từ các đầu ra bàn giao; Dashboard đã được mở và refresh trong Power BI Desktop; 26 kiểm tra DAX native đã đạt.
+Power BI native có sơ đồ nối tuyến theo xe và trang lịch trình chi tiết. Bản preview HTML giữ thiết kế tham khảo trước lần nâng cấp.
 
 ## Phát hiện chính
 

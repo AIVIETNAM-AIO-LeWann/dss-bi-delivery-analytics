@@ -2,7 +2,7 @@
   "name": "Delivery",
   "compatibilityLevel": 1567,
   "model": {
-    "culture": "en-US",
+    "culture": "vi-VN",
     "defaultPowerBIDataSourceVersion": "powerBI_V3",
     "sourceQueryCulture": "en-US",
     "expressions": [
@@ -35,6 +35,13 @@
             "dataType": "string",
             "sourceColumn": "year_month",
             "summarizeBy": "none"
+          },
+          {
+            "name": "month_start",
+            "dataType": "dateTime",
+            "sourceColumn": "month_start",
+            "summarizeBy": "none",
+            "formatString": "MMM yy"
           },
           {
             "name": "shipping_mode",
@@ -106,10 +113,10 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/orders.csv\"), [Delimiter=\",\", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/orders.csv\"), [Delimiter=\",\", Columns=14, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
                 "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
-                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"order_id\", type text}, {\"order_date\", type date}, {\"year_month\", type text}, {\"shipping_mode\", type text}, {\"market\", type text}, {\"order_region\", type text}, {\"customer_segment\", type text}, {\"shipping_days_scheduled\", Int64.Type}, {\"shipping_days_actual\", Int64.Type}, {\"late_delivery_risk\", Int64.Type}, {\"partition\", type text}, {\"P_Late\", type number}, {\"duration_mismatch_flag\", Int64.Type}}, \"en-US\")",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"order_id\", type text}, {\"order_date\", type date}, {\"year_month\", type text}, {\"month_start\", type date}, {\"shipping_mode\", type text}, {\"market\", type text}, {\"order_region\", type text}, {\"customer_segment\", type text}, {\"shipping_days_scheduled\", Int64.Type}, {\"shipping_days_actual\", Int64.Type}, {\"late_delivery_risk\", Int64.Type}, {\"partition\", type text}, {\"P_Late\", type number}, {\"duration_mismatch_flag\", Int64.Type}}, \"en-US\")",
                 "in",
                 "    Typed"
               ]
@@ -130,7 +137,7 @@
           {
             "name": "Tỷ lệ trễ",
             "expression": "DIVIDE([Số đơn trễ], [Số đơn])",
-            "formatString": "0.00%"
+            "formatString": "0.0%"
           },
           {
             "name": "Cam kết TB",
@@ -170,12 +177,12 @@
           {
             "name": "Precision theo ngưỡng",
             "expression": "DIVIDE([Cảnh báo đúng], [Cảnh báo])",
-            "formatString": "0.00%"
+            "formatString": "0.0%"
           },
           {
             "name": "Recall theo ngưỡng",
             "expression": "DIVIDE([Cảnh báo đúng], [Đơn trễ test])",
-            "formatString": "0.00%"
+            "formatString": "0.0%"
           },
           {
             "name": "Bỏ sót",
@@ -185,7 +192,132 @@
           {
             "name": "P_Late TB test",
             "expression": "CALCULATE(AVERAGE(Orders[P_Late]), Orders[partition] = \"test\")",
-            "formatString": "0.00%"
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Chênh lệch cam kết",
+            "expression": "[Thực tế TB] - [Cam kết TB]",
+            "formatString": "0.00\" ngày\""
+          },
+          {
+            "name": "Cảnh báo sai",
+            "expression": "[Cảnh báo] - [Cảnh báo đúng]",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Tỷ trọng cảnh báo",
+            "expression": "DIVIDE([Cảnh báo], [Đơn test])",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Phương thức ưu tiên",
+            "expression": "VAR t = FILTER(ADDCOLUMNS(VALUES(Orders[shipping_mode]), \"n\", [Số đơn], \"r\", [Tỷ lệ trễ]), [n] > 0) RETURN IF(COUNTROWS(t) > 0, MAXX(TOPN(1, t, [r], DESC, Orders[shipping_mode], ASC), Orders[shipping_mode]), \"Không có dữ liệu\")"
+          },
+          {
+            "name": "Kỳ phân tích",
+            "expression": "IF([Số đơn] > 0, FORMAT(MIN(Orders[order_date]), \"MM/yyyy\") & \" đến \" & FORMAT(MAX(Orders[order_date]), \"MM/yyyy\"), \"Không có dữ liệu\")"
+          },
+          {
+            "name": "Thẻ Số đơn",
+            "expression": "IF(ISBLANK([Số đơn]), \"Chưa có\", FORMAT([Số đơn], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Số đơn trễ",
+            "expression": "IF(ISBLANK([Số đơn trễ]), \"Chưa có\", FORMAT([Số đơn trễ], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Tỷ lệ trễ",
+            "expression": "IF(ISBLANK([Tỷ lệ trễ]), \"Chưa có\", FORMAT([Tỷ lệ trễ], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Cam kết TB",
+            "expression": "IF(ISBLANK([Cam kết TB]), \"Chưa có\", FORMAT([Cam kết TB], \"0.00\"\" ngày\"\"\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Thực tế TB",
+            "expression": "IF(ISBLANK([Thực tế TB]), \"Chưa có\", FORMAT([Thực tế TB], \"0.00\"\" ngày\"\"\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Đơn test",
+            "expression": "IF(ISBLANK([Đơn test]), \"Chưa có\", FORMAT([Đơn test], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Ngưỡng cảnh báo",
+            "expression": "IF(ISBLANK([Ngưỡng cảnh báo]), \"Chưa có\", FORMAT([Ngưỡng cảnh báo], \"0.00\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Cảnh báo",
+            "expression": "IF(ISBLANK([Cảnh báo]), \"Chưa có\", FORMAT([Cảnh báo], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Cảnh báo đúng",
+            "expression": "IF(ISBLANK([Cảnh báo đúng]), \"Chưa có\", FORMAT([Cảnh báo đúng], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Đơn trễ test",
+            "expression": "IF(ISBLANK([Đơn trễ test]), \"Chưa có\", FORMAT([Đơn trễ test], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Precision theo ngưỡng",
+            "expression": "IF(ISBLANK([Precision theo ngưỡng]), \"Chưa có\", FORMAT([Precision theo ngưỡng], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Recall theo ngưỡng",
+            "expression": "IF(ISBLANK([Recall theo ngưỡng]), \"Chưa có\", FORMAT([Recall theo ngưỡng], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Bỏ sót",
+            "expression": "IF(ISBLANK([Bỏ sót]), \"Chưa có\", FORMAT([Bỏ sót], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ P_Late TB test",
+            "expression": "IF(ISBLANK([P_Late TB test]), \"Chưa có\", FORMAT([P_Late TB test], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Chênh lệch cam kết",
+            "expression": "IF(ISBLANK([Chênh lệch cam kết]), \"Chưa có\", FORMAT([Chênh lệch cam kết], \"0.00\"\" ngày\"\"\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Cảnh báo sai",
+            "expression": "IF(ISBLANK([Cảnh báo sai]), \"Chưa có\", FORMAT([Cảnh báo sai], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Tỷ trọng cảnh báo",
+            "expression": "IF(ISBLANK([Tỷ trọng cảnh báo]), \"Chưa có\", FORMAT([Tỷ trọng cảnh báo], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
           }
         ]
       },
@@ -251,37 +383,88 @@
         "measures": [
           {
             "name": "Chính sách đang xem",
-            "expression": "SELECTEDVALUE(Policies[policy_label], \"+1 ngày, giữ Same Day\")"
+            "expression": "COALESCE(SELECTEDVALUE(PolicySelector[policy_label]), \"Thêm một ngày\")"
           },
           {
             "name": "Đơn kịch bản",
-            "expression": "VAR p = SELECTEDVALUE(Policies[policy_id], \"bounded_plus1_keep_same_day\") RETURN CALCULATE(COUNTROWS(PromiseScenarios), KEEPFILTERS(Policies[policy_id] = p))",
+            "expression": "VAR p = COALESCE(SELECTEDVALUE(Policies[policy_id]), SELECTEDVALUE(PolicySelector[policy_id]), \"bounded_plus1_keep_same_day\") RETURN CALCULATE(COUNTROWS(PromiseScenarios), KEEPFILTERS(Policies[policy_id] = p))",
             "formatString": "#,0"
           },
           {
             "name": "Vượt hẹn tính lại",
-            "expression": "VAR p = SELECTEDVALUE(Policies[policy_id], \"bounded_plus1_keep_same_day\") RETURN DIVIDE(CALCULATE(SUM(PromiseScenarios[exceed_proposed]), KEEPFILTERS(Policies[policy_id] = p)), [Đơn kịch bản])",
-            "formatString": "0.00%"
+            "expression": "VAR p = COALESCE(SELECTEDVALUE(Policies[policy_id]), SELECTEDVALUE(PolicySelector[policy_id]), \"bounded_plus1_keep_same_day\") RETURN DIVIDE(CALCULATE(SUM(PromiseScenarios[exceed_proposed]), KEEPFILTERS(Policies[policy_id] = p)), [Đơn kịch bản])",
+            "formatString": "0.0%"
           },
           {
             "name": "Cam kết mới TB",
-            "expression": "VAR p = SELECTEDVALUE(Policies[policy_id], \"bounded_plus1_keep_same_day\") RETURN CALCULATE(AVERAGE(PromiseScenarios[proposed_days]), KEEPFILTERS(Policies[policy_id] = p))",
+            "expression": "VAR p = COALESCE(SELECTEDVALUE(Policies[policy_id]), SELECTEDVALUE(PolicySelector[policy_id]), \"bounded_plus1_keep_same_day\") RETURN CALCULATE(AVERAGE(PromiseScenarios[proposed_days]), KEEPFILTERS(Policies[policy_id] = p))",
             "formatString": "0.00\" ngày\""
           },
           {
             "name": "Tăng cam kết TB",
-            "expression": "VAR p = SELECTEDVALUE(Policies[policy_id], \"bounded_plus1_keep_same_day\") RETURN CALCULATE(AVERAGE(PromiseScenarios[added_days]), KEEPFILTERS(Policies[policy_id] = p))",
+            "expression": "VAR p = COALESCE(SELECTEDVALUE(Policies[policy_id]), SELECTEDVALUE(PolicySelector[policy_id]), \"bounded_plus1_keep_same_day\") RETURN CALCULATE(AVERAGE(PromiseScenarios[added_days]), KEEPFILTERS(Policies[policy_id] = p))",
             "formatString": "0.00\" ngày\""
           },
           {
             "name": "Trễ hiện trạng test",
             "expression": "DIVIDE([Đơn trễ test], [Đơn test])",
-            "formatString": "0.00%"
+            "formatString": "0.0%"
           },
           {
             "name": "Giảm vượt hẹn (điểm %)",
             "expression": "IF([Đơn kịch bản] > 0, ([Trễ hiện trạng test] - [Vượt hẹn tính lại]) * 100)",
-            "formatString": "0.00\" điểm %\""
+            "formatString": "0.0\" điểm %\""
+          },
+          {
+            "name": "Nhóm cần rà soát cam kết",
+            "expression": "VAR t = FILTER(ADDCOLUMNS(VALUES(Orders[shipping_mode]), \"n\", [Đơn kịch bản], \"r\", [Vượt hẹn tính lại]), [n] > 0) RETURN IF(COUNTROWS(t) > 0, MAXX(TOPN(1, t, [r], DESC, Orders[shipping_mode], ASC), Orders[shipping_mode]), \"Không có dữ liệu\")"
+          },
+          {
+            "name": "Vượt hẹn nhóm cao nhất",
+            "expression": "MAXX(VALUES(Orders[shipping_mode]), [Vượt hẹn tính lại])",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Thẻ Đơn kịch bản",
+            "expression": "IF(ISBLANK([Đơn kịch bản]), \"Chưa có\", FORMAT([Đơn kịch bản], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Vượt hẹn tính lại",
+            "expression": "IF(ISBLANK([Vượt hẹn tính lại]), \"Chưa có\", FORMAT([Vượt hẹn tính lại], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Cam kết mới TB",
+            "expression": "IF(ISBLANK([Cam kết mới TB]), \"Chưa có\", FORMAT([Cam kết mới TB], \"0.00\"\" ngày\"\"\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Tăng cam kết TB",
+            "expression": "IF(ISBLANK([Tăng cam kết TB]), \"Chưa có\", FORMAT([Tăng cam kết TB], \"0.00\"\" ngày\"\"\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Trễ hiện trạng test",
+            "expression": "IF(ISBLANK([Trễ hiện trạng test]), \"Chưa có\", FORMAT([Trễ hiện trạng test], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Giảm vượt hẹn (điểm %)",
+            "expression": "IF(ISBLANK([Giảm vượt hẹn (điểm %)]), \"Chưa có\", FORMAT([Giảm vượt hẹn (điểm %)], \"0.0\"\" điểm %\"\"\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Vượt hẹn nhóm cao nhất",
+            "expression": "IF(ISBLANK([Vượt hẹn nhóm cao nhất]), \"Chưa có\", FORMAT([Vượt hẹn nhóm cao nhất], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
           }
         ]
       },
@@ -385,6 +568,20 @@
             "dataType": "double",
             "sourceColumn": "distance_units",
             "summarizeBy": "none"
+          },
+          {
+            "name": "case_label",
+            "dataType": "string",
+            "sourceColumn": "case_label",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "route_image",
+            "dataType": "string",
+            "sourceColumn": "route_image",
+            "summarizeBy": "none",
+            "dataCategory": "ImageUrl",
+            "isHidden": true
           }
         ],
         "partitions": [
@@ -395,10 +592,10 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/route_cases.csv\"), [Delimiter=\",\", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/route_cases.csv\"), [Delimiter=\",\", Columns=11, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
                 "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
-                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"case_id\", type text}, {\"instance\", type text}, {\"scenario\", type text}, {\"method\", type text}, {\"max_vehicles\", Int64.Type}, {\"capacity\", Int64.Type}, {\"status\", type text}, {\"vehicles_used\", Int64.Type}, {\"distance_units\", type number}}, \"en-US\")",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"case_id\", type text}, {\"instance\", type text}, {\"scenario\", type text}, {\"method\", type text}, {\"max_vehicles\", Int64.Type}, {\"capacity\", Int64.Type}, {\"status\", type text}, {\"vehicles_used\", Int64.Type}, {\"distance_units\", type number}, {\"case_label\", type text}, {\"route_image\", type text}}, \"en-US\")",
                 "in",
                 "    Typed"
               ]
@@ -429,6 +626,72 @@
           {
             "name": "Trạng thái tuyến",
             "expression": "IF(HASONEVALUE(RouteCases[case_id]), IF(SELECTEDVALUE(RouteCases[status]) = \"feasible\", \"Có tuyến khả thi — chưa chứng minh tối ưu\", \"Chưa tìm được lời giải — không quy về 0\"), \"Chọn đúng một case_id để xem tuyến và chi phí\")"
+          },
+          {
+            "name": "Bản đồ tuyến",
+            "expression": "SELECTEDVALUE(RouteCases[route_image])",
+            "dataCategory": "ImageUrl"
+          },
+          {
+            "name": "Quãng đường đối chiếu",
+            "expression": "VAR i = SELECTEDVALUE(RouteCases[instance])\nVAR s = SELECTEDVALUE(RouteCases[scenario])\nVAR k = SELECTEDVALUE(RouteCases[max_vehicles])\nVAR q = SELECTEDVALUE(RouteCases[capacity])\nVAR m = SELECTEDVALUE(RouteMethods[method])\nRETURN IF(HASONEVALUE(RouteCases[case_id]), CALCULATE(MAX(RouteCases[distance_units]), REMOVEFILTERS(RouteCases),\nRouteCases[instance] = i, RouteCases[scenario] = s, RouteCases[max_vehicles] = k,\nRouteCases[capacity] = q, RouteCases[method] = m, RouteCases[status] = \"feasible\"))",
+            "formatString": "0.0"
+          },
+          {
+            "name": "Xe đối chiếu",
+            "expression": "VAR i = SELECTEDVALUE(RouteCases[instance])\nVAR s = SELECTEDVALUE(RouteCases[scenario])\nVAR k = SELECTEDVALUE(RouteCases[max_vehicles])\nVAR q = SELECTEDVALUE(RouteCases[capacity])\nVAR m = SELECTEDVALUE(RouteMethods[method])\nRETURN IF(HASONEVALUE(RouteCases[case_id]), CALCULATE(MAX(RouteCases[vehicles_used]), REMOVEFILTERS(RouteCases),\nRouteCases[instance] = i, RouteCases[scenario] = s, RouteCases[max_vehicles] = k,\nRouteCases[capacity] = q, RouteCases[method] = m, RouteCases[status] = \"feasible\"))",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Trạng thái đối chiếu",
+            "expression": "IF(ISBLANK([Quãng đường đối chiếu]), \"Chưa có lời giải\", \"Khả thi\")"
+          },
+          {
+            "name": "Giảm quãng đường",
+            "expression": "VAR d = [Quãng đường benchmark]\nVAR i = SELECTEDVALUE(RouteCases[instance])\nVAR s = SELECTEDVALUE(RouteCases[scenario])\nVAR k = SELECTEDVALUE(RouteCases[max_vehicles])\nVAR q = SELECTEDVALUE(RouteCases[capacity])\nVAR b = CALCULATE(MAX(RouteCases[distance_units]), REMOVEFILTERS(RouteCases), RouteCases[instance] = i,\nRouteCases[scenario] = s, RouteCases[max_vehicles] = k, RouteCases[capacity] = q,\nRouteCases[method] = \"nearest_feasible\", RouteCases[status] = \"feasible\")\nRETURN IF(NOT ISBLANK(d) && NOT ISBLANK(b), DIVIDE(b - d, b))",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Thẻ Quãng đường benchmark",
+            "expression": "IF(ISBLANK([Quãng đường benchmark]), \"Chưa có\", FORMAT([Quãng đường benchmark], \"0.00\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Số xe sử dụng",
+            "expression": "IF(ISBLANK([Số xe sử dụng]), \"Chưa có\", FORMAT([Số xe sử dụng], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Km mô phỏng",
+            "expression": "IF(ISBLANK([Km mô phỏng]), \"Chưa có\", FORMAT([Km mô phỏng], \"0.00\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Nhiên liệu mô phỏng",
+            "expression": "IF(ISBLANK([Nhiên liệu mô phỏng]), \"Chưa có\", FORMAT([Nhiên liệu mô phỏng], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Quãng đường đối chiếu",
+            "expression": "IF(ISBLANK([Quãng đường đối chiếu]), \"Chưa có\", FORMAT([Quãng đường đối chiếu], \"0.0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Xe đối chiếu",
+            "expression": "IF(ISBLANK([Xe đối chiếu]), \"Chưa có\", FORMAT([Xe đối chiếu], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Giảm quãng đường",
+            "expression": "IF(ISBLANK([Giảm quãng đường]), \"Chưa có\", FORMAT([Giảm quãng đường], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
           }
         ]
       },
@@ -517,6 +780,30 @@
             "name": "Tọa độ Y",
             "expression": "IF(HASONEVALUE(RouteCases[case_id]), AVERAGE(RouteStops[y]))",
             "formatString": "0.0"
+          },
+          {
+            "name": "Thẻ Node tuyến",
+            "expression": "IF(ISBLANK([Node tuyến]), \"Chưa có\", FORMAT([Node tuyến], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Thứ tự dừng",
+            "expression": "IF(ISBLANK([Thứ tự dừng]), \"Chưa có\", FORMAT([Thứ tự dừng], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Tọa độ X",
+            "expression": "IF(ISBLANK([Tọa độ X]), \"Chưa có\", FORMAT([Tọa độ X], \"0.0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Tọa độ Y",
+            "expression": "IF(ISBLANK([Tọa độ Y]), \"Chưa có\", FORMAT([Tọa độ Y], \"0.0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
           }
         ]
       },
@@ -641,6 +928,12 @@
             "dataType": "int64",
             "sourceColumn": "tp",
             "summarizeBy": "none"
+          },
+          {
+            "name": "model_label",
+            "dataType": "string",
+            "sourceColumn": "model_label",
+            "summarizeBy": "none"
           }
         ],
         "partitions": [
@@ -651,10 +944,10 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/model_metrics.csv\"), [Delimiter=\",\", Columns=18, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/model_metrics.csv\"), [Delimiter=\",\", Columns=19, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
                 "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
-                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"model\", type text}, {\"partition\", type text}, {\"n\", Int64.Type}, {\"late_count\", Int64.Type}, {\"late_rate\", type number}, {\"roc_auc\", type number}, {\"average_precision\", type number}, {\"log_loss\", type number}, {\"brier\", type number}, {\"accuracy\", type number}, {\"precision\", type number}, {\"recall\", type number}, {\"f1\", type number}, {\"threshold\", type number}, {\"tn\", Int64.Type}, {\"fp\", Int64.Type}, {\"fn\", Int64.Type}, {\"tp\", Int64.Type}}, \"en-US\")",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"model\", type text}, {\"partition\", type text}, {\"n\", Int64.Type}, {\"late_count\", Int64.Type}, {\"late_rate\", type number}, {\"roc_auc\", type number}, {\"average_precision\", type number}, {\"log_loss\", type number}, {\"brier\", type number}, {\"accuracy\", type number}, {\"precision\", type number}, {\"recall\", type number}, {\"f1\", type number}, {\"threshold\", type number}, {\"tn\", Int64.Type}, {\"fp\", Int64.Type}, {\"fn\", Int64.Type}, {\"tp\", Int64.Type}, {\"model_label\", type text}}, \"en-US\")",
                 "in",
                 "    Typed"
               ]
@@ -671,6 +964,93 @@
             "name": "Log loss baseline test",
             "expression": "CALCULATE(MAX(ModelMetrics[log_loss]), ModelMetrics[model] = \"mode_baseline\", ModelMetrics[partition] = \"test\")",
             "formatString": "0.000"
+          },
+          {
+            "name": "AP ngoài mẫu",
+            "expression": "CALCULATE(MAX(ModelMetrics[average_precision]), ModelMetrics[partition] = \"test\")",
+            "formatString": "0.000"
+          },
+          {
+            "name": "AUC ngoài mẫu",
+            "expression": "CALCULATE(MAX(ModelMetrics[roc_auc]), ModelMetrics[partition] = \"test\")",
+            "formatString": "0.000"
+          },
+          {
+            "name": "Log loss ngoài mẫu",
+            "expression": "CALCULATE(MAX(ModelMetrics[log_loss]), ModelMetrics[partition] = \"test\")",
+            "formatString": "0.000"
+          },
+          {
+            "name": "Thẻ AUC baseline test",
+            "expression": "IF(ISBLANK([AUC baseline test]), \"Chưa có\", FORMAT([AUC baseline test], \"0.000\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Log loss baseline test",
+            "expression": "IF(ISBLANK([Log loss baseline test]), \"Chưa có\", FORMAT([Log loss baseline test], \"0.000\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ AP ngoài mẫu",
+            "expression": "IF(ISBLANK([AP ngoài mẫu]), \"Chưa có\", FORMAT([AP ngoài mẫu], \"0.000\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ AUC ngoài mẫu",
+            "expression": "IF(ISBLANK([AUC ngoài mẫu]), \"Chưa có\", FORMAT([AUC ngoài mẫu], \"0.000\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Log loss ngoài mẫu",
+            "expression": "IF(ISBLANK([Log loss ngoài mẫu]), \"Chưa có\", FORMAT([Log loss ngoài mẫu], \"0.000\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          }
+        ]
+      },
+      {
+        "name": "PolicySelector",
+        "lineageTag": "cb62cdb3-f255-52fb-afa3-34b02b59780e",
+        "columns": [
+          {
+            "name": "policy_id",
+            "dataType": "string",
+            "sourceColumn": "policy_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "policy_label",
+            "dataType": "string",
+            "sourceColumn": "policy_label",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "sort_order",
+            "dataType": "int64",
+            "sourceColumn": "sort_order",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "PolicySelector",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(RepoRoot & \"/data/dashboard/policies.csv\"), [Delimiter=\",\", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    EmptyAsNull = Table.ReplaceValue(Headers, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Headers)),",
+                "    Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"policy_id\", type text}, {\"policy_label\", type text}, {\"sort_order\", Int64.Type}}, \"en-US\")",
+                "in",
+                "    Typed"
+              ]
+            }
           }
         ]
       },
@@ -758,6 +1138,35 @@
             "source": {
               "type": "calculated",
               "expression": "GENERATESERIES(18000, 26000, 1000)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "RouteMethods",
+        "columns": [
+          {
+            "name": "method",
+            "dataType": "string",
+            "type": "calculatedTableColumn",
+            "sourceColumn": "[method]",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "method_label",
+            "dataType": "string",
+            "type": "calculatedTableColumn",
+            "sourceColumn": "[method_label]",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "RouteMethods",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "DATATABLE(\"method\", STRING, \"method_label\", STRING, {{\"nearest_feasible\", \"Điểm gần nhất\"}, {\"ortools\", \"OR Tools\"}})"
             }
           }
         ]

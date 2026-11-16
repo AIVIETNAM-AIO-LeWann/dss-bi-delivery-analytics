@@ -1,7 +1,7 @@
 {
   "scope": "Dashboard input validation, not native Power BI execution",
   "all_passed": true,
-  "checks_passed": 81,
+  "checks_passed": 84,
   "checks": [
     "62,897 unique analysis orders",
     "36,048 unchanged source late labels",
@@ -83,7 +83,10 @@
     "rc101|base|ortools: time windows respected",
     "rc101|base|ortools: capacity respected",
     "rc101|base|ortools: full depot-to-depot distance recomputed",
-    "Route stop keys are unique, including depot returns"
+    "Route stop keys are unique, including depot returns",
+    "Model presentation labels map to the original models",
+    "Friendly route labels retain unique case identities",
+    "Native route maps fit the Power BI text field limit"
   ],
   "source_sha256": {
     "data/processed/orders_analysis.csv": "5d9c405b35da33deab51a830783e4fea1bf06828ceb7681c7438beeb1b02e2ba",
@@ -117,6 +120,7 @@
         "order_id",
         "order_date",
         "year_month",
+        "month_start",
         "shipping_mode",
         "market",
         "order_region",
@@ -128,7 +132,7 @@
         "P_Late",
         "duration_mismatch_flag"
       ],
-      "sha256": "19bd019d2c438247397a04cabbc3f9de22178632861f1b5c47285174a3b6415c"
+      "sha256": "e9a7d7018faec835dcf3df72d8ac454b428391c5648e014ad1c6ceb3f2e156e0"
     },
     "promise_scenarios.csv": {
       "rows": 65355,
@@ -149,7 +153,7 @@
         "policy_label",
         "sort_order"
       ],
-      "sha256": "2cded403583094205127b11c9329110e310752ca6f3c1e11d0fcc87b6760e822"
+      "sha256": "5dea05db0c561d91c4a7ce6d97f00ea027b156b30fd3385d038f8a403b231920"
     },
     "route_cases.csv": {
       "rows": 12,
@@ -162,9 +166,11 @@
         "capacity",
         "status",
         "vehicles_used",
-        "distance_units"
+        "distance_units",
+        "case_label",
+        "route_image"
       ],
-      "sha256": "2d6a3b0a9f20814c58116748b016b23262719027e84d6b341e6ca157a1a73780"
+      "sha256": "79ca11b0c1f51cfe095ec65899b975efd12ff4397dd215114d06ca8b97dacd2e"
     },
     "route_stops.csv": {
       "rows": 1194,
@@ -199,9 +205,10 @@
         "tn",
         "fp",
         "fn",
-        "tp"
+        "tp",
+        "model_label"
       ],
-      "sha256": "0455e140aa2bd7f21a8e62625862e2ddc05c989b0c83f78983cbe498ac087460"
+      "sha256": "65185ac52331266f5516e09ce3b0b2cf01ad4a027964ddadefd25b9c5d760e4a"
     }
   },
   "baseline_test_confusion_at_0_5": {

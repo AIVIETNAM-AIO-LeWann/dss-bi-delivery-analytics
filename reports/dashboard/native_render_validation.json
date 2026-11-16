@@ -1,28 +1,33 @@
 {
+  "all_pages_captured": true,
+  "all_pages_visually_reviewed": true,
+  "scope": "Actual native Power BI Desktop after refresh, five pages at two render sizes",
+  "review_notes": "Separated KPI and dropdown regions, table columns span the frame, repeated oversized insight cards removed, map frames resized without stretching route coordinates. Full native geometry checks in native_layout_validation.json.",
   "pages": [
     {
       "page": "overview",
-      "expected_value_rendered": "62,897",
-      "visual_error_text_detected": false
+      "visual_error_text_detected": false,
+      "geometry_issues": 0
     },
     {
       "page": "risk",
-      "expected_value_rendered": "13,071",
-      "visual_error_text_detected": false
+      "visual_error_text_detected": false,
+      "geometry_issues": 0
     },
     {
       "page": "promises",
-      "expected_value_rendered": "26.82%",
-      "visual_error_text_detected": false
+      "visual_error_text_detected": false,
+      "geometry_issues": 0
     },
     {
       "page": "routing",
-      "expected_value_rendered": "1,823,661",
-      "visual_error_text_detected": false
+      "visual_error_text_detected": false,
+      "geometry_issues": 0
+    },
+    {
+      "page": "routing_detail",
+      "visual_error_text_detected": false,
+      "geometry_issues": 0
     }
-  ],
-  "scope": "Real Power BI Desktop WebView after native refresh; waited for expected KPI values",
-  "all_pages_captured": true,
-  "all_pages_visually_reviewed": true,
-  "review_notes": "Four native pages reviewed; exact KPI values rendered; tables/monthly chart retain standard scroll navigation. Native routing uses a scatter and ordered stop table, while the offline preview adds route polylines."
+  ]
 }

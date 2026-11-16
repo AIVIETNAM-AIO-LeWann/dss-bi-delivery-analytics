@@ -12,11 +12,11 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICIES = {
-    'current': 'Hiện trạng',
-    'bounded_plus1_keep_same_day': '+1 ngày, giữ Same Day',
-    'q80_min100': 'Phân vị 80% — tối thiểu 100 đơn train',
-    'q90_min100': 'Phân vị 90% — tối thiểu 100 đơn train',
-    'q95_min100': 'Phân vị 95% — tối thiểu 100 đơn train',
+    'current': 'Hiện tại',
+    'bounded_plus1_keep_same_day': 'Thêm một ngày',
+    'q80_min100': 'Mục tiêu 80% đúng hẹn',
+    'q90_min100': 'Mục tiêu 90% đúng hẹn',
+    'q95_min100': 'Mục tiêu 95% đúng hẹn',
 }
 
 
@@ -51,7 +51,8 @@ def build(root: Path = ROOT, output: Path | None = None) -> dict:
     orders = orders.merge(predictions[['order_id', 'P_Late']], on='order_id', how='left', validate='one_to_one')
     orders['order_date'] = orders.order_datetime.str[:10]
     orders['year_month'] = orders.order_datetime.str[:7]
-    selected = ['order_id', 'order_date', 'year_month', 'shipping_mode', 'market', 'order_region',
+    orders['month_start'] = orders['year_month'] + '-01'
+    selected = ['order_id', 'order_date', 'year_month', 'month_start', 'shipping_mode', 'market', 'order_region',
                 'customer_segment', 'shipping_days_scheduled', 'shipping_days_actual', 'late_delivery_risk',
                 'partition', 'P_Late', 'duration_mismatch_flag']
     orders = orders[selected]
@@ -123,6 +124,18 @@ def build(root: Path = ROOT, output: Path | None = None) -> dict:
         check(math.isclose(distance, case.distance_units, rel_tol=1e-10, abs_tol=1e-7), f'{case.case_id}: full depot-to-depot distance recomputed')
     stops = pd.concat(stop_frames, ignore_index=True)
     check(stops.stop_key.is_unique, 'Route stop keys are unique, including depot returns')
+    from .route_assets import route_svg
+
+    labels = {'nearest_feasible': 'Điểm gần nhất', 'ortools': 'OR Tools'}
+    cases['case_label'] = cases.apply(
+        lambda row: f"{row.instance.upper()}, tải {int(row.capacity)}, tối đa {int(row.max_vehicles)} xe, {labels[row.method]}", axis=1)
+    cases['route_image'] = [route_svg(stops[stops.case_id.eq(case_id)]) for case_id in cases.case_id]
+    metrics['model_label'] = metrics.model.map({
+        'mode_baseline': 'Theo phương thức', 'logistic_regression': 'Hồi quy logistic',
+        'hist_gradient_boosting': 'Gradient boosting'})
+    check(metrics.model_label.notna().all(), 'Model presentation labels map to the original models')
+    check(cases.case_label.is_unique, 'Friendly route labels retain unique case identities')
+    check(cases.route_image.str.len().lt(32766).all(), 'Native route maps fit the Power BI text field limit')
     policies = pd.DataFrame([{'policy_id': k, 'policy_label': v, 'sort_order': i} for i,(k,v) in enumerate(POLICIES.items())])
     tables = {'orders.csv': orders, 'promise_scenarios.csv': scenarios, 'policies.csv': policies,
               'route_cases.csv': cases, 'route_stops.csv': stops, 'model_metrics.csv': metrics}

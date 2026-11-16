@@ -49,3 +49,51 @@ Dashboard đã qua hạn theo bảng; chưa tạo sản phẩm Dashboard trong �
 Đã có nguồn Power BI bốn trang, sáu bảng đầu vào được kiểm tra, bản xem trước offline và nháp thông điệp phần VI.
 Đã khắc phục môi trường thư viện; 11/11 unittest đạt. Sau đó đã tìm thấy Power BI Store và kiểm tra trực tiếp. Báo cáo đã mở/refresh; 21 kiểm tra DAX native đạt.
 Trạng thái phần VI: có Dashboard kỹ thuật và bản viết bàn giao; Anh Quốc/nhóm rà thông điệp trước khi nộp.
+
+
+## Nâng cấp Delivery Insights ngày 16/11/2026
+
+Bốn trang chính và một trang lịch trình chi tiết thay thiết kế native trước đó. Bố cục,
+màu sắc, nhãn, thứ tự xem chỉ số và điều hướng được thiết kế lại. Power BI đã có đường nối
+tuyến theo xe bằng image visual native, bộ lọc DataCo đồng bộ và bộ chọn cam kết độc lập
+để luôn giữ đủ năm phương án trong bảng so sánh. Giả định nhiên liệu được đồng bộ sang
+trang lịch trình bằng slicer ẩn. Nguồn dữ liệu bàn giao và kết quả số gốc được giữ nguyên.
+
+84 kiểm tra đầu vào, 13 unittest, 132 file qua schema, 119 visual qua kiểm tra tham chiếu/
+bố cục và 26 kiểm tra DAX native đạt. CLI Microsoft xác nhận 0 lỗi, 0 cảnh báo. Chi tiết
+render và tương tác xem reports/dashboard/native_render_validation.json. Các ghi nhận
+scatter/chưa đồng bộ phía trên mô tả phiên bản cũ. Không chạy lại huấn luyện hoặc bộ giải.
+Chưa stage, commit hoặc push bản nâng cấp này.
+
+
+## Điều chỉnh điều hướng và nội dung Dashboard
+
+Theo góp ý của Anh Quốc, chuyển DELIVERY INSIGHTS và bốn mục điều hướng từ cột trái
+lên thanh ngang cao 72. Canvas giảm từ 1440 × 960 xuống 1440 × 864, nội dung trải hết
+chiều ngang với lề 28. Bỏ thông tin người phụ trách, dòng giới thiệu lặp, hướng dẫn thao tác,
+khuyến nghị chung và footer dài. Giữ phạm vi, đơn vị và các giải thích cần để đọc đúng số liệu.
+Thay đoạn lời khuyên ở trang Cam kết bằng bảng thời gian cam kết theo phương thức.
+
+100 file qua schema, 87 visual qua kiểm tra tham chiếu và bố cục; không sửa measures,
+quan hệ hoặc CSV. Đã rà ảnh native năm trang và thử thanh điều hướng ngang cùng nút
+lịch trình. Kết quả hiện hành xem reports/dashboard/native_render_validation.json.
+Chưa commit/push lượt điều chỉnh này.
+
+
+## Sửa chồng lấn và khoảng trống trong Dashboard
+
+Tách tiêu đề, chú thích và số KPI thành các vùng hiển thị độc lập; số có đủ chiều cao dòng
+theo font native. Tách nhãn bộ lọc với dropdown đúng kích thước tối thiểu. Cố định độ rộng
+cột để bảng phủ khoảng 97% khung; căn tiêu đề theo kiểu dữ liệu. Bỏ ba ô kết luận lớn bị
+lặp, mở rộng bảng tương ứng và cân tỷ lệ khung sơ đồ tuyến/lịch trình.
+
+175 file qua schema, 162 visual qua kiểm tra nguồn; CLI Microsoft không có lỗi/cảnh báo.
+Đo trực tiếp Power BI ở 2400 × 1580 và 1366 × 900, đủ năm trang mỗi kích thước: không
+phát hiện chữ vượt vùng riêng, khung tiền cảnh giao nhau hoặc nhãn biểu đồ chồng nhau
+trong các trạng thái mặc định đã kiểm tra. Đã xem ảnh native; phạm vi và giới hạn được
+ghi trong native_layout_validation.json. Công thức, quan hệ và CSV giữ nguyên.
+Chưa commit/push lượt sửa này.
+
+## Bàn giao Git
+
+Bản nâng cấp Power BI và bộ kiểm tra bố cục được đưa vào commit của lượt bàn giao này. Các ghi nhận chưa commit/push phía trên mô tả thời điểm kiểm tra trước bàn giao.

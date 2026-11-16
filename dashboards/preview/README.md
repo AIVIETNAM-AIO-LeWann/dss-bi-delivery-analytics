@@ -6,8 +6,9 @@ Tệp chứa dữ liệu tối thiểu đã đối chiếu, không gọi API ho�
 HTML được sinh không theo dõi trong Git; template và bộ dựng được theo dõi.
 
 Bản này giúp Anh Quốc và nhóm rà thông điệp, KPI, what-if và tuyến ngay khi chưa có Power BI.
-Nó không phải trình render Power BI: bộ lọc của preview dùng chung ba trang DataCo,
-trong khi Power BI hiện có slicer riêng từng trang; preview có đường nối tuyến, native hiện là scatter/bảng dừng.
+Nó không phải trình render Power BI. Preview giữ thiết kế trước lần nâng cấp Delivery Insights.
+Power BI mới đã đồng bộ bộ lọc giữa các trang DataCo và có đường nối tuyến bằng SVG native,
+cùng trang lịch trình riêng. Xem giao diện mới trong Power BI, không suy ra từ preview HTML.
 Không dùng kết quả preview để tuyên bố model Power BI đã refresh hoặc DAX/M đã được thực thi.
 
 Kiểm tra tương tác tùy chọn: cài Playwright vào `.cache/browser/` (không tạo package ở gốc repo),

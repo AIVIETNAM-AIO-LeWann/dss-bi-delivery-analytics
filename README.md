@@ -32,7 +32,7 @@ DataCo dùng để phân tích giao hàng; Solomon dùng riêng để thử nghi
 `workstreams/prescriptive/results/dashboard_orders_test.csv`: bảng test ghép kết quả dự báo và kịch bản cam kết.
 Mã `order_id` là Text; tỷ lệ/xác suất lưu 0–1. Mẫu toàn nguồn, mẫu không hủy và test có mẫu số khác nhau.
 
-Dashboard: mở `dashboards/powerbi/delivery_dashboard.pbip`; hoặc tạo và mở bản xem trước `dashboards/preview/delivery_dashboard.html`.
+Dashboard Delivery Insights: mở `dashboards/powerbi/delivery_dashboard.pbip` để xem bốn trang chính và lịch trình chi tiết. Bản HTML trong `dashboards/preview/` giữ thiết kế tham khảo trước lần nâng cấp native.
 Hướng dẫn và trạng thái nghiệm thu tại [dashboards/README.md](dashboards/README.md).
 
 Các CSV sạch trong thư mục chung được khôi phục từ snapshot bàn giao, có checksum tại

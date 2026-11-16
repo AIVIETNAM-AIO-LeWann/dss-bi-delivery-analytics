@@ -1,110 +1,133 @@
 {
-  "checks_passed": 21,
-  "scope": "DAX executed against the local Power BI Desktop model after native refresh",
   "all_passed": true,
+  "checks_passed": 26,
+  "scope": "DAX executed against the local Power BI Desktop model after native refresh",
   "checks": [
     {
+      "actual": 62897,
       "description": "Native analysis denominator",
-      "expected": 62897,
-      "actual": 62897
+      "expected": 62897
     },
     {
+      "actual": 36048,
       "description": "Native source late count",
-      "expected": 36048,
-      "actual": 36048
+      "expected": 36048
     },
     {
+      "actual": 13071,
       "description": "Native test denominator",
-      "expected": 13071,
-      "actual": 13071
+      "expected": 13071
     },
     {
+      "actual": 4560,
       "description": "Native alerts at default threshold",
-      "expected": 4560,
-      "actual": 4560
+      "expected": 4560
     },
     {
+      "actual": 4057,
       "description": "Native true positives",
-      "expected": 4057,
-      "actual": 4057
+      "expected": 4057
     },
     {
+      "actual": 3467,
       "description": "Native false negatives",
-      "expected": 3467,
-      "actual": 3467
+      "expected": 3467
     },
     {
+      "actual": 0.8896929824561404,
       "description": "Native precision",
-      "expected": 0.8896929824561404,
-      "actual": 0.8896929824561404
+      "expected": 0.8896929824561404
     },
     {
+      "actual": 0.5392078681552366,
       "description": "Native recall",
-      "expected": 0.5392078681552366,
-      "actual": 0.5392078681552366
+      "expected": 0.5392078681552366
     },
     {
+      "actual": 13071,
       "description": "Native threshold 0.4 includes all test orders",
-      "expected": 13071,
-      "actual": 13071
+      "expected": 13071
     },
     {
+      "actual": 0,
       "description": "Native zero alerts for Standard Class at threshold 0.5",
-      "expected": 0,
-      "actual": 0
+      "expected": 0
     },
     {
-      "description": "Native undefined precision stays blank",
-      "actual": null
+      "actual": null,
+      "description": "Native undefined precision stays blank"
     },
     {
+      "actual": 0.26815086833448093,
       "description": "Native default promise exceedance rate",
-      "expected": 0.26815086833448093,
-      "actual": 0.26815086833448093
+      "expected": 0.26815086833448093
     },
     {
+      "actual": 0.9440746691148344,
       "description": "Native promise increase in days",
-      "expected": 0.9440746691148343,
-      "actual": 0.9440746691148344
+      "expected": 0.9440746691148343
     },
     {
+      "actual": 13071,
       "description": "Native scenario denominator does not count all five policies",
-      "expected": 13071,
-      "actual": 13071
+      "expected": 13071
     },
     {
+      "actual": 0.5756254303419784,
       "description": "Native current policy preserves test late rate",
-      "expected": 0.5756254303419784,
-      "actual": 0.5756254303419784
+      "expected": 0.5756254303419784
     },
     {
+      "actual": 0.0,
       "description": "Native current policy adds zero days",
-      "expected": 0,
-      "actual": 0.0
+      "expected": 0
     },
     {
+      "actual": 828.936866942834,
       "description": "Native selected route distance",
-      "expected": 828.936866942834,
-      "actual": 828.936866942834
+      "expected": 828.936866942834
     },
     {
+      "actual": 10,
       "description": "Native selected route vehicles",
-      "expected": 10,
-      "actual": 10
+      "expected": 10
     },
     {
+      "actual": 1823661.1072742345,
       "description": "Native fuel cost with default assumptions",
-      "expected": 1823661.1072742345,
-      "actual": 1823661.1072742345
+      "expected": 1823661.1072742345
     },
     {
+      "actual": 2155235.8540513683,
       "description": "Native fuel price parameter changes cost",
-      "expected": 2155235.8540513683,
-      "actual": 2155235.8540513683
+      "expected": 2155235.8540513683
     },
     {
-      "description": "Native no-solution distance and cost remain blank",
-      "actual": null
+      "actual": null,
+      "description": "Native no-solution distance and cost remain blank"
+    },
+    {
+      "actual": 0.5756254303419784,
+      "description": "Disconnected policy selector controls scenario cards",
+      "expected": 0.5756254303419784
+    },
+    {
+      "actual": 5,
+      "description": "Policy comparison retains all five alternatives",
+      "expected": 5
+    },
+    {
+      "actual": 24450,
+      "description": "Native route image resolves within the Power BI text limit"
+    },
+    {
+      "actual": 0.55688265652557,
+      "description": "Route saving uses matching feasible baseline",
+      "expected": 0.55688265652557
+    },
+    {
+      "actual": null,
+      "description": "Missing feasible baseline keeps route saving blank"
     }
   ]
 }

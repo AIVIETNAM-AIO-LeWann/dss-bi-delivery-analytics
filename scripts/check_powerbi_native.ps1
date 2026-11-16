@@ -60,6 +60,16 @@ try{
     $missing=Query-One 'EVALUATE CALCULATETABLE(ROW("distance", [Quãng đường benchmark], "cost", [Nhiên liệu mô phỏng]), TREATAS({"c101|fleet10|nearest_feasible"}, RouteCases[case_id]))'
     if($null -ne $missing.distance -or $null -ne $missing.cost){throw 'Unsolved native route must have blank distance/cost'}
     $checks.Add(@{description='Native no-solution distance and cost remain blank';actual=$null})
+    $selector=Query-One 'EVALUATE CALCULATETABLE(ROW("rate", [Vượt hẹn tính lại], "policies", COUNTROWS(Policies)), TREATAS({"current"}, PolicySelector[policy_id]))'
+    Check-Number $selector.rate (7524/13071) 'Disconnected policy selector controls scenario cards'
+    Check-Number $selector.policies 5 'Policy comparison retains all five alternatives'
+    $image=Query-One 'EVALUATE CALCULATETABLE(ROW("length", LEN([Bản đồ tuyến]), "saving", [Giảm quãng đường]), TREATAS({"c101|base|ortools"}, RouteCases[case_id]))'
+    if($image.length -lt 1000 -or $image.length -ge 32766){throw 'Native route image is absent or exceeds the text limit'}
+    $checks.Add(@{description='Native route image resolves within the Power BI text limit';actual=$image.length})
+    Check-Number $image.saving ((1870.6937996225547-828.936866942834)/1870.6937996225547) 'Route saving uses matching feasible baseline'
+    $noBaseline=Query-One 'EVALUATE CALCULATETABLE(ROW("saving", [Giảm quãng đường]), TREATAS({"c101|fleet10|ortools"}, RouteCases[case_id]))'
+    if($null -ne $noBaseline.saving){throw 'Unsolved baseline must not produce a saving percentage'}
+    $checks.Add(@{description='Missing feasible baseline keeps route saving blank';actual=$null})
     $result=@{all_passed=$true;checks_passed=$checks.Count;checks=$checks;scope='DAX executed against the local Power BI Desktop model after native refresh'}
     $output=Join-Path $repoRoot 'reports/dashboard/native_dax_validation.json'
     $result | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $output -Encoding utf8

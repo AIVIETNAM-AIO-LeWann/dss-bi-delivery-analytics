@@ -10,6 +10,6 @@
     "tzdata==2025.2"
   ],
   "power_bi_desktop": "2.159.1231.0 (Microsoft Store)",
-  "native_refresh": "6 imported tables plus calculated parameters",
+  "native_refresh": "7 imported tables from 6 CSV files, plus 5 calculated tables; 12 total",
   "git_commit_or_push": false
 }

@@ -74,10 +74,12 @@ def main():
             assert box['x'] >= 0 and box['y'] >= 0
             assert box['x']+box['width'] <= dimensions['width']
             assert box['y']+box['height'] <= dimensions['height']
-            for previous in boxes:
+            is_background = data.get('isHidden', False) or any(a.get('name') == 'designRole' and a.get('value') == 'background' for a in data.get('annotations', []))
+            for previous in ([] if is_background else boxes):
                 overlaps = box['x'] < previous['x']+previous['width'] and previous['x'] < box['x']+box['width'] and box['y'] < previous['y']+previous['height'] and previous['y'] < box['y']+box['height']
                 if overlaps: raise ValueError(f'Overlapping visual containers: {visual}')
-            boxes.append(box)
+            if not is_background:
+                boxes.append(box)
             visual_count += 1
     for relation in model['relationships']:
         assert relation['fromColumn'] in refs[relation['fromTable']]['Column']
