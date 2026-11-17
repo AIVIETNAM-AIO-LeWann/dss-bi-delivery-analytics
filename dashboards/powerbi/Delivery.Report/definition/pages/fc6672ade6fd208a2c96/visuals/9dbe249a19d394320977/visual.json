@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "9dbe249a19d394320977",
   "position": {
-    "x": 1200,
-    "y": 154,
+    "x": 30,
+    "y": 367,
     "z": 16,
-    "width": 200,
+    "width": 66,
     "height": 22,
     "tabOrder": 16
   },
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#F6F3ED'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "0D"
                 }
               }
             }
@@ -190,15 +190,16 @@
               {
                 "textRuns": [
                   {
-                    "value": "Giá nhiên liệu (VND/lít)",
+                    "value": "Tuyến giao",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "12pt",
-                      "color": "#142D3B",
+                      "fontSize": "9.5pt",
+                      "color": "#1D2A33",
                       "fontWeight": "bold"
                     }
                   }
-                ]
+                ],
+                "horizontalTextAlignment": "center"
               }
             ]
           }

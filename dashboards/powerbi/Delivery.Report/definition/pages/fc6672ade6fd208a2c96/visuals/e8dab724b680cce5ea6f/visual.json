@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "e8dab724b680cce5ea6f",
   "position": {
-    "x": 1108,
-    "y": 256,
+    "x": 140,
+    "y": 14,
     "z": 29,
-    "width": 288,
-    "height": 24,
+    "width": 540,
+    "height": 44,
     "tabOrder": 29
   },
   "visual": {
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#F6F3ED'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "0D"
                 }
               }
             }
@@ -190,11 +190,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "Giảm quãng đường",
+                    "value": "Tuyến giao và nhiên liệu",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "12pt",
-                      "color": "#627780",
+                      "fontSize": "25pt",
+                      "color": "#1D2A33",
                       "fontWeight": "bold"
                     }
                   }

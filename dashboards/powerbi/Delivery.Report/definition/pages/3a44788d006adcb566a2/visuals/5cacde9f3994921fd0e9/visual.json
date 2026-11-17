@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "5cacde9f3994921fd0e9",
   "position": {
-    "x": 756,
-    "y": 148,
+    "x": 30,
+    "y": 303,
     "z": 13,
-    "width": 456,
-    "height": 80,
+    "width": 66,
+    "height": 22,
     "tabOrder": 13
   },
   "visual": {
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -78,7 +78,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -109,7 +109,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#F6F3ED'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "0D"
                 }
               }
             }
@@ -190,20 +190,21 @@
               {
                 "textRuns": [
                   {
-                    "value": ""
+                    "value": "Cam kết",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "9.5pt",
+                      "color": "#1D2A33",
+                      "fontWeight": "bold"
+                    }
                   }
-                ]
+                ],
+                "horizontalTextAlignment": "center"
               }
             ]
           }
         }
       ]
     }
-  },
-  "annotations": [
-    {
-      "name": "designRole",
-      "value": "background"
-    }
-  ]
+  }
 }

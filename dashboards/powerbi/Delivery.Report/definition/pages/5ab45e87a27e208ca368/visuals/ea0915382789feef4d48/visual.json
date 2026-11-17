@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "ea0915382789feef4d48",
   "position": {
-    "x": 1108,
-    "y": 304,
+    "x": 140,
+    "y": 14,
     "z": 29,
-    "width": 288,
-    "height": 60,
+    "width": 540,
+    "height": 44,
     "tabOrder": 29
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "textbox",
     "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#F6F3ED'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "0D"
                 }
               }
             }
@@ -182,77 +182,25 @@
         }
       ]
     },
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteCases"
-                    }
-                  },
-                  "Property": "Thẻ Giảm quãng đường"
-                }
-              },
-              "queryRef": "RouteCases.Thẻ Giảm quãng đường",
-              "nativeQueryRef": "Thẻ Giảm quãng đường"
-            }
-          ]
-        }
-      }
-    },
     "objects": {
-      "labels": [
+      "general": [
         {
           "properties": {
-            "fontFamily": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Segoe UI'"
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "30D"
-                }
-              }
-            },
-            "labelDisplayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1D"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#142D3B'"
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Lịch trình tuyến",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "25pt",
+                      "color": "#1D2A33",
+                      "fontWeight": "bold"
                     }
                   }
-                }
+                ]
               }
-            }
-          }
-        }
-      ],
-      "categoryLabels": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
+            ]
           }
         }
       ]

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "70c390b308b2a9a4cc35",
   "position": {
-    "x": 1108,
-    "y": 282,
+    "x": 28,
+    "y": 886,
     "z": 27,
-    "width": 288,
-    "height": 20,
+    "width": 76,
+    "height": 19,
     "tabOrder": 27
   },
   "visual": {
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#F6F3ED'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "0D"
                 }
               }
             }
@@ -190,14 +190,15 @@
               {
                 "textRuns": [
                   {
-                    "value": "Thực tế trừ cam kết",
+                    "value": "trễ toàn kỳ",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "10pt",
-                      "color": "#627780"
+                      "fontSize": "8pt",
+                      "color": "#5E6D76"
                     }
                   }
-                ]
+                ],
+                "horizontalTextAlignment": "center"
               }
             ]
           }

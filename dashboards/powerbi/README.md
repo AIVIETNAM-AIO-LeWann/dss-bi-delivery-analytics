@@ -25,7 +25,8 @@ giá nhiên liệu 22.000 VND/lít. Đây là giả định mô phỏng.
 
 ## Mô hình và phạm vi lọc
 
-12 bảng, 47 measures nghiệp vụ và 40 measures trình bày. Measures trình bày được ẩn,
+12 bảng, 145 measures: 82 hiển thị (nghiệp vụ, chữ kết luận, measure SVG của bản đồ) và 63 ẩn
+(thẻ trình bày và hình SVG trang trí có dữ liệu). Measures trình bày được ẩn,
 chỉ định dạng thẻ số theo tiếng Việt và xử lý giá trị trống; không thay công thức số gốc.
 
 Orders có một dòng/đơn, 62.897 dòng không hủy. P_Late chỉ có trên 13.071 đơn test.

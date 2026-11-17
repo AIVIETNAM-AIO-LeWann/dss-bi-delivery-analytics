@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "601b0ddf9607e4018afa",
   "position": {
-    "x": 1228,
-    "y": 166,
+    "x": 28,
+    "y": 352,
     "z": 15,
-    "width": 184,
-    "height": 44,
+    "width": 76,
+    "height": 52,
     "tabOrder": 15
   },
   "visual": {
-    "visualType": "actionButton",
+    "visualType": "textbox",
     "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -78,7 +78,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -87,7 +87,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#EAE7DF'"
                     }
                   }
                 }
@@ -109,7 +109,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#EAE7DF'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "14D"
                 }
               }
             }
@@ -181,7 +181,7 @@
           }
         }
       ],
-      "visualLink": [
+      "dropShadow": [
         {
           "properties": {
             "show": {
@@ -191,63 +191,21 @@
                 }
               }
             },
-            "type": {
+            "preset": {
               "expr": {
                 "Literal": {
-                  "Value": "'ClearAllSlicers'"
+                  "Value": "'Custom'"
                 }
               }
-            }
-          }
-        }
-      ]
-    },
-    "objects": {
-      "shape": [
-        {
-          "properties": {
-            "roundEdge": {
+            },
+            "position": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "'Outer'"
                 }
               }
-            }
-          }
-        },
-        {
-          "selector": {
-            "id": "default"
-          },
-          "properties": {
-            "tileShape": {
-              "expr": {
-                "Literal": {
-                  "Value": "'rectangleRounded'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "fill": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "id": "default"
-          },
-          "properties": {
-            "fillColor": {
+            },
+            "color": {
               "solid": {
                 "color": {
                   "expr": {
@@ -257,149 +215,68 @@
                   }
                 }
               }
-            }
-          }
-        },
-        {
-          "selector": {
-            "id": "hover"
-          },
-          "properties": {
-            "fillColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#E3F0EF'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "outline": [
-        {
-          "properties": {
-            "show": {
+            },
+            "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "icon": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "text": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "id": "default"
-          },
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Xóa bộ lọc'"
+                  "Value": "8D"
                 }
               }
             },
-            "fontSize": {
+            "shadowSpread": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "0D"
                 }
               }
             },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#087E7C'"
-                    }
-                  }
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
                 }
               }
             },
-            "bold": {
+            "angle": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "225D"
                 }
               }
             },
-            "horizontalAlignment": {
+            "shadowDistance": {
               "expr": {
                 "Literal": {
-                  "Value": "'center'"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "id": "hover"
-          },
-          "properties": {
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#087E7C'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "id": "disabled"
-          },
-          "properties": {
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#627780'"
-                    }
-                  }
+                  "Value": "4D"
                 }
               }
             }
           }
         }
       ]
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
     }
-  }
+  },
+  "annotations": [
+    {
+      "name": "designRole",
+      "value": "background"
+    }
+  ]
 }

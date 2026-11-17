@@ -3,7 +3,7 @@
   "name": "5ab45e87a27e208ca368",
   "displayName": "Lịch trình tuyến",
   "displayOption": "FitToPage",
-  "height": 884,
+  "height": 1000,
   "width": 1440,
   "visibility": "HiddenInViewMode",
   "objects": {
@@ -15,7 +15,7 @@
               "color": {
                 "expr": {
                   "Literal": {
-                    "Value": "'#F3F6F6'"
+                    "Value": "'#E4E0D7'"
                   }
                 }
               }

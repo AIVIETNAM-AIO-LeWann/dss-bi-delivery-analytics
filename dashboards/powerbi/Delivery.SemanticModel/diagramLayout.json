@@ -133,6 +133,32 @@
             "width": 234
           },
           "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2790.3830500146937,
+            "y": 0
+          },
+          "nodeIndex": "PolicySelector",
+          "nodeLineageTag": "cb62cdb3-f255-52fb-afa3-34b02b59780e",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3160.8217689983958,
+            "y": 12
+          },
+          "nodeIndex": "RouteMethods",
+          "nodeLineageTag": "ada5dc84-5c2b-4719-9d6e-d8edbd4c6532",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",

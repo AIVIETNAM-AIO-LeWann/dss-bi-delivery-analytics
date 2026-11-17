@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "2812dcb99b52694c27d8",
   "position": {
-    "x": 772,
-    "y": 304,
+    "x": 46,
+    "y": 630,
     "z": 26,
-    "width": 288,
-    "height": 60,
+    "width": 44,
+    "height": 250,
     "tabOrder": 26
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "image",
     "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#F6F3ED'"
                     }
                   }
                 }
@@ -182,74 +182,40 @@
         }
       ]
     },
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
+    "objects": {
+      "image": [
+        {
+          "properties": {
+            "sourceType": {
+              "expr": {
+                "Literal": {
+                  "Value": "'imageData'"
+                }
+              }
+            },
+            "sourceField": {
+              "expr": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "PromiseScenarios"
+                      "Entity": "Orders"
                     }
                   },
-                  "Property": "Thẻ Cam kết mới TB"
-                }
-              },
-              "queryRef": "PromiseScenarios.Thẻ Cam kết mới TB",
-              "nativeQueryRef": "Thẻ Cam kết mới TB"
-            }
-          ]
-        }
-      }
-    },
-    "objects": {
-      "labels": [
-        {
-          "properties": {
-            "fontFamily": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Segoe UI'"
+                  "Property": "Nhiệt kế toàn kỳ"
                 }
               }
             },
-            "fontSize": {
+            "fit": {
               "expr": {
                 "Literal": {
-                  "Value": "30D"
+                  "Value": "'Fit'"
                 }
               }
             },
-            "labelDisplayUnits": {
+            "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "1D"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#142D3B'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "categoryLabels": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
+                  "Value": "'Nhiệt kế tỷ lệ trễ toàn kỳ'"
                 }
               }
             }

@@ -1,74 +1,82 @@
 # Nguyên tắc thiết kế Delivery Insights
 
-## Bố cục và nhận diện
+Giao diện là một bảng điều khiển kho vận: mặt giấy ấm, các khối nổi và ô lọc lõm, một dải nhãn
+kraft mang kết luận. Bản mockup tham chiếu nằm ở `dashboards/design/mockup_v6.html`; bản Power BI
+giữ cấu trúc, màu và logic tương tác, bỏ các hiệu ứng mà Power BI không có.
 
-Canvas rộng 1440, cao 884; riêng Cam kết cao 936 để đủ chỗ cho tám thanh có nhãn. Thanh điều hướng ngang cao 72, gộp tên báo cáo và bốn trang chính.
-Không có cột trái hoặc thông tin người phụ trách trong giao diện. Nội dung cách mép 28,
-khoảng cách giữa các khối 16–20. Segoe UI dùng thống nhất; tiêu đề trang 26 pt, tiêu đề
-biểu đồ 13 pt và nội dung 10–13 pt. Một thẻ chính nền đậm tạo điểm bắt đầu cho mỗi trang.
-Ba thẻ còn lại bổ sung quy mô, mức đánh đổi hoặc nguồn lực cần thiết.
+## Canvas và bố cục
+
+Mọi trang rộng 1440, cao 1000. Cột trái 100 là thanh bên (logo, bốn phím trang, bảng dữ liệu và
+nhiệt kế tỷ lệ trễ toàn kỳ). Nội dung bắt đầu ở x=140, rộng 1272. Từ trên xuống: tiêu đề và ô lọc
+(cao 72), dải kết luận (cao 38), rồi ba hàng khối cách nhau 16. Một trang đọc theo thứ tự: kết luận,
+chỉ số chính, so sánh theo nhóm, diễn biến.
 
 | Vai trò | Màu | Cách dùng |
 | --- | --- | --- |
-| Chữ chính, thanh điều hướng | #142D3B | Nền đậm chỉ dùng ở thanh trên và thẻ trọng tâm |
-| Dữ liệu chính, thao tác | #087E7C | Màu ngọc nhất quán giữa các trang |
-| Điểm cần cân nhắc | #AE6A3C | Dùng tiết chế, không biến mọi chỉ số thành cảnh báo |
-| Chữ phụ | #627780 | Giải thích mẫu số, phạm vi và đơn vị |
-| Nền trang | #F3F6F6 | Phân tách các khối trắng mà không cần bóng đổ |
+| Nền trang | #E4E0D7 | Giấy ấm, nền cho mọi khối |
+| Mặt khối nổi | #EAE7DF | Khối nổi bằng hai lớp bóng |
+| Ô lõm | #D7D3C8 | Ô lọc, thanh bên, rãnh |
+| Chữ chính | #1D2A33 | Mực xanh đen |
+| Chữ phụ | #5E6D76 | Mẫu số, phạm vi, đơn vị |
+| Trễ, rủi ro | #D2472A | Đỏ chu sa, chỉ dùng cho điều xấu |
+| Đúng hạn, ổn | #0E7C86 | Xanh dầu |
+| Thận trọng | #B8860B | Vàng đồng, cảnh báo sai |
+| Trung tính | #8E9AA3 | Tổng thể, chỉ số không phán xét |
 
-Không dùng ảnh trang trí, hiệu ứng phát sáng hay biểu tượng không có chức năng. Chữ mô tả
-ngắn, trực tiếp; số liệu và biểu đồ tạo điểm nhấn. Màu không phải cách duy nhất phân biệt
-trạng thái: luôn giữ nhãn, tiêu đề hoặc chú giải đi cùng.
+Cặp đỏ và xanh dầu đã qua kiểm tra phân biệt cho người mù màu (ΔE 12,9). Màu không phải cách duy
+nhất phân biệt: luôn có nhãn, chú giải hoặc số đi kèm. Font Segoe UI; số lớn dùng Segoe UI Light.
 
-## Luồng phân tích
+## Chất liệu: nổi và lõm
 
-Tổng quan xếp tỷ lệ trễ theo phương thức, cạnh diễn biến tháng; bảng dưới đối chiếu cam kết
-với thời gian thực tế. Rủi ro đặt độ chính xác cạnh độ bao phủ, cảnh báo và bỏ sót để thấy
-khối lượng xử lý cùng hạn chế của mô hình. AP, ROC-AUC và log loss được đối chiếu trên
-toàn tập test; không giả vờ thay đổi theo vùng.
+Ánh sáng đến từ góc trên trái. Khối nổi là hai hình chồng nhau, mỗi hình một bóng đổ native: lớp dưới
+bóng sáng lệch lên trái, lớp trên bóng ấm lệch xuống phải. Ô lõm là một hình có bóng trong (Inner).
+Các lớp này được đánh dấu `designRole = background` để bộ kiểm tra bỏ qua khi xét chồng chéo; mọi
+visual có nội dung vẫn không được chồng nhau. Hằng số bóng nằm ở đầu `powerbi_report.py`
+(`BIG_LIGHT`, `BIG_DARK`, `SMALL_*`, `INSET`), đổi một chỗ là đổi toàn báo cáo.
 
-Cam kết luôn giữ đủ năm phương án trong bảng, trong khi thẻ và biểu đồ đi theo lựa chọn
-đang xem. Giảm vượt hẹn phải đi cùng số ngày khách chờ thêm. Không mô tả thay đổi cam kết
-như cải thiện tốc độ giao thực tế.
+Phím trang hiện tại được vẽ lõm kèm đèn đỏ; ba phím còn lại nổi và bấm để chuyển trang. Mỗi trang
+tự vẽ trạng thái này vì nút bấm native không biết trang đang mở.
 
-Tuyến giao trình bày đường đi có thứ tự và màu theo xe. Biểu đồ so sánh chỉ dùng cùng cấu
-hình; lịch trình được chuyển sang trang riêng để kiểm tra chi tiết mà không chiếm trang chính.
-Không có đối chứng khả thi thì để trống tỷ lệ giảm. Các tham số nhiên liệu vẫn là giả định.
+## Nội dung động, không số cứng
 
-## Nội dung hiển thị
+Dải kết luận và các câu chữ dưới biểu đồ là measure DAX, nên đúng theo bộ lọc. Không viết số hay
+nhận định cố định vào hộp chữ. Các hình trang trí có dữ liệu là measure SVG (dataCategory
+ImageUrl, ẩn trong thư mục Hình ảnh), hiển thị bằng visual hình ảnh như bản đồ tuyến:
 
-Giữ tên chỉ số, mẫu số cần thiết, phạm vi dữ liệu và đơn vị. Bỏ tên người phụ trách,
-khẩu hiệu, hướng dẫn thao tác hiển nhiên, đoạn khuyến nghị chung và footer dài. Các lưu ý
-phương pháp vẫn được giữ trong README và tài liệu chỉ số; giao diện chỉ giữ phần tránh
-hiểu nhầm trực tiếp, như AP không đổi theo vùng hoặc sơ đồ Solomon không phải đường bộ.
-Trang Cam kết dùng bảng thời gian cam kết theo phương thức thay đoạn khuyến nghị chung.
+| Measure | Hình |
+| --- | --- |
+| Logo | Khối hộp hàng hóa và chấm tín hiệu đỏ |
+| Vòng tỷ lệ trễ, Vòng độ chính xác, Vòng độ bao phủ, Vòng vượt hẹn | Vòng tiến độ lõm, có núm kéo |
+| Thanh tỷ lệ trễ | Thanh nổi trong rãnh, vạch đứt là trung bình toàn kỳ |
+| Nhiệt kế toàn kỳ | Nhiệt kế dọc ở thanh bên, không đổi theo bộ lọc |
+| Bàn phím nhiệt | Phương thức × thị trường, màu từ xanh dầu qua giấy tới đỏ quanh trung bình |
+| Phễu phát hiện | Từ đơn kiểm tra đến cảnh báo đúng và bỏ sót |
+
+Mã sinh các measure này nằm ở `src/dss_bi_delivery/powerbi_svg.py`. Chuỗi đã mã hóa phần trăm;
+số định dạng bằng `FORMAT(..., "en-US")` để dấu thập phân không phá URI.
+
+## Luồng phân tích và những điều không được nói
+
+Tổng quan đặt bốn phương thức làm trung tâm: tỷ lệ trễ, cam kết so với thực tế, phần đóng góp vào
+tổng đơn trễ. Bong bóng ưu tiên đặt khối lượng cạnh tỷ lệ để thấy nhóm lớn nhưng trễ ít vẫn có nhiều
+đơn trễ. Phím nhiệt chỉ ra thị trường ít làm đổi kết quả. Rủi ro đặt độ chính xác cạnh độ bao phủ và
+nêu rõ số đơn bị bỏ sót. AP, ROC-AUC và log loss lấy trên toàn tập test; không giả vờ đổi theo vùng.
+
+Cam kết luôn giữ đủ năm phương án; thẻ và biểu đồ đi theo phương án đang chọn. Giảm vượt hẹn phải
+đi cùng số ngày khách chờ thêm. Không mô tả thay đổi cam kết như cải thiện tốc độ giao thực tế.
+
+Tuyến giao dùng tọa độ Solomon, không phải km đường bộ. Nhiên liệu là giả định mô phỏng và được
+ghi rõ như vậy ngay trên thẻ. Không có đối chứng khả thi thì để trống tỷ lệ giảm.
 
 ## Duy trì
 
-Giữ mô đun dữ liệu, công thức, bản đồ tuyến và trình bày riêng. Định dạng thẻ số không thay
-đổi measures số dùng cho biểu đồ. Cập nhật nguồn sinh cùng thay đổi trong Desktop trước khi
-build lại. Kiểm tra trực tiếp nhãn dài, giá trị trống, tất cả trang, bộ lọc đồng bộ và nút chi tiết.
+Giữ mô đun dữ liệu, công thức, hình SVG, bản đồ tuyến và trình bày riêng. Nguồn thiết kế ở
+`powerbi_report.py`, hình SVG ở `powerbi_svg.py`, model và measure ở `powerbi_model.py`. Cập nhật nguồn
+sinh cùng thay đổi trong Desktop trước khi build lại: Desktop lưu lại file với phiên bản lược đồ mới
+hơn, `scripts/build_powerbi.py` sẽ ghi đè toàn bộ file đã sinh.
 
-
-## Chống chồng lấn và sử dụng diện tích
-
-Ô chỉ số có ba vùng độc lập: tiêu đề, định nghĩa ngắn và số. Native card chỉ vẽ số,
-không dùng cơ chế tự căn chung với title/subtitle. Vùng số cao 60, đủ chiều cao dòng font
-thực tế; luôn giữ khoảng cách với phần chữ trên. Bộ lọc cũng tách tiêu đề khỏi dropdown,
-dropdown native cao 48 và có padding 8 mỗi phía. Các lớp nền được đánh dấu riêng;
-chỉ lớp nền được phép nằm sau nội dung.
-
-Bảng dùng độ rộng cột cố định theo tổng chiều rộng nội dung, không co theo chữ sau refresh.
-Dữ liệu chữ căn trái, số căn phải trong cột riêng. Các bảng dùng khoảng 97% chiều rộng
-khung ở các bảng rộng; các bảng nhỏ dùng khoảng 92–94%, phần còn lại là lề. Bỏ ba ô kết luận lớn bị lặp ở cuối Tổng quan, Rủi ro và Cam kết.
-Bảng ở cuối các trang này trải hết hàng. Hai cột tuyến và lịch trình được cân theo tỷ lệ ảnh.
-Nhãn thanh đơn và nhóm nằm ngoài đầu thanh, có khoảng dự phòng bên phải. Ở biểu đồ
-thanh nhóm, mỗi hàng được cấp đủ chiều cao cho hai nhãn số, kể cả khi chúng bằng nhau.
-Giữ đủ cả tám nhãn mặc định; không giải quyết chồng chữ bằng cách ẩn giá trị. Nhãn biểu đồ
-xếp chồng nằm trong từng đoạn. Không kéo giãn hình học tuyến để lấp khung.
-
-Kiểm tra nguồn bằng scripts/validate_powerbi.py và CLI Microsoft. Kiểm tra geometry thực
-bằng scripts/check_powerbi_layout.cjs trên Desktop đã refresh: đo text so với vùng riêng,
-các vùng tiền cảnh so với nhau, nhãn biểu đồ và độ phủ cột bảng. Bằng chứng nằm trong
-reports/dashboard/native_layout_validation.json. Thực hiện lại sau thay font, kích thước,
-nhãn hoặc cấu trúc bảng; ảnh chụp cần được xem thêm để đánh giá tính dễ đọc.
+Khi mở bản mới lần đầu, những điều cần kiểm tra trực tiếp trong Desktop vì bộ kiểm tra lược đồ không
+chứng minh được: giá trị thuộc tính bóng đổ (`preset`, `position`, `angle`) cho ra đúng nổi và lõm;
+mọi measure SVG và measure chữ tính được, không báo lỗi DAX; thuộc tính riêng của biểu đồ phân tán,
+biểu đồ đường thu nhỏ và bảng; số liệu trên thẻ khớp mục Đối chiếu số liệu trong README; nhãn dài,
+giá trị trống và bộ lọc đồng bộ giữa các trang.
