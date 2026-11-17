@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery Insights</title>
+<style>
+/* ------------------------------------------------------------------
+   Bảng điều khiển kho vận: giấy ấm · mực xanh đen · đỏ chu sa · xanh dầu · vàng đồng
+------------------------------------------------------------------- */
+:root{
+  --base:#E4E0D7; --hi:rgba(255,255,255,.92); --lo:rgba(104,92,68,.34);
+  --face1:#EFECE5; --face2:#DCD8CE; --well1:#D3CFC4; --well2:#E8E5DD; --edge:rgba(255,255,255,.65);
+  --ink:#1D2A33; --ink2:#45545E; --muted:#5E6D76; --rule:rgba(29,42,51,.14);
+  --red:#D2472A; --red2:#B93A20; --teal:#0E7C86; --teal2:#0A636B; --brass:#B8860B; --steel:#8E9AA3;
+  --tx:0 1px 0 rgba(255,255,255,.85);
+}
+[data-theme=dark]{
+  --base:#262B30; --hi:rgba(255,255,255,.05); --lo:rgba(0,0,0,.58);
+  --face1:#30363C; --face2:#252A2F; --well1:#1B1F23; --well2:#2B3136; --edge:rgba(255,255,255,.09);
+  --ink:#ECE8E0; --ink2:#C3C9CC; --muted:#98A3AA; --rule:rgba(255,255,255,.1);
+  --red:#FF7A5A; --red2:#E0583A; --teal:#35C2C0; --teal2:#25A09E; --brass:#E9B949; --steel:#7D8A93;
+  --tx:0 -1px 0 rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;margin:0}
+html{background:var(--base)}
+body{width:1440px;height:1030px;margin:0 auto;position:relative;background:var(--base);color:var(--ink);font:13px/1.4 "Segoe UI",system-ui,sans-serif;display:flex}
+body:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+[data-theme=dark] body:after{opacity:.05;mix-blend-mode:screen}
+.num{font-variant-numeric:tabular-nums}
+svg text{font-family:"Segoe UI",system-ui,sans-serif}
+
+/* ---------- vật liệu ---------- */
+.raise{background:linear-gradient(145deg,var(--face1),var(--face2));border-radius:20px;
+  box-shadow:9px 11px 22px var(--lo),-7px -7px 16px var(--hi),inset 1px 1px 0 var(--edge)}
+.well{background:linear-gradient(145deg,var(--well1),var(--well2));border-radius:14px;
+  box-shadow:inset 4px 5px 9px var(--lo),inset -3px -3px 8px var(--hi)}
+.small.raise{border-radius:12px;box-shadow:4px 5px 10px var(--lo),-3px -3px 8px var(--hi),inset 1px 1px 0 var(--edge)}
+h1,h2,h3{text-shadow:var(--tx)}
+
+/* ---------- thanh điều hướng ---------- */
+.rail{position:absolute;left:16px;top:20px;bottom:20px;width:92px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.mark{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:17px;letter-spacing:-.04em;color:var(--ink);
+  background:linear-gradient(145deg,var(--face1),var(--face2));box-shadow:5px 6px 12px var(--lo),-4px -4px 9px var(--hi),inset 0 0 0 5px var(--base),inset 0 0 0 6px var(--rule);text-shadow:var(--tx)}
+.mark i{font-style:normal;color:var(--red)}
+.brand{font-size:9.5px;letter-spacing:.1em;color:var(--muted);text-align:center;text-transform:uppercase;margin:-4px 0 6px;line-height:1.25}
+.key{width:72px;padding:11px 0 10px;border-radius:14px;text-align:center;cursor:pointer;position:relative;color:var(--muted);
+  background:linear-gradient(145deg,var(--face1),var(--face2));box-shadow:5px 6px 11px var(--lo),-4px -4px 9px var(--hi),inset 1px 1px 0 var(--edge);transition:.12s}
+.key small{display:block;font-size:10px;letter-spacing:.08em;opacity:.8}
+.key b{display:block;font-size:12px;font-weight:600;margin-top:2px}
+.key.on{color:var(--ink);background:linear-gradient(145deg,var(--well1),var(--well2));box-shadow:inset 3px 4px 8px var(--lo),inset -2px -2px 6px var(--hi)}
+.key.on:after{content:"";position:absolute;right:8px;top:8px;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 5px color-mix(in srgb,var(--red) 70%,transparent)}
+.knob{margin-top:auto;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--ink2);font-size:17px;cursor:pointer;
+  background:linear-gradient(145deg,var(--face1),var(--face2));box-shadow:5px 6px 11px var(--lo),-4px -4px 9px var(--hi),inset 1px 1px 0 var(--edge)}
+
+/* ---------- khung ---------- */
+.main{margin-left:140px;width:1272px;padding:20px 0 0;position:relative}
+.page{display:none;height:920px}.page.on{display:block}
+.head{height:64px;display:flex;align-items:center;gap:14px}
+.head .tt{margin-right:auto}
+.head h1{font-size:28px;font-weight:600;letter-spacing:-.015em;line-height:1.1}
+.head p{color:var(--muted);font-size:12.5px;margin-top:2px}
+.fil{width:172px;height:50px;padding:7px 14px 0;position:relative;border-radius:14px;cursor:pointer}
+.fil span{display:block;font-size:10.5px;color:var(--muted);letter-spacing:.03em}
+.fil b{display:block;font-size:13.5px;font-weight:600;margin-top:0}
+.fil:after{content:"";position:absolute;right:14px;top:21px;width:6px;height:6px;border:solid var(--muted);border-width:0 1.6px 1.6px 0;transform:rotate(45deg)}
+.reset{height:50px;padding:0 16px;display:grid;place-items:center;font-weight:600;color:var(--red);cursor:pointer}
+.tape{margin:12px 0 16px;height:38px;border-radius:7px;display:flex;align-items:center;gap:12px;padding:0 18px;position:relative;
+  background:linear-gradient(180deg,#DCC9A2,#CDB98E);color:#2B2314;font-weight:600;font-size:13px;box-shadow:0 5px 10px var(--lo),0 -1px 0 rgba(255,255,255,.5),inset 0 1px 0 rgba(255,255,255,.55);text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.tape:before,.tape:after{content:"";position:absolute;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fdf6e3,#8a7a54 70%);box-shadow:inset 0 1px 2px rgba(0,0,0,.35)}
+.tape:before{left:8px}.tape:after{right:8px}
+.tape em{font-style:normal;background:#2B2314;color:#E8D9B3;font-size:10.5px;letter-spacing:.14em;padding:3px 9px;border-radius:3px;margin-left:12px;text-shadow:none}
+.tape span{margin-right:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g{display:grid;gap:16px;margin-bottom:16px}
+.plate{padding:16px 20px;position:relative;min-width:0}
+.plate>h3{font-size:13.5px;font-weight:650;letter-spacing:.005em}
+.plate>.sub{font-size:11.5px;color:var(--muted);margin-top:1px}
+.ph{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+
+/* ---------- mặt đồng hồ ---------- */
+.dialwrap{position:relative;width:300px;height:214px;margin:2px auto 0}
+.lcd{position:absolute;left:50%;transform:translateX(-50%);top:154px;width:136px;height:46px;border-radius:10px;display:grid;place-items:center;font-size:31px;font-weight:400;letter-spacing:-.02em}
+.dialfoot{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);padding:0 4px}
+.dialfoot b{color:var(--ink);font-weight:650}
+
+/* ---------- thẻ phương thức ---------- */
+.tile{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 20px;align-items:center;min-width:0}
+.tile .nm{font-size:13.5px;font-weight:650}
+.tile .big{font-size:50px;font-weight:300;letter-spacing:-.04em;line-height:1.02;margin:1px 0 3px}
+.tile .bd{font-size:10.5px;font-weight:650;letter-spacing:.04em;color:var(--c)}
+.tile .ln{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);padding:3px 0;border-bottom:1px solid var(--rule)}
+.tile .ln b{color:var(--ink);font-weight:600}
+.track{height:14px;border-radius:7px;position:relative;margin-top:11px}
+.track i{position:absolute;left:3px;top:3px;bottom:3px;border-radius:5px;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 82%,#000));box-shadow:1px 2px 3px var(--lo),inset 0 1px 0 rgba(255,255,255,.4)}
+.track u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.55;border-radius:1px}
+.tile.hot{background:linear-gradient(150deg,color-mix(in srgb,var(--red) 100%,#fff 8%),var(--red2));color:#fff;box-shadow:9px 11px 22px var(--lo),-7px -7px 16px var(--hi),inset 1px 1px 0 rgba(255,255,255,.35)}
+.tile.hot .nm,.tile.hot .bd,.tile.hot .ln b{color:#fff}.tile.hot .ln{color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.28)}
+.tile.hot .track{background:rgba(0,0,0,.22);box-shadow:inset 2px 3px 5px rgba(0,0,0,.3)}
+.tile.hot .track i{--c:#fff}.tile.hot .track u{background:#fff}
+
+/* ---------- bàn phím nhiệt ---------- */
+.keypad{display:grid;grid-template-columns:88px repeat(5,42px);gap:5px 5px;margin-top:8px}
+.keypad .hd{font-size:10px;color:var(--muted);text-align:center;align-self:end;line-height:1.1}
+.keypad .rl{font-size:12px;font-weight:600;color:var(--ink2);display:flex;align-items:center}
+.keypad .kk{height:30px;border-radius:9px;display:grid;place-items:center;font-size:12px;font-weight:700;
+  box-shadow:3px 4px 7px var(--lo),-2px -2px 5px var(--hi),inset 1px 1px 0 rgba(255,255,255,.35)}
+.legendbar{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--muted);margin-top:10px}
+.legendbar i{flex:1;height:8px;border-radius:4px;box-shadow:inset 1px 2px 3px var(--lo)}
+
+/* ---------- KPI khắc chìm ---------- */
+.eng{display:grid;grid-template-columns:1fr auto;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule);box-shadow:0 1px 0 var(--hi)}
+.eng:last-child{border-bottom:0;box-shadow:none}
+.eng span{font-size:11.5px;color:var(--muted)}.eng .sp{text-align:right}.eng .sp small{display:block;font-size:10.5px;color:var(--muted);margin-top:1px}
+.eng b{display:block;font-size:27px;font-weight:300;letter-spacing:-.03em;line-height:1.1}
+.eng b small{font-size:12px;font-weight:500;color:var(--muted);margin-left:4px;letter-spacing:0}
+
+/* ---------- trang rủi ro ---------- */
+.cnt{display:grid;grid-template-columns:8px 1fr;gap:14px;align-items:center;padding:14px 18px}
+.cnt i{height:44px;border-radius:4px;background:var(--c);box-shadow:inset 1px 1px 2px rgba(255,255,255,.4),1px 2px 3px var(--lo)}
+.cnt span{font-size:11.5px;color:var(--muted)}
+.cnt b{display:block;font-size:30px;font-weight:300;letter-spacing:-.03em;line-height:1.1}
+.fn{display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:center;margin-top:12px}
+.fn .t{font-size:12px;color:var(--ink2)} .fn .t b{display:block;color:var(--ink);font-size:17px;font-weight:600}
+.table{width:100%;border-collapse:collapse;margin-top:6px}
+.table th{font-size:10.5px;font-weight:600;color:var(--muted);text-align:right;padding:7px 8px;letter-spacing:.03em;border-bottom:1px solid var(--rule)}
+.table td{padding:17px 8px;text-align:right;border-bottom:1px solid var(--rule)}
+.table tr:last-child td{border-bottom:0}
+.table th:first-child,.table td:first-child{text-align:left}
+.apb{display:inline-block;position:relative;width:104px;height:22px;border-radius:7px;vertical-align:middle}.apv{display:inline-block;width:46px;text-align:right;font-weight:650;margin-left:6px;vertical-align:middle}
+.apb i{position:absolute;left:3px;top:3px;bottom:3px;border-radius:5px;background:linear-gradient(180deg,color-mix(in srgb,var(--teal) 78%,#fff),var(--teal));box-shadow:1px 2px 3px var(--lo)}
+
+
+/* ---- tinh chỉnh ---- */
+@keyframes grow{from{transform:scaleX(0)}}
+.track i,.apb i,.gw{transform-origin:left center;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes needle{from{transform:rotate(var(--from))}}
+.needle{animation:needle 1.3s cubic-bezier(.2,.9,.25,1.12) both}
+@keyframes sweep{from{stroke-dasharray:0 600}}
+.sweep{animation:sweep 1.3s cubic-bezier(.2,.9,.25,1) both}
+.tile,.plate,.key,.fil{transition:transform .18s ease}
+.key:hover,.fil:hover{transform:translateY(-1px)}
+.cnt{grid-template-columns:8px 1fr auto}
+.pc{font-style:normal;font-size:11.5px;color:var(--muted);text-align:right;max-width:96px;line-height:1.25}
+.fp{position:absolute;left:14px;top:0;line-height:26px;font-size:11.5px;font-weight:700}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.tile.good{background:linear-gradient(150deg,var(--teal),var(--teal2));color:#fff;box-shadow:9px 11px 22px var(--lo),-7px -7px 16px var(--hi),inset 1px 1px 0 rgba(255,255,255,.35)}
+.tile.good .nm,.tile.good .bd,.tile.good .ln b{color:#fff}.tile.good .ln{color:rgba(255,255,255,.82);border-color:rgba(255,255,255,.28)}
+.tile.good .track{background:rgba(0,0,0,.22);box-shadow:inset 2px 3px 5px rgba(0,0,0,.3)}
+.tile.good .track i{--c:#fff}.tile.good .track u{background:#fff}
+.table tr.selrow td{background:color-mix(in srgb,var(--well1) 65%,var(--well2));box-shadow:inset 0 3px 5px -2px var(--lo)}
+.table.cp td{padding:8px 8px}.table.cp th{padding:6px 8px}
+.tile.v{grid-template-columns:1fr;gap:6px;align-content:center}.tile.v .big{font-size:46px}.tile.v .bd{margin-bottom:4px}
+.table tr.selrow td:first-child{border-radius:10px 0 0 10px}.table tr.selrow td:last-child{border-radius:0 10px 10px 0}
+.callout2{margin-top:18px;font-size:12.5px;color:var(--ink2);padding:10px 14px;border-radius:12px;background:linear-gradient(145deg,var(--well1),var(--well2));box-shadow:inset 3px 4px 7px var(--lo),inset -2px -2px 6px var(--hi)}
+.callout2 b{color:var(--ink)}
+
+/* ================= v6: logo, thanh bên, vòng, chuyển động ================= */
+.rail{width:100px;padding:18px 10px 16px;gap:12px}
+.logo{display:flex;flex-direction:column;align-items:center;gap:9px;padding-bottom:4px}
+.logo .badge{width:64px;height:64px;border-radius:21px;display:grid;place-items:center;position:relative;
+  background:linear-gradient(145deg,var(--face1),var(--face2));box-shadow:6px 7px 14px var(--lo),-4px -4px 10px var(--hi),inset 1px 1px 0 var(--edge)}
+.logo .badge:before{content:"";position:absolute;inset:6px;border-radius:16px;box-shadow:inset 2px 3px 6px var(--lo),inset -2px -2px 5px var(--hi)}
+.logo .badge svg{position:relative;filter:drop-shadow(2px 3px 2px var(--lo));animation:logoIn .9s cubic-bezier(.2,.9,.3,1.2) both}
+.logo .wm{text-align:center;line-height:1}
+.logo .wm b{display:block;font-size:14px;font-weight:700;letter-spacing:.01em;text-shadow:var(--tx)}
+.logo .wm span{display:block;font-size:9.5px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-top:5px;padding-left:.3em}
+@keyframes logoIn{from{opacity:0;transform:translateY(-8px) rotate(-12deg) scale(.7)}}
+.plaque{flex:1;width:100%;min-height:0;border-radius:16px;padding:14px 8px 12px;display:flex;flex-direction:column;gap:10px}
+.pl-h{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:center}
+.pl-r{text-align:center;padding-bottom:8px;border-bottom:1px solid var(--rule);box-shadow:0 1px 0 var(--hi)}
+.pl-r b{display:block;font-size:17px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
+.pl-r span{font-size:10px;color:var(--muted)}
+.therm{flex:1;min-height:90px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.tube{flex:1;width:24px;border-radius:12px;position:relative;overflow:hidden}
+.tube i{position:absolute;left:3px;right:3px;bottom:3px;border-radius:9px;background:linear-gradient(90deg,color-mix(in srgb,var(--red) 65%,#fff),var(--red));box-shadow:1px 1px 3px var(--lo),inset 0 1px 0 rgba(255,255,255,.4);transform-origin:bottom;animation:growY 1.3s cubic-bezier(.2,.8,.2,1) .35s backwards}
+.tube u{position:absolute;left:0;right:0;height:1px;background:var(--ink);opacity:.25}
+@keyframes growY{from{transform:scaleY(0)}}
+.tl{text-align:center;font-size:10px;color:var(--muted);line-height:1.2}
+.tl b{display:block;font-size:15px;color:var(--red);font-weight:650}
+.knob{margin-top:0;position:relative;overflow:hidden}
+.knob span{display:block;transition:transform .75s cubic-bezier(.2,.9,.3,1)}
+.knob.spin span{transform:rotate(180deg)}
+.key,.reset{position:relative;overflow:hidden}
+.key:active,.reset:active,.knob:active{transform:scale(.955)}
+.ripple{position:absolute;border-radius:50%;background:currentColor;opacity:.22;transform:scale(0);animation:rip .65s cubic-bezier(.2,.7,.3,1) forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+
+/* vòng tiến độ */
+.rc{position:absolute;left:50%;top:107px;transform:translate(-50%,-50%);text-align:center;width:104px;pointer-events:none}
+.rc b{display:block;font-size:31px;font-weight:300;letter-spacing:-.035em;line-height:1}
+.rc span{display:block;font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.2}
+@keyframes knobrot{from{transform:rotate(0deg)}}
+.knobg{animation:knobrot 1.3s cubic-bezier(.2,.9,.25,1) both}
+
+/* chuyển động vào trang */
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.985)}}
+.page.on>*{animation:rise .65s cubic-bezier(.2,.8,.2,1) backwards}
+.page.on .tile,.page.on .cnt{animation:rise .6s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes pop{from{transform:scale(0)}}
+.bb circle,.sb circle{transform-box:fill-box;transform-origin:center;animation:pop .7s cubic-bezier(.3,1.5,.5,1) backwards}
+.bb:nth-of-type(2) circle{animation-delay:.1s}.bb:nth-of-type(3) circle{animation-delay:.2s}.bb:nth-of-type(4) circle{animation-delay:.3s}
+@keyframes pop2{from{opacity:0;transform:scale(.55)}}
+.kk{animation:pop2 .5s cubic-bezier(.3,1.4,.5,1) backwards}
+@keyframes dash{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.spl{stroke-dasharray:1;animation:dash 1.5s cubic-bezier(.3,.8,.3,1) .25s both}
+
+/* chạm / rê chuột */
+.tile,.cnt,.plate{position:relative;transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .3s,opacity .3s,filter .3s;will-change:transform}
+.tile:hover,.plate:hover,.cnt:hover{--ty:-3px}
+.tile::after,.plate::after,.cnt::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.55),transparent 62%);mix-blend-mode:soft-light}
+.tile:hover::after,.plate:hover::after,.cnt:hover::after{opacity:1}
+.kk{transition:transform .2s cubic-bezier(.3,1.4,.5,1),opacity .3s,filter .3s;cursor:pointer}
+.kk:hover{transform:translateY(-2px) scale(1.08);z-index:2}
+[data-mode],[data-col],.vh{transition:opacity .3s,filter .3s,transform .35s cubic-bezier(.2,.8,.2,1)}
+.dim,.dimc{opacity:.26!important;filter:saturate(.35)}
+.tile.foc{--ty:-5px}
+[data-mode]{cursor:pointer}
+tr[data-mode]:hover td{background:color-mix(in srgb,var(--well1) 40%,transparent)}
+
+/* tooltip, menu, toast */
+.tip{position:fixed;left:0;top:0;z-index:999;pointer-events:none;opacity:0;padding:9px 13px;font-size:12px;line-height:1.55;color:var(--ink);max-width:270px;transition:opacity .16s;will-change:transform}
+.tip.on{opacity:1}
+.tip b{font-weight:650}
+.toast{position:fixed;left:50%;bottom:26px;z-index:998;opacity:0;padding:10px 18px;font-size:12.5px;color:var(--ink2);transform:translate(-50%,22px);transition:opacity .3s,transform .35s cubic-bezier(.2,.9,.3,1.2);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.head{position:relative;z-index:30}
+.fil{cursor:pointer;transition:transform .18s ease,box-shadow .18s}
+.fil.open{box-shadow:inset 5px 6px 11px var(--lo),inset -3px -3px 8px var(--hi)}
+.fil.open:after{transform:rotate(225deg)}
+.fil:after{transition:transform .25s cubic-bezier(.2,.9,.3,1)}
+.menu{position:absolute;left:-2px;top:56px;min-width:calc(100% + 4px);z-index:60;padding:6px;border-radius:14px;transform-origin:top left;
+  background:linear-gradient(145deg,var(--face1),var(--face2));box-shadow:9px 11px 24px var(--lo),-6px -6px 14px var(--hi),inset 1px 1px 0 var(--edge);animation:menuIn .24s cubic-bezier(.2,.9,.3,1.15) both}
+.menu.out{animation:menuOut .16s ease both}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.94)}}
+@keyframes menuOut{to{opacity:0;transform:translateY(-6px) scale(.96)}}
+.menu div{padding:8px 26px 8px 12px;border-radius:9px;cursor:pointer;font-size:13px;white-space:nowrap;color:var(--ink2);position:relative;transition:background .12s,box-shadow .12s,color .12s}
+.menu div:hover{background:linear-gradient(145deg,var(--well1),var(--well2));box-shadow:inset 2px 2px 5px var(--lo);color:var(--ink)}
+.menu div.sel{color:var(--ink);font-weight:650}
+.menu div.sel:after{content:"";position:absolute;right:11px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:var(--red)}
+.menu div.dis{opacity:.55}
+
+/* đổi giao diện sáng/tối kiểu mở vòng tròn */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}
+::view-transition-new(root){z-index:2}
+@media (prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important}}
+
+/* ===== web app additions ===== */
+.fbar{display:flex;gap:14px;align-items:center}
+.menu{max-height:330px;overflow:auto}
+.drawer-bg{position:fixed;inset:0;background:rgba(20,28,34,.38);opacity:0;pointer-events:none;transition:opacity .3s;z-index:900}
+.drawer-bg.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:540px;max-width:100%;transform:translateX(106%);transition:transform .5s cubic-bezier(.2,.8,.2,1);z-index:901;padding:26px 28px;overflow:auto;border-radius:24px 0 0 24px}
+.drawer.on{transform:none}
+.drawer h2{font-size:20px;font-weight:600;margin-bottom:2px}
+.drawer .sub{color:var(--muted);font-size:12px;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
+.chip2{padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer;color:var(--ink2);background:linear-gradient(145deg,var(--face1),var(--face2));box-shadow:3px 4px 8px var(--lo),-2px -2px 6px var(--hi)}
+.chip2.on{color:var(--ink);font-weight:650;background:linear-gradient(145deg,var(--well1),var(--well2));box-shadow:inset 2px 3px 6px var(--lo),inset -2px -2px 5px var(--hi)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 20px;border-radius:13px;font-weight:650;color:var(--teal);cursor:pointer;position:relative;overflow:hidden;
+  background:linear-gradient(145deg,var(--face1),var(--face2));box-shadow:5px 6px 11px var(--lo),-4px -4px 9px var(--hi),inset 1px 1px 0 var(--edge)}
+.btn:active{transform:scale(.97)}
+.nodata{display:grid;place-items:center;height:100%;color:var(--muted);text-align:center;padding:20px;font-size:13px}
+.clickrow{cursor:pointer}
+
+</style>
+</head>
+<body>
+
+<aside class="rail raise">
+  <div class="logo"><div class="badge"><svg width="42" height="42" viewBox="-21 -21 42 42" aria-label="Logo">
+    <polygon points="0,-17 15,-8.5 0,0 -15,-8.5" style="fill:color-mix(in srgb,var(--teal) 55%,#fff)"/>
+    <polygon points="-15,-8.5 0,0 0,17 -15,8.5" style="fill:var(--teal)"/>
+    <polygon points="15,-8.5 0,0 0,17 15,8.5" style="fill:var(--teal2)"/>
+    <path d="M-15,-8.5 L0,0 L15,-8.5 M0,0 V17" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1"/>
+    <path d="M-8,-4.2 L6,3.8" stroke="#fff" stroke-opacity=".85" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 4"/>
+    <circle cx="14" cy="-14" r="6" style="fill:var(--red)" stroke="var(--face1)" stroke-width="2.2"/></svg></div>
+    <div class="wm"><b>Delivery</b><span>Insights</span></div></div>
+  <div class="key on" data-p="p1"><small>01</small><b>Tổng quan</b></div>
+  <div class="key" data-p="p2"><small>02</small><b>Rủi ro</b></div>
+  <div class="key" data-p="p3"><small>03</small><b>Cam kết</b></div>
+  <div class="key" data-p="p4"><small>04</small><b>Tuyến giao</b></div>
+  <div class="plaque well">
+    <div class="pl-h">Dữ liệu</div>
+    <div class="pl-r"><b class="num" id="rn"></b><span>đơn</span></div>
+    <div class="pl-r"><b class="num" id="rm"></b><span>tháng</span></div>
+    <div class="pl-r"><b class="num" id="rk"></b><span>thị trường</span></div>
+    <div class="therm"><div class="tube well"><i id="rtube"></i><u style="bottom:50%"></u></div><div class="tl">trễ toàn kỳ<b class="num" id="rrate"></b></div></div>
+  </div>
+  <div class="knob" id="tog" title="Đổi giao diện sáng / tối"><span>◐</span></div>
+</aside>
+
+<div class="main">
+
+<!-- ================= 1. TỔNG QUAN ================= -->
+<div class="page on" id="p1">
+  <div class="head"><div class="tt"><h1>Hiệu suất giao hàng</h1><p id="sub1"></p></div><div class="fbar" id="fb1"></div></div>
+  <div class="tape"><em>KẾT LUẬN</em><span id="tape1"></span></div>
+  <div class="g" style="grid-template-columns:340px 1fr;height:282px">
+    <div class="plate raise">
+      <div class="ph"><h3>Tỷ lệ giao trễ</h3><span class="sub" id="ring1sub" style="font-size:11.5px;color:var(--muted)"></span></div>
+      <div class="dialwrap" id="dial1"></div>
+      <div class="dialfoot"><span id="f1a"></span><span id="f1b"></span></div>
+    </div>
+    <div class="g" style="grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;margin:0" id="tiles"></div>
+  </div>
+  <div class="g" style="grid-template-columns:600px 360px 1fr;height:268px">
+    <div class="plate raise"><h3>Nên ưu tiên phương thức nào?</h3><div class="sub">Số đơn (ngang) × tỷ lệ trễ (dọc) · cỡ khối cầu là số đơn trễ</div><div id="bubble"></div></div>
+    <div class="plate raise"><h3>Phương thức × thị trường</h3><div class="sub">Màu cho thấy chênh lệch so với mức trung bình toàn kỳ</div><div class="keypad" id="keypad"></div>
+      <div class="legendbar"><span>thấp</span><i id="lgbar"></i><span>cao</span></div></div>
+    <div class="plate raise" id="kpis"></div>
+  </div>
+  <div class="g" style="grid-template-columns:1fr;height:196px"><div class="plate raise"><div class="ph"><h3>Diễn biến tỷ lệ trễ theo tháng</h3><span class="sub" id="trendsub" style="font-size:11.5px;color:var(--muted)"></span></div><div id="trend"></div></div></div>
+</div>
+
+<!-- ================= 2. RỦI RO ================= -->
+<div class="page" id="p2">
+  <div class="head"><div class="tt"><h1>Rủi ro giao trễ</h1><p id="sub2"></p></div><div class="fbar" id="fb2"></div></div>
+  <div class="tape"><em>KẾT LUẬN</em><span id="tape2"></span></div>
+  <div class="g" style="grid-template-columns:316px 316px 1fr;height:296px">
+    <div class="plate raise"><div class="ph"><h3>Độ chính xác</h3><span class="sub" style="font-size:11.5px;color:var(--muted)">đúng / số cảnh báo</span></div><div class="dialwrap" id="dial2" style="width:276px"></div><div class="dialfoot"><span id="f2a"></span><span id="f2b"></span></div></div>
+    <div class="plate raise"><div class="ph"><h3>Độ bao phủ</h3><span class="sub" style="font-size:11.5px;color:var(--muted)">bắt được / đơn trễ</span></div><div class="dialwrap" id="dial3" style="width:276px"></div><div class="dialfoot"><span id="f3a"></span><span id="f3b"></span></div></div>
+    <div class="plate raise"><h3>Phễu phát hiện đơn trễ</h3><div class="sub" id="funsub"></div><div id="funnel"></div></div>
+  </div>
+  <div class="g" style="grid-template-columns:repeat(4,1fr);height:92px">
+    <div class="plate raise cnt" style="--c:var(--teal)"><i></i><div><span>Cảnh báo đúng</span><b class="num" id="c1"></b></div><em class="pc" id="s1"></em></div>
+    <div class="plate raise cnt" style="--c:var(--brass)"><i></i><div><span>Cảnh báo sai</span><b class="num" id="c2"></b></div><em class="pc" id="s2"></em></div>
+    <div class="plate raise cnt" style="--c:var(--red)"><i></i><div><span>Đơn trễ bị bỏ sót</span><b class="num" id="c3"></b></div><em class="pc" id="s3"></em></div>
+    <div class="plate raise cnt" style="--c:var(--steel)"><i></i><div><span>Đơn trễ thực tế</span><b class="num" id="c4"></b></div><em class="pc" id="s4"></em></div>
+  </div>
+  <div class="g" style="grid-template-columns:1fr 480px;height:340px">
+    <div class="plate raise"><div class="ph"><div><h3>Cảnh báo và bỏ sót theo phương thức</h3><div class="sub">Số đơn trên tập kiểm tra</div></div><div class="legend" id="stkleg"></div></div><div id="stack" style="margin-top:6px"></div></div>
+    <div class="plate raise"><h3>Chất lượng mô hình</h3><div class="sub">Toàn tập kiểm tra, không đổi theo bộ lọc · thanh lõm thể hiện AP</div><div id="models"></div></div>
+  </div>
+</div>
+
+<!-- ================= 3. CAM KẾT ================= -->
+<div class="page" id="p3">
+  <div class="head"><div class="tt"><h1>Phương án cam kết</h1><p id="sub3"></p></div><div class="fbar" id="fb3"></div></div>
+  <div class="tape"><em>KẾT LUẬN</em><span id="tape3"></span></div>
+  <div class="g" style="grid-template-columns:340px 1fr;height:282px">
+    <div class="plate raise">
+      <div class="ph"><h3>Tỷ lệ vượt hẹn tính lại</h3><span class="sub" id="selname" style="font-size:11.5px;color:var(--muted)"></span></div>
+      <div class="dialwrap" id="dial4"></div>
+      <div class="dialfoot"><span id="f4a"></span><span id="f4b"></span></div>
+    </div>
+    <div class="g" style="grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;margin:0" id="ptiles"></div>
+  </div>
+  <div class="g" style="grid-template-columns:540px 1fr;height:268px">
+    <div class="plate raise"><h3>Đánh đổi giữa vượt hẹn và ngày chờ thêm</h3><div class="sub">Mỗi khối cầu là một phương án · càng sang phải khách càng chờ lâu</div><div id="trade"></div></div>
+    <div class="plate raise"><h3>So sánh các phương án</h3><div class="sub">Luôn hiện đủ năm phương án; dòng đang xem được ấn lõm · bấm một dòng để chọn</div><div id="poltable"></div></div>
+  </div>
+  <div class="g" style="grid-template-columns:1fr;height:236px"><div class="plate raise"><h3>Cam kết theo phương thức</h3><div class="sub">Phương án đang xem so với hiện tại · tăng cam kết không có nghĩa là giao nhanh hơn</div><div id="modetable"></div></div></div>
+</div>
+
+<!-- ================= 4. TUYẾN GIAO ================= -->
+<div class="page" id="p4">
+  <div class="head"><div class="tt"><h1>Tuyến giao và nhiên liệu</h1><p>Bộ bài toán Solomon · phương án đã tính</p></div><div class="fbar" id="fb4"></div></div>
+  <div class="tape"><em>KẾT LUẬN</em><span id="tape4"></span></div>
+  <div class="g" style="grid-template-columns:640px 1fr;height:462px">
+    <div class="plate raise" style="padding-bottom:14px">
+      <div class="ph"><h3>Sơ đồ tuyến theo xe</h3><span class="sub" style="font-size:11.5px;color:var(--muted)">tọa độ Solomon, không phải đường bộ</span></div>
+      <div class="well" id="rmap" style="margin-top:10px;height:392px;border-radius:14px;padding:8px"></div>
+    </div>
+    <div style="display:grid;grid-template-rows:1fr 1fr;gap:16px">
+      <div class="g" style="grid-template-columns:1fr 1fr;margin:0;gap:16px" id="rtiles1"></div>
+      <div class="g" style="grid-template-columns:1fr 1fr;margin:0;gap:16px" id="rtiles2"></div>
+    </div>
+  </div>
+  <div class="g" style="grid-template-columns:420px 1fr;height:330px">
+    <div class="plate raise"><h3>Quãng đường cùng cấu hình</h3><div class="sub">Đơn vị tọa độ · chỉ so sánh khi cả hai có lời giải khả thi</div><div id="rcmp"></div></div>
+    <div class="plate raise"><div class="ph"><div><h3>Các cấu hình đã tính</h3><div class="sub">Bấm một dòng để xem tuyến OR Tools của cấu hình đó</div></div><div class="btn" id="openStops">Lịch trình chi tiết ›</div></div><div id="rtable"></div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="drawer-bg" id="dbg"></div>
+<aside class="drawer raise" id="drawer"></aside>
+
+<script>window.__DATA__={"modes":["First Class","Second Class","Same Day","Standard Class"],"markets":["Africa","Europe","LATAM","Pacific Asia","USCA"],"regions":[{"name":"Canada","market":4},{"name":"Caribbean","market":2},{"name":"Central Africa","market":0},{"name":"Central America","market":2},{"name":"Central Asia","market":3},{"name":"East Africa","market":0},{"name":"East of USA","market":4},{"name":"Eastern Asia","market":3},{"name":"Eastern Europe","market":1},{"name":"North Africa","market":0},{"name":"Northern Europe","market":1},{"name":"Oceania","market":3},{"name":"South America","market":2},{"name":"South Asia","market":3},{"name":"South of USA","market":4},{"name":"Southeast Asia","market":3},{"name":"Southern Africa","market":0},{"name":"Southern Europe","market":1},{"name":"US Center","market":4},{"name":"West Africa","market":0},{"name":"West Asia","market":3},{"name":"West of USA","market":4},{"name":"Western Europe","market":1}],"months":["2015-01","2015-02","2015-03","2015-04","2015-05","2015-06","2015-07","2015-08","2015-09","2015-10","2015-11","2015-12","2016-01","2016-02","2016-03","2016-04","2016-05","2016-06","2016-07","2016-08","2016-09","2016-10","2016-11","2016-12","2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08","2017-09","2017-10","2017-11","2017-12","2018-01"],"testRange":["2017-07","2018-01"],"A":[[0,0,2,20,20,20,20,40],[0,0,2,21,21,21,21,42],[0,0,2,22,21,21,21,42],[0,0,2,23,19,19,19,38],[0,0,2,24,8,8,8,16],[0,0,5,19,3,3,3,6],[0,0,5,20,14,14,14,28],[0,0,5,21,21,21,21,42],[0,0,5,22,16,16,16,32],[0,0,5,23,29,29,29,58],[0,0,5,24,11,11,11,22],[0,0,9,19,7,7,7,14],[0,0,9,20,35,35,35,70],[0,0,9,21,20,20,20,40],[0,0,9,22,46,46,46,92],[0,0,9,23,31,31,31,62],[0,0,9,24,11,11,11,22],[0,0,16,19,1,1,1,2],[0,0,16,20,13,13,13,26],[0,0,16,21,13,13,13,26],[0,0,16,22,6,6,6,12],[0,0,16,23,27,27,27,54],[0,0,16,24,4,4,4,8],[0,0,19,19,3,3,3,6],[0,0,19,20,39,39,39,78],[0,0,19,21,34,34,34,68],[0,0,19,22,26,26,26,52],[0,0,19,23,28,28,28,56],[0,0,19,24,9,9,9,18],[0,1,8,19,6,6,6,12],[0,1,8,20,41,41,41,82],[0,1,8,21,45,45,45,90],[0,1,8,22,42,42,42,84],[0,1,8,23,46,46,46,92],[0,1,8,24,22,22,22,44],[0,1,10,4,3,3,3,6],[0,1,10,5,55,55,55,110],[0,1,10,6,53,53,53,106],[0,1,10,7,64,64,64,128],[0,1,10,8,48,48,48,96],[0,1,10,9,52,52,52,104],[0,1,10,19,1,1,1,2],[0,1,10,21,3,3,3,6],[0,1,10,23,2,2,2,4],[0,1,10,24,2,2,2,4],[0,1,10,29,24,24,24,48],[0,1,10,30,37,37,37,74],[0,1,10,31,49,49,49,98],[0,1,10,32,44,44,44,88],[0,1,10,33,71,71,71,142],[0,1,10,34,20,20,20,40],[0,1,17,4,1,1,1,2],[0,1,17,5,35,35,35,70],[0,1,17,6,63,63,63,126],[0,1,17,7,44,44,44,88],[0,1,17,8,48,48,48,96],[0,1,17,9,53,53,53,106],[0,1,17,20,8,8,8,16],[0,1,17,21,2,2,2,4],[0,1,17,23,1,1,1,2],[0,1,17,24,4,4,4,8],[0,1,17,29,19,19,19,38],[0,1,17,30,53,53,53,106],[0,1,17,31,50,50,50,100],[0,1,17,32,56,56,56,112],[0,1,17,33,56,56,56,112],[0,1,17,34,14,14,14,28],[0,1,22,4,2,2,2,4],[0,1,22,5,140,140,140,280],[0,1,22,6,139,139,139,278],[0,1,22,7,173,173,173,346],[0,1,22,8,153,153,153,306],[0,1,22,9,120,120,120,240],[0,1,22,20,5,5,5,10],[0,1,22,21,2,2,2,4],[0,1,22,23,2,2,2,4],[0,1,22,29,68,68,68,136],[0,1,22,30,153,153,153,306],[0,1,22,31,163,163,163,326],[0,1,22,32,136,136,136,272],[0,1,22,33,201,201,201,402],[0,1,22,34,59,59,59,118],[0,2,1,0,31,31,31,62],[0,2,1,1,49,49,49,98],[0,2,1,2,46,46,46,92],[0,2,1,3,26,26,26,52],[0,2,1,4,38,38,38,76],[0,2,1,24,10,10,10,20],[0,2,1,25,35,35,35,70],[0,2,1,26,72,72,72,144],[0,2,1,27,33,33,33,66],[0,2,1,28,43,43,43,86],[0,2,1,29,9,9,9,18],[0,2,3,0,133,133,133,266],[0,2,3,1,124,124,124,248],[0,2,3,2,145,145,145,290],[0,2,3,3,135,135,135,270],[0,2,3,4,149,149,149,298],[0,2,3,24,61,61,61,122],[0,2,3,25,137,137,137,274],[0,2,3,26,133,133,133,266],[0,2,3,27,141,141,141,282],[0,2,3,28,163,163,163,326],[0,2,3,29,61,61,61,122],[0,2,12,0,63,63,63,126],[0,2,12,1,54,54,54,108],[0,2,12,2,90,90,90,180],[0,2,12,3,59,59,59,118],[0,2,12,4,90,90,90,180],[0,2,12,24,35,35,35,70],[0,2,12,25,61,61,61,122],[0,2,12,26,77,77,77,154],[0,2,12,27,61,61,61,122],[0,2,12,28,80,80,80,160],[0,2,12,29,54,54,54,108],[0,3,4,19,1,1,1,2],[0,3,4,20,2,2,2,4],[0,3,4,21,3,3,3,6],[0,3,4,22,4,4,4,8],[0,3,4,23,4,4,4,8],[0,3,4,24,5,5,5,10],[0,3,7,9,13,13,13,26],[0,3,7,10,55,55,55,110],[0,3,7,11,54,54,54,108],[0,3,7,12,52,52,52,104],[0,3,7,13,55,55,55,110],[0,3,7,14,41,41,41,82],[0,3,7,21,1,1,1,2],[0,3,7,22,3,3,3,6],[0,3,7,34,57,57,57,114],[0,3,7,35,64,64,64,128],[0,3,7,36,74,74,74,148],[0,3,11,9,13,13,13,26],[0,3,11,10,47,47,47,94],[0,3,11,11,65,65,65,130],[0,3,11,12,65,65,65,130],[0,3,11,13,32,32,32,64],[0,3,11,14,130,130,130,260],[0,3,11,15,6,6,6,12],[0,3,11,34,52,52,52,104],[0,3,11,35,71,71,71,142],[0,3,11,36,85,85,85,170],[0,3,13,9,11,11,11,22],[0,3,13,10,62,62,62,124],[0,3,13,11,51,51,51,102],[0,3,13,12,63,63,63,126],[0,3,13,13,63,63,63,126],[0,3,13,14,33,33,33,66],[0,3,13,19,7,7,7,14],[0,3,13,20,17,17,17,34],[0,3,13,21,20,20,20,40],[0,3,13,22,12,12,12,24],[0,3,13,23,11,11,11,22],[0,3,13,24,6,6,6,12],[0,3,13,34,42,42,42,84],[0,3,13,35,58,58,58,116],[0,3,13,36,67,67,67,134],[0,3,15,9,22,22,22,44],[0,3,15,10,79,79,79,158],[0,3,15,11,95,95,95,190],[0,3,15,12,72,72,72,144],[0,3,15,13,66,66,66,132],[0,3,15,14,74,74,74,148],[0,3,15,34,50,50,50,100],[0,3,15,35,97,97,97,194],[0,3,15,36,95,95,95,190],[0,3,20,19,17,17,17,34],[0,3,20,20,53,53,53,106],[0,3,20,21,82,82,82,164],[0,3,20,22,52,52,52,104],[0,3,20,23,79,79,79,158],[0,3,20,24,33,33,33,66],[0,4,0,19,2,2,2,4],[0,4,0,20,18,18,18,36],[0,4,0,21,7,7,7,14],[0,4,0,22,10,10,10,20],[0,4,0,23,15,15,15,30],[0,4,0,24,1,1,1,2],[0,4,6,15,86,86,86,172],[0,4,6,16,72,72,72,144],[0,4,6,17,66,66,66,132],[0,4,6,18,60,60,60,120],[0,4,6,19,58,58,58,116],[0,4,14,15,28,28,28,56],[0,4,14,16,51,51,51,102],[0,4,14,17,36,36,36,72],[0,4,14,18,54,54,54,108],[0,4,14,19,18,18,18,36],[0,4,18,15,60,60,60,120],[0,4,18,16,65,65,65,130],[0,4,18,17,58,58,58,116],[0,4,18,18,58,58,58,116],[0,4,18,19,73,73,73,146],[0,4,21,15,68,68,68,136],[0,4,21,16,73,73,73,146],[0,4,21,17,81,81,81,162],[0,4,21,18,92,92,92,184],[0,4,21,19,62,62,62,124],[1,0,2,19,4,4,8,19],[1,0,2,20,24,20,48,105],[1,0,2,21,16,12,32,59],[1,0,2,22,22,20,44,100],[1,0,2,23,20,16,40,75],[1,0,2,24,11,10,22,44],[1,0,5,19,3,2,6,11],[1,0,5,20,30,26,60,118],[1,0,5,21,21,17,42,87],[1,0,5,22,22,17,44,91],[1,0,5,23,23,20,46,91],[1,0,5,24,15,11,30,56],[1,0,9,19,11,10,22,48],[1,0,9,20,39,29,78,147],[1,0,9,21,35,26,70,129],[1,0,9,22,51,47,102,218],[1,0,9,23,36,30,72,150],[1,0,9,24,23,17,46,84],[1,0,16,19,3,3,6,10],[1,0,16,20,13,9,26,43],[1,0,16,21,10,7,20,43],[1,0,16,22,13,12,26,55],[1,0,16,23,8,6,16,36],[1,0,16,24,4,2,8,11],[1,0,19,19,10,8,20,40],[1,0,19,20,47,37,94,189],[1,0,19,21,52,39,104,189],[1,0,19,22,40,32,80,169],[1,0,19,23,55,44,110,223],[1,0,19,24,24,18,48,91],[1,1,8,19,8,6,16,31],[1,1,8,20,42,35,84,181],[1,1,8,21,57,39,114,213],[1,1,8,22,59,47,118,234],[1,1,8,23,56,47,112,217],[1,1,8,24,34,27,68,134],[1,1,10,4,4,3,8,16],[1,1,10,5,56,40,112,213],[1,1,10,6,75,63,150,303],[1,1,10,7,80,64,160,313],[1,1,10,8,65,56,130,262],[1,1,10,9,55,40,110,217],[1,1,10,20,3,1,6,7],[1,1,10,22,1,1,2,6],[1,1,10,23,2,2,4,10],[1,1,10,24,3,2,6,11],[1,1,10,29,23,15,46,85],[1,1,10,30,71,55,142,268],[1,1,10,31,77,61,154,318],[1,1,10,32,66,55,132,261],[1,1,10,33,75,65,150,325],[1,1,10,34,31,22,62,120],[1,1,17,4,1,1,2,3],[1,1,17,5,56,40,112,219],[1,1,17,6,70,60,140,290],[1,1,17,7,60,44,120,237],[1,1,17,8,55,42,110,206],[1,1,17,9,44,36,88,172],[1,1,17,20,2,2,4,9],[1,1,17,21,2,2,4,9],[1,1,17,22,1,0,2,2],[1,1,17,23,1,1,2,5],[1,1,17,24,3,3,6,14],[1,1,17,29,26,19,52,94],[1,1,17,30,68,58,136,282],[1,1,17,31,61,50,122,244],[1,1,17,32,73,58,146,267],[1,1,17,33,84,67,168,349],[1,1,17,34,34,31,68,139],[1,1,22,4,7,5,14,29],[1,1,22,5,212,172,424,855],[1,1,22,6,179,146,358,740],[1,1,22,7,213,173,426,875],[1,1,22,8,195,158,390,770],[1,1,22,9,124,102,248,517],[1,1,22,20,1,1,2,3],[1,1,22,21,1,1,2,5],[1,1,22,22,3,2,6,13],[1,1,22,29,66,51,132,264],[1,1,22,30,196,161,392,795],[1,1,22,31,211,170,422,855],[1,1,22,32,181,145,362,745],[1,1,22,33,200,156,400,781],[1,1,22,34,86,70,172,352],[1,2,1,0,53,44,106,214],[1,2,1,1,58,48,116,233],[1,2,1,2,50,44,100,214],[1,2,1,3,52,42,104,202],[1,2,1,4,41,34,82,169],[1,2,1,24,21,16,42,86],[1,2,1,25,52,45,104,220],[1,2,1,26,55,43,110,228],[1,2,1,27,70,57,140,277],[1,2,1,28,47,37,94,175],[1,2,1,29,14,10,28,55],[1,2,3,0,197,156,394,775],[1,2,3,1,156,121,312,632],[1,2,3,2,202,157,404,807],[1,2,3,3,202,163,404,801],[1,2,3,4,132,101,264,515],[1,2,3,24,70,59,140,281],[1,2,3,25,166,132,332,664],[1,2,3,26,180,142,360,724],[1,2,3,27,197,154,394,784],[1,2,3,28,172,133,344,671],[1,2,3,29,74,59,148,295],[1,2,12,0,94,72,188,366],[1,2,12,1,87,74,174,360],[1,2,12,2,75,62,150,307],[1,2,12,3,72,53,144,278],[1,2,12,4,121,101,242,495],[1,2,12,24,25,22,50,102],[1,2,12,25,87,60,174,342],[1,2,12,26,88,71,176,342],[1,2,12,27,67,51,134,264],[1,2,12,28,91,72,182,367],[1,2,12,29,92,75,184,384],[1,3,4,19,1,1,2,6],[1,3,4,20,7,6,14,29],[1,3,4,21,7,7,14,34],[1,3,4,22,13,11,26,49],[1,3,4,23,9,7,18,33],[1,3,4,24,5,4,10,22],[1,3,7,9,26,20,52,101],[1,3,7,10,87,68,174,349],[1,3,7,11,68,56,136,273],[1,3,7,12,81,68,162,328],[1,3,7,13,66,60,132,275],[1,3,7,14,25,21,50,106],[1,3,7,20,1,1,2,6],[1,3,7,21,4,4,8,20],[1,3,7,22,3,2,6,9],[1,3,7,23,1,1,2,5],[1,3,7,34,68,53,136,273],[1,3,7,35,82,66,164,336],[1,3,7,36,85,72,170,351],[1,3,11,9,14,11,28,53],[1,3,11,10,89,68,178,340],[1,3,11,11,96,74,192,391],[1,3,11,12,79,61,158,303],[1,3,11,13,67,56,134,276],[1,3,11,14,216,175,432,860],[1,3,11,15,16,14,32,65],[1,3,11,34,75,60,150,288],[1,3,11,35,76,58,152,291],[1,3,11,36,121,95,242,465],[1,3,13,9,16,11,32,63],[1,3,13,10,52,41,104,209],[1,3,13,11,89,74,178,364],[1,3,13,12,78,62,156,315],[1,3,13,13,68,50,136,258],[1,3,13,14,39,33,78,172],[1,3,13,19,3,3,6,14],[1,3,13,20,13,11,26,58],[1,3,13,21,22,20,44,100],[1,3,13,22,25,19,50,98],[1,3,13,23,14,8,28,48],[1,3,13,24,9,8,18,36],[1,3,13,34,40,31,80,161],[1,3,13,35,87,68,174,349],[1,3,13,36,92,77,184,383],[1,3,15,9,26,22,52,111],[1,3,15,10,103,86,206,421],[1,3,15,11,89,73,178,348],[1,3,15,12,114,89,228,454],[1,3,15,13,90,67,180,355],[1,3,15,14,43,33,86,168],[1,3,15,15,2,1,4,8],[1,3,15,34,57,48,114,238],[1,3,15,35,162,132,324,649],[1,3,15,36,127,99,254,501],[1,3,20,19,22,17,44,85],[1,3,20,20,78,63,156,308],[1,3,20,21,96,77,192,372],[1,3,20,22,57,44,114,219],[1,3,20,23,76,62,152,303],[1,3,20,24,61,51,122,262],[1,4,0,20,8,5,16,30],[1,4,0,21,10,5,20,31],[1,4,0,22,20,18,40,92],[1,4,0,23,4,4,8,20],[1,4,0,24,9,7,18,32],[1,4,6,15,93,71,186,362],[1,4,6,16,89,75,178,354],[1,4,6,17,83,62,166,325],[1,4,6,18,75,59,150,303],[1,4,6,19,73,58,146,306],[1,4,14,15,55,40,110,203],[1,4,14,16,47,40,94,189],[1,4,14,17,54,49,108,241],[1,4,14,18,65,55,130,271],[1,4,14,19,50,42,100,200],[1,4,18,15,77,67,154,321],[1,4,18,16,79,66,158,319],[1,4,18,17,85,65,170,328],[1,4,18,18,67,50,134,253],[1,4,18,19,67,49,134,253],[1,4,21,15,90,72,180,370],[1,4,21,16,123,95,246,487],[1,4,21,17,128,105,256,504],[1,4,21,18,84,66,168,352],[1,4,21,19,79,64,158,302],[2,0,2,20,7,4,0,4],[2,0,2,21,11,3,0,3],[2,0,2,22,4,0,0,0],[2,0,2,23,5,0,0,0],[2,0,2,24,2,1,0,1],[2,0,5,19,1,0,0,0],[2,0,5,20,9,3,0,3],[2,0,5,21,9,7,0,7],[2,0,5,22,8,4,0,4],[2,0,5,23,6,1,0,1],[2,0,5,24,2,0,0,0],[2,0,9,19,1,1,0,1],[2,0,9,20,15,6,0,6],[2,0,9,21,15,9,0,9],[2,0,9,22,13,6,0,6],[2,0,9,23,18,13,0,13],[2,0,9,24,3,0,0,0],[2,0,16,19,1,0,0,0],[2,0,16,20,7,4,0,4],[2,0,16,21,3,1,0,1],[2,0,16,22,2,2,0,2],[2,0,16,23,3,3,0,3],[2,0,16,24,4,4,0,4],[2,0,19,19,2,2,0,2],[2,0,19,20,16,9,0,9],[2,0,19,21,21,11,0,11],[2,0,19,22,14,3,0,3],[2,0,19,23,11,5,0,5],[2,0,19,24,10,3,0,3],[2,1,8,20,16,2,0,2],[2,1,8,21,8,3,0,3],[2,1,8,22,13,6,0,6],[2,1,8,23,12,5,0,5],[2,1,8,24,5,4,0,4],[2,1,10,5,19,6,0,6],[2,1,10,6,24,7,0,7],[2,1,10,7,24,6,0,6],[2,1,10,8,10,1,0,1],[2,1,10,9,7,5,0,5],[2,1,10,20,1,0,0,0],[2,1,10,21,2,2,0,2],[2,1,10,22,1,0,0,0],[2,1,10,24,2,1,0,1],[2,1,10,29,2,1,0,1],[2,1,10,30,31,16,0,16],[2,1,10,31,17,8,0,8],[2,1,10,32,14,10,0,10],[2,1,10,33,35,15,0,15],[2,1,10,34,11,4,0,4],[2,1,17,5,10,2,0,2],[2,1,17,6,33,15,0,15],[2,1,17,7,14,9,0,9],[2,1,17,8,18,9,0,9],[2,1,17,9,17,13,0,13],[2,1,17,20,1,1,0,1],[2,1,17,22,1,0,0,0],[2,1,17,23,3,1,0,1],[2,1,17,29,7,3,0,3],[2,1,17,30,28,22,0,22],[2,1,17,31,19,9,0,9],[2,1,17,32,19,13,0,13],[2,1,17,33,18,3,0,3],[2,1,17,34,9,6,0,6],[2,1,22,4,1,1,0,1],[2,1,22,5,54,28,0,28],[2,1,22,6,56,20,0,20],[2,1,22,7,45,22,0,22],[2,1,22,8,42,18,0,18],[2,1,22,9,43,20,0,20],[2,1,22,23,3,2,0,2],[2,1,22,29,24,16,0,16],[2,1,22,30,55,31,0,31],[2,1,22,31,51,22,0,22],[2,1,22,32,55,32,0,32],[2,1,22,33,53,31,0,31],[2,1,22,34,16,6,0,6],[2,2,1,0,9,5,0,5],[2,2,1,1,17,10,0,10],[2,2,1,2,17,9,0,9],[2,2,1,3,15,7,0,7],[2,2,1,4,17,12,0,12],[2,2,1,24,9,5,0,5],[2,2,1,25,8,5,0,5],[2,2,1,26,19,8,0,8],[2,2,1,27,13,5,0,5],[2,2,1,28,15,9,0,9],[2,2,1,29,8,4,0,4],[2,2,3,0,51,19,0,19],[2,2,3,1,55,29,0,29],[2,2,3,2,59,28,0,28],[2,2,3,3,40,22,0,22],[2,2,3,4,44,23,0,23],[2,2,3,24,11,7,0,7],[2,2,3,25,48,18,0,18],[2,2,3,26,48,30,0,30],[2,2,3,27,39,18,0,18],[2,2,3,28,55,30,0,30],[2,2,3,29,20,10,0,10],[2,2,12,0,22,13,0,13],[2,2,12,1,15,10,0,10],[2,2,12,2,26,7,0,7],[2,2,12,3,20,13,0,13],[2,2,12,4,26,16,0,16],[2,2,12,24,12,6,0,6],[2,2,12,25,40,26,0,26],[2,2,12,26,27,19,0,19],[2,2,12,27,25,5,0,5],[2,2,12,28,23,8,0,8],[2,2,12,29,17,6,0,6],[2,3,4,20,3,0,0,0],[2,3,4,21,6,1,0,1],[2,3,4,22,3,2,0,2],[2,3,4,23,1,0,0,0],[2,3,4,24,3,0,0,0],[2,3,7,9,7,7,0,7],[2,3,7,10,21,10,0,10],[2,3,7,11,27,14,0,14],[2,3,7,12,15,6,0,6],[2,3,7,13,24,11,0,11],[2,3,7,14,7,2,0,2],[2,3,7,24,2,0,0,0],[2,3,7,34,14,8,0,8],[2,3,7,35,31,16,0,16],[2,3,7,36,24,12,0,12],[2,3,11,9,7,2,0,2],[2,3,11,10,27,11,0,11],[2,3,11,11,32,10,0,10],[2,3,11,12,31,15,0,15],[2,3,11,13,24,7,0,7],[2,3,11,14,50,28,0,28],[2,3,11,15,2,1,0,1],[2,3,11,34,12,5,0,5],[2,3,11,35,41,29,0,29],[2,3,11,36,40,19,0,19],[2,3,13,9,1,1,0,1],[2,3,13,10,13,6,0,6],[2,3,13,11,21,8,0,8],[2,3,13,12,21,14,0,14],[2,3,13,13,13,7,0,7],[2,3,13,14,17,7,0,7],[2,3,13,20,3,2,0,2],[2,3,13,21,10,2,0,2],[2,3,13,22,3,2,0,2],[2,3,13,23,2,1,0,1],[2,3,13,24,2,1,0,1],[2,3,13,34,13,11,0,11],[2,3,13,35,26,17,0,17],[2,3,13,36,26,11,0,11],[2,3,15,9,6,5,0,5],[2,3,15,10,26,11,0,11],[2,3,15,11,28,11,0,11],[2,3,15,12,31,13,0,13],[2,3,15,13,18,1,0,1],[2,3,15,14,15,9,0,9],[2,3,15,34,23,13,0,13],[2,3,15,35,28,17,0,17],[2,3,15,36,22,8,0,8],[2,3,20,19,4,3,0,3],[2,3,20,20,15,8,0,8],[2,3,20,21,21,6,0,6],[2,3,20,22,19,12,0,12],[2,3,20,23,22,9,0,9],[2,3,20,24,15,8,0,8],[2,4,0,20,2,0,0,0],[2,4,0,21,2,1,0,1],[2,4,0,22,2,0,0,0],[2,4,0,23,1,1,0,1],[2,4,0,24,4,1,0,1],[2,4,6,15,25,14,0,14],[2,4,6,16,26,12,0,12],[2,4,6,17,31,13,0,13],[2,4,6,18,27,14,0,14],[2,4,6,19,23,12,0,12],[2,4,14,15,14,1,0,1],[2,4,14,16,24,7,0,7],[2,4,14,17,13,9,0,9],[2,4,14,18,13,6,0,6],[2,4,14,19,15,8,0,8],[2,4,18,15,18,5,0,5],[2,4,18,16,18,4,0,4],[2,4,18,17,10,7,0,7],[2,4,18,18,25,5,0,5],[2,4,18,19,19,14,0,14],[2,4,21,15,23,16,0,16],[2,4,21,16,29,14,0,14],[2,4,21,17,30,18,0,18],[2,4,21,18,34,12,0,12],[2,4,21,19,19,10,0,10],[3,0,2,19,10,4,40,39],[3,0,2,20,68,30,272,276],[3,0,2,21,65,28,260,267],[3,0,2,22,92,43,368,381],[3,0,2,23,58,28,232,241],[3,0,2,24,25,8,100,97],[3,0,5,19,15,7,60,62],[3,0,5,20,83,29,332,322],[3,0,5,21,54,22,216,216],[3,0,5,22,70,30,280,283],[3,0,5,23,85,45,340,364],[3,0,5,24,39,13,156,152],[3,0,9,19,33,11,132,130],[3,0,9,20,145,58,580,575],[3,0,9,21,128,48,512,520],[3,0,9,22,115,39,460,443],[3,0,9,23,111,48,444,442],[3,0,9,24,71,30,284,288],[3,0,16,19,24,10,96,96],[3,0,16,20,57,20,228,221],[3,0,16,21,44,16,176,172],[3,0,16,22,49,22,196,204],[3,0,16,23,49,22,196,209],[3,0,16,24,22,7,88,83],[3,0,19,19,25,12,100,101],[3,0,19,20,155,55,620,608],[3,0,19,21,159,58,636,624],[3,0,19,22,131,45,524,501],[3,0,19,23,166,67,664,677],[3,0,19,24,97,39,388,397],[3,1,8,19,20,4,80,69],[3,1,8,20,149,72,596,633],[3,1,8,21,163,73,652,660],[3,1,8,22,166,64,664,657],[3,1,8,23,146,50,584,569],[3,1,8,24,90,37,360,366],[3,1,10,4,6,2,24,24],[3,1,10,5,221,91,884,890],[3,1,10,6,218,77,872,843],[3,1,10,7,213,81,852,832],[3,1,10,8,211,90,844,848],[3,1,10,9,169,61,676,666],[3,1,10,19,2,0,8,5],[3,1,10,20,1,1,4,6],[3,1,10,21,4,3,16,19],[3,1,10,22,3,3,12,17],[3,1,10,23,7,2,28,24],[3,1,10,24,10,5,40,42],[3,1,10,29,89,34,356,347],[3,1,10,30,206,78,824,835],[3,1,10,31,229,94,916,909],[3,1,10,32,227,96,908,923],[3,1,10,33,239,84,956,921],[3,1,10,34,94,39,376,376],[3,1,17,4,2,1,8,9],[3,1,17,5,204,79,816,808],[3,1,17,6,225,93,900,897],[3,1,17,7,203,65,812,767],[3,1,17,8,218,85,872,868],[3,1,17,9,143,51,572,566],[3,1,17,19,1,1,4,5],[3,1,17,20,4,2,16,17],[3,1,17,21,5,2,20,18],[3,1,17,22,11,5,44,44],[3,1,17,23,7,1,28,23],[3,1,17,24,6,2,24,25],[3,1,17,29,69,33,276,289],[3,1,17,30,233,86,932,914],[3,1,17,31,192,74,768,764],[3,1,17,32,192,70,768,749],[3,1,17,33,247,85,988,955],[3,1,17,34,83,33,332,327],[3,1,22,4,13,6,52,54],[3,1,22,5,589,253,2356,2386],[3,1,22,6,569,227,2276,2281],[3,1,22,7,545,221,2180,2190],[3,1,22,8,571,243,2284,2310],[3,1,22,9,431,175,1724,1724],[3,1,22,19,2,0,8,7],[3,1,22,20,3,2,12,13],[3,1,22,21,7,1,28,24],[3,1,22,22,9,3,36,36],[3,1,22,23,9,3,36,32],[3,1,22,24,2,1,8,10],[3,1,22,29,282,120,1128,1152],[3,1,22,30,562,216,2248,2201],[3,1,22,31,576,231,2304,2295],[3,1,22,32,577,226,2308,2286],[3,1,22,33,740,303,2960,2984],[3,1,22,34,187,76,748,752],[3,2,1,0,194,73,776,766],[3,2,1,1,172,67,688,691],[3,2,1,2,172,74,688,699],[3,2,1,3,164,60,656,647],[3,2,1,4,130,41,520,496],[3,2,1,24,77,26,308,300],[3,2,1,25,154,59,616,613],[3,2,1,26,176,55,704,670],[3,2,1,27,151,57,604,595],[3,2,1,28,160,58,640,642],[3,2,1,29,73,26,292,280],[3,2,3,0,518,217,2072,2102],[3,2,3,1,467,181,1868,1868],[3,2,3,2,560,221,2240,2232],[3,2,3,3,626,246,2504,2496],[3,2,3,4,468,190,1872,1884],[3,2,3,24,257,101,1028,1009],[3,2,3,25,487,205,1948,1967],[3,2,3,26,567,228,2268,2268],[3,2,3,27,621,234,2484,2452],[3,2,3,28,588,241,2352,2366],[3,2,3,29,242,99,968,965],[3,2,12,0,348,137,1392,1375],[3,2,12,1,251,104,1004,1001],[3,2,12,2,260,95,1040,1020],[3,2,12,3,228,101,912,938],[3,2,12,4,388,149,1552,1529],[3,2,12,24,131,55,524,527],[3,2,12,25,263,96,1052,1033],[3,2,12,26,268,106,1072,1070],[3,2,12,27,248,101,992,1011],[3,2,12,28,235,91,940,923],[3,2,12,29,242,95,968,958],[3,3,4,20,31,7,124,108],[3,3,4,21,26,11,104,109],[3,3,4,22,19,7,76,75],[3,3,4,23,16,11,64,72],[3,3,4,24,11,8,44,52],[3,3,7,9,90,39,360,364],[3,3,7,10,243,86,972,938],[3,3,7,11,245,100,980,991],[3,3,7,12,205,85,820,823],[3,3,7,13,266,110,1064,1079],[3,3,7,14,120,43,480,464],[3,3,7,20,5,2,20,20],[3,3,7,21,1,0,4,4],[3,3,7,22,1,0,4,4],[3,3,7,23,3,0,12,9],[3,3,7,24,1,1,4,6],[3,3,7,34,221,85,884,878],[3,3,7,35,285,118,1140,1165],[3,3,7,36,247,102,988,996],[3,3,11,9,73,31,292,292],[3,3,11,10,260,107,1040,1052],[3,3,11,11,254,99,1016,1002],[3,3,11,12,244,98,976,980],[3,3,11,13,240,109,960,997],[3,3,11,14,608,248,2432,2452],[3,3,11,15,21,7,84,82],[3,3,11,34,216,88,864,872],[3,3,11,35,300,114,1200,1178],[3,3,11,36,278,116,1112,1129],[3,3,13,9,39,13,156,156],[3,3,13,10,181,69,724,722],[3,3,13,11,195,79,780,766],[3,3,13,12,221,86,884,875],[3,3,13,13,209,80,836,823],[3,3,13,14,94,43,376,387],[3,3,13,19,19,4,76,71],[3,3,13,20,59,24,236,234],[3,3,13,21,71,30,284,288],[3,3,13,22,60,28,240,247],[3,3,13,23,58,26,232,244],[3,3,13,24,35,9,140,126],[3,3,13,34,153,58,612,612],[3,3,13,35,214,87,856,856],[3,3,13,36,270,100,1080,1063],[3,3,15,9,74,24,296,274],[3,3,15,10,313,135,1252,1273],[3,3,15,11,322,125,1288,1285],[3,3,15,12,331,149,1324,1360],[3,3,15,13,273,119,1092,1130],[3,3,15,14,188,67,752,721],[3,3,15,34,219,91,876,869],[3,3,15,35,409,160,1636,1617],[3,3,15,36,384,163,1536,1553],[3,3,20,19,66,27,264,265],[3,3,20,20,209,85,836,848],[3,3,20,21,225,98,900,919],[3,3,20,22,229,87,916,903],[3,3,20,23,242,90,968,944],[3,3,20,24,162,69,648,654],[3,4,0,19,9,1,36,27],[3,4,0,20,27,12,108,114],[3,4,0,21,36,10,144,134],[3,4,0,22,33,12,132,128],[3,4,0,23,47,14,188,174],[3,4,0,24,24,9,96,94],[3,4,6,15,282,113,1128,1140],[3,4,6,16,271,113,1084,1113],[3,4,6,17,255,117,1020,1064],[3,4,6,18,289,101,1156,1125],[3,4,6,19,235,100,940,946],[3,4,14,15,128,49,512,495],[3,4,14,16,166,68,664,661],[3,4,14,17,145,65,580,599],[3,4,14,18,174,78,696,712],[3,4,14,19,130,49,520,515],[3,4,18,15,224,84,896,881],[3,4,18,16,224,91,896,899],[3,4,18,17,230,89,920,927],[3,4,18,18,213,79,852,838],[3,4,18,19,182,82,728,752],[3,4,21,15,312,122,1248,1245],[3,4,21,16,318,125,1272,1271],[3,4,21,17,312,128,1248,1250],[3,4,21,18,332,133,1328,1319],[3,4,21,19,247,95,988,975]],"B":[[0,1,10,1.0,221,221],[0,1,17,1.0,229,229],[0,1,22,1.0,712,712],[0,3,7,1.0,195,195],[0,3,11,1.0,208,208],[0,3,13,1.0,167,167],[0,3,15,1.0,242,242],[1,1,10,0.800855,320,258],[1,1,17,0.800855,320,264],[1,1,22,0.800855,874,702],[1,3,7,0.800855,235,191],[1,3,11,0.800855,272,213],[1,3,13,0.800855,219,176],[1,3,15,0.800855,346,279],[2,1,10,0.460317,108,53],[2,1,17,0.460317,93,53],[2,1,22,0.460317,230,122],[2,3,7,0.460317,69,36],[2,3,11,0.460317,93,53],[2,3,13,0.460317,65,39],[2,3,15,0.460317,73,38],[3,1,10,0.400541,995,391],[3,1,17,0.400541,947,348],[3,1,22,0.400541,2642,1052],[3,3,7,0.400541,753,305],[3,3,11,0.400541,794,318],[3,3,13,0.400541,637,245],[3,3,15,0.400541,1012,414]],"C":[[0,0,1,10,221,221,221,0,0],[0,0,1,17,229,229,229,0,0],[0,0,1,22,712,712,712,0,0],[0,0,3,7,195,195,195,0,0],[0,0,3,11,208,208,208,0,0],[0,0,3,13,167,167,167,0,0],[0,0,3,15,242,242,242,0,0],[0,1,1,10,320,258,640,0,0],[0,1,1,17,320,264,640,0,0],[0,1,1,22,874,702,1748,0,0],[0,1,3,7,235,191,470,0,0],[0,1,3,11,272,213,544,0,0],[0,1,3,13,219,176,438,0,0],[0,1,3,15,346,279,692,0,0],[0,2,1,10,108,53,0,0,0],[0,2,1,17,93,53,0,0,0],[0,2,1,22,230,122,0,0,0],[0,2,3,7,69,36,0,0,0],[0,2,3,11,93,53,0,0,0],[0,2,3,13,65,39,0,0,0],[0,2,3,15,73,38,0,0,0],[0,3,1,10,995,391,3980,0,0],[0,3,1,17,947,348,3788,0,0],[0,3,1,22,2642,1052,10568,0,0],[0,3,3,7,753,305,3012,0,0],[0,3,3,11,794,318,3176,0,0],[0,3,3,13,637,245,2548,0,0],[0,3,3,15,1012,414,4048,0,0],[1,0,1,10,221,0,442,221,0],[1,0,1,17,229,0,458,229,0],[1,0,1,22,712,0,1424,712,0],[1,0,3,7,195,0,390,195,0],[1,0,3,11,208,0,416,208,0],[1,0,3,13,167,0,334,167,0],[1,0,3,15,242,0,484,242,0],[1,1,1,10,320,190,960,320,0],[1,1,1,17,320,190,960,320,0],[1,1,1,22,874,536,2622,874,0],[1,1,3,7,235,149,705,235,0],[1,1,3,11,272,151,816,272,0],[1,1,3,13,219,134,657,219,0],[1,1,3,15,346,215,1038,346,0],[1,2,1,10,108,53,0,0,0],[1,2,1,17,93,53,0,0,0],[1,2,1,22,230,122,0,0,0],[1,2,3,7,69,36,0,0,0],[1,2,3,11,93,53,0,0,0],[1,2,3,13,65,39,0,0,0],[1,2,3,15,73,38,0,0,0],[1,3,1,10,995,197,4975,995,0],[1,3,1,17,947,171,4735,947,0],[1,3,1,22,2642,534,13210,2642,0],[1,3,3,7,753,159,3765,753,0],[1,3,3,11,794,151,3970,794,0],[1,3,3,13,637,125,3185,637,0],[1,3,3,15,1012,209,5060,1012,0],[2,0,1,10,221,0,442,221,0],[2,0,1,17,229,0,458,229,0],[2,0,1,22,712,0,1424,712,0],[2,0,3,7,195,0,390,195,0],[2,0,3,11,208,0,416,208,0],[2,0,3,13,167,0,334,167,0],[2,0,3,15,242,0,484,242,0],[2,1,1,10,320,65,1600,960,0],[2,1,1,17,320,64,1600,960,0],[2,1,1,22,874,0,5244,3496,0],[2,1,3,7,235,51,1175,705,0],[2,1,3,11,272,41,1360,816,0],[2,1,3,13,219,0,1314,876,0],[2,1,3,15,346,0,2076,1384,0],[2,2,1,10,108,0,108,108,108],[2,2,1,17,93,0,93,93,93],[2,2,1,22,230,0,230,230,0],[2,2,3,7,69,0,69,69,0],[2,2,3,11,93,0,93,93,0],[2,2,3,13,65,0,65,65,0],[2,2,3,15,73,0,73,73,0],[2,3,1,10,995,0,5970,1990,0],[2,3,1,17,947,171,4735,947,0],[2,3,1,22,2642,0,15852,5284,0],[2,3,3,7,753,0,4518,1506,0],[2,3,3,11,794,151,3970,794,0],[2,3,3,13,637,125,3185,637,0],[2,3,3,15,1012,0,6072,2024,0],[3,0,1,10,221,0,442,221,0],[3,0,1,17,229,0,458,229,0],[3,0,1,22,712,0,1424,712,0],[3,0,3,7,195,0,390,195,0],[3,0,3,11,208,0,416,208,0],[3,0,3,13,167,0,334,167,0],[3,0,3,15,242,0,484,242,0],[3,1,1,10,320,0,1920,1280,0],[3,1,1,17,320,0,1920,1280,0],[3,1,1,22,874,0,5244,3496,0],[3,1,3,7,235,0,1410,940,0],[3,1,3,11,272,0,1632,1088,0],[3,1,3,13,219,0,1314,876,0],[3,1,3,15,346,0,2076,1384,0],[3,2,1,10,108,0,108,108,108],[3,2,1,17,93,0,93,93,93],[3,2,1,22,230,0,230,230,0],[3,2,3,7,69,0,69,69,0],[3,2,3,11,93,0,93,93,0],[3,2,3,13,65,0,65,65,0],[3,2,3,15,73,0,73,73,0],[3,3,1,10,995,0,5970,1990,0],[3,3,1,17,947,0,5682,1894,0],[3,3,1,22,2642,0,15852,5284,0],[3,3,3,7,753,0,4518,1506,0],[3,3,3,11,794,0,4764,1588,0],[3,3,3,13,637,0,3822,1274,0],[3,3,3,15,1012,0,6072,2024,0],[4,0,1,10,221,0,442,221,0],[4,0,1,17,229,0,458,229,0],[4,0,1,22,712,0,1424,712,0],[4,0,3,7,195,0,390,195,0],[4,0,3,11,208,0,416,208,0],[4,0,3,13,167,0,334,167,0],[4,0,3,15,242,0,484,242,0],[4,1,1,10,320,0,1920,1280,0],[4,1,1,17,320,0,1920,1280,0],[4,1,1,22,874,0,5244,3496,0],[4,1,3,7,235,0,1410,940,0],[4,1,3,11,272,0,1632,1088,0],[4,1,3,13,219,0,1314,876,0],[4,1,3,15,346,0,2076,1384,0],[4,2,1,10,108,0,108,108,108],[4,2,1,17,93,0,93,93,93],[4,2,1,22,230,0,230,230,0],[4,2,3,7,69,0,69,69,0],[4,2,3,11,93,0,93,93,0],[4,2,3,13,65,0,65,65,0],[4,2,3,15,73,0,73,73,0],[4,3,1,10,995,0,5970,1990,0],[4,3,1,17,947,0,5682,1894,0],[4,3,1,22,2642,0,15852,5284,0],[4,3,3,7,753,0,4518,1506,0],[4,3,3,11,794,0,4764,1588,0],[4,3,3,13,637,0,3822,1274,0],[4,3,3,15,1012,0,6072,2024,0]],"policies":[{"id":"current","label":"Hiện tại"},{"id":"bounded_plus1_keep_same_day","label":"Thêm một ngày"},{"id":"q80_min100","label":"Mục tiêu 80% đúng hẹn"},{"id":"q90_min100","label":"Mục tiêu 90% đúng hẹn"},{"id":"q95_min100","label":"Mục tiêu 95% đúng hẹn"}],"models":[{"label":"Gradient boosting","auc":0.74536892077,"ap":0.837687176727,"ll":0.539964954264},{"label":"Hồi quy logistic","auc":0.750711861817,"ap":0.840136358486,"ll":0.538248716031},{"label":"Theo phương thức","auc":0.745970732727,"ap":0.787822425219,"ll":0.536158587543}],"cases":[{"id":"c101|base|nearest_feasible","instance":"c101","scenario":"base","method":"nearest_feasible","maxv":25,"cap":200,"status":"feasible","veh":21,"dist":1870.6937996225547,"label":"C101, tải 200, tối đa 25 xe, Điểm gần nhất"},{"id":"c101|base|ortools","instance":"c101","scenario":"base","method":"ortools","maxv":25,"cap":200,"status":"feasible","veh":10,"dist":828.936866942834,"label":"C101, tải 200, tối đa 25 xe, OR Tools"},{"id":"c101|fleet10|nearest_feasible","instance":"c101","scenario":"fleet10","method":"nearest_feasible","maxv":10,"cap":200,"status":"no_solution_found","veh":null,"dist":null,"label":"C101, tải 200, tối đa 10 xe, Điểm gần nhất"},{"id":"c101|fleet10|ortools","instance":"c101","scenario":"fleet10","method":"ortools","maxv":10,"cap":200,"status":"feasible","veh":10,"dist":828.9368669428338,"label":"C101, tải 200, tối đa 10 xe, OR Tools"},{"id":"c101|capacity160|nearest_feasible","instance":"c101","scenario":"capacity160","method":"nearest_feasible","maxv":25,"cap":160,"status":"feasible","veh":24,"dist":2111.4228288661634,"label":"C101, tải 160, tối đa 25 xe, Điểm gần nhất"},{"id":"c101|capacity160|ortools","instance":"c101","scenario":"capacity160","method":"ortools","maxv":25,"cap":160,"status":"feasible","veh":13,"dist":1069.1095194920167,"label":"C101, tải 160, tối đa 25 xe, OR Tools"},{"id":"c101|capacity240|nearest_feasible","instance":"c101","scenario":"capacity240","method":"nearest_feasible","maxv":25,"cap":240,"status":"feasible","veh":21,"dist":1870.6937996225547,"label":"C101, tải 240, tối đa 25 xe, Điểm gần nhất"},{"id":"c101|capacity240|ortools","instance":"c101","scenario":"capacity240","method":"ortools","maxv":25,"cap":240,"status":"feasible","veh":10,"dist":828.9368669428338,"label":"C101, tải 240, tối đa 25 xe, OR Tools"},{"id":"r101|base|nearest_feasible","instance":"r101","scenario":"base","method":"nearest_feasible","maxv":25,"cap":200,"status":"no_solution_found","veh":null,"dist":null,"label":"R101, tải 200, tối đa 25 xe, Điểm gần nhất"},{"id":"r101|base|ortools","instance":"r101","scenario":"base","method":"ortools","maxv":25,"cap":200,"status":"feasible","veh":21,"dist":1658.8618065066296,"label":"R101, tải 200, tối đa 25 xe, OR Tools"},{"id":"rc101|base|nearest_feasible","instance":"rc101","scenario":"base","method":"nearest_feasible","maxv":25,"cap":200,"status":"no_solution_found","veh":null,"dist":null,"label":"RC101, tải 200, tối đa 25 xe, Điểm gần nhất"},{"id":"rc101|base|ortools","instance":"rc101","scenario":"base","method":"ortools","maxv":25,"cap":200,"status":"feasible","veh":17,"dist":1700.09002923046,"label":"RC101, tải 200, tối đa 25 xe, OR Tools"}],"stops":{"0":[[1,0,0,40.0,50.0],[1,1,20,30.0,50.0],[1,2,21,30.0,52.0],[1,3,47,30.0,35.0],[1,4,0,40.0,50.0],[2,0,0,40.0,50.0],[2,1,22,28.0,52.0],[2,2,49,28.0,35.0],[2,3,0,40.0,50.0],[3,0,0,40.0,50.0],[3,1,67,47.0,40.0],[3,2,65,48.0,40.0],[3,3,63,50.0,40.0],[3,4,62,50.0,35.0],[3,5,66,47.0,35.0],[3,6,69,45.0,35.0],[3,7,75,45.0,65.0],[3,8,0,40.0,50.0],[4,0,0,40.0,50.0],[4,1,23,28.0,55.0],[4,2,52,25.0,35.0],[4,3,0,40.0,50.0],[5,0,0,40.0,50.0],[5,1,24,25.0,50.0],[5,2,25,25.0,52.0],[5,3,27,23.0,52.0],[5,4,28,23.0,55.0],[5,5,26,25.0,55.0],[5,6,34,8.0,45.0],[5,7,50,26.0,32.0],[5,8,0,40.0,50.0],[6,0,0,40.0,50.0],[6,1,5,42.0,65.0],[6,2,3,42.0,66.0],[6,3,4,42.0,68.0],[6,4,1,45.0,68.0],[6,5,0,40.0,50.0],[7,0,0,40.0,50.0],[7,1,7,40.0,66.0],[7,2,8,38.0,68.0],[7,3,9,38.0,70.0],[7,4,6,40.0,69.0],[7,5,2,45.0,70.0],[7,6,0,40.0,50.0],[8,0,0,40.0,50.0],[8,1,43,33.0,35.0],[8,2,42,33.0,32.0],[8,3,41,35.0,32.0],[8,4,40,35.0,30.0],[8,5,44,32.0,30.0],[8,6,45,30.0,30.0],[8,7,48,28.0,30.0],[8,8,51,25.0,30.0],[8,9,91,60.0,60.0],[8,10,0,40.0,50.0],[9,0,0,40.0,50.0],[9,1,10,35.0,66.0],[9,2,11,35.0,69.0],[9,3,12,25.0,85.0],[9,4,99,55.0,80.0],[9,5,0,40.0,50.0],[10,0,0,40.0,50.0],[10,1,74,53.0,35.0],[10,2,72,53.0,30.0],[10,3,61,50.0,30.0],[10,4,64,48.0,30.0],[10,5,68,45.0,30.0],[10,6,0,40.0,50.0],[11,0,0,40.0,50.0],[11,1,29,20.0,50.0],[11,2,30,20.0,55.0],[11,3,36,5.0,45.0],[11,4,0,40.0,50.0],[12,0,0,40.0,50.0],[12,1,46,30.0,32.0],[12,2,59,38.0,15.0],[12,3,80,85.0,25.0],[12,4,0,40.0,50.0],[13,0,0,40.0,50.0],[13,1,90,60.0,55.0],[13,2,89,63.0,58.0],[13,3,0,40.0,50.0],[14,0,0,40.0,50.0],[14,1,87,65.0,55.0],[14,2,86,66.0,55.0],[14,3,84,70.0,58.0],[14,4,85,68.0,60.0],[14,5,88,65.0,60.0],[14,6,0,40.0,50.0],[15,0,0,40.0,50.0],[15,1,13,22.0,75.0],[15,2,17,18.0,75.0],[15,3,18,15.0,75.0],[15,4,19,15.0,80.0],[15,5,15,20.0,80.0],[15,6,16,20.0,85.0],[15,7,14,22.0,85.0],[15,8,100,55.0,85.0],[15,9,0,40.0,50.0],[16,0,0,40.0,50.0],[16,1,98,58.0,75.0],[16,2,96,60.0,80.0],[16,3,95,62.0,80.0],[16,4,94,65.0,82.0],[16,5,93,65.0,85.0],[16,6,97,60.0,85.0],[16,7,79,87.0,30.0],[16,8,0,40.0,50.0],[17,0,0,40.0,50.0],[17,1,32,10.0,40.0],[17,2,33,8.0,40.0],[17,3,31,10.0,35.0],[17,4,35,5.0,35.0],[17,5,37,2.0,40.0],[17,6,38,0.0,40.0],[17,7,39,0.0,45.0],[17,8,0,40.0,50.0],[18,0,0,40.0,50.0],[18,1,83,72.0,55.0],[18,2,82,75.0,55.0],[18,3,77,88.0,30.0],[18,4,0,40.0,50.0],[19,0,0,40.0,50.0],[19,1,57,40.0,15.0],[19,2,55,42.0,15.0],[19,3,54,42.0,10.0],[19,4,53,44.0,5.0],[19,5,56,40.0,5.0],[19,6,58,38.0,5.0],[19,7,60,35.0,5.0],[19,8,0,40.0,50.0],[20,0,0,40.0,50.0],[20,1,92,67.0,85.0],[20,2,73,92.0,30.0],[20,3,0,40.0,50.0],[21,0,0,40.0,50.0],[21,1,81,85.0,35.0],[21,2,78,88.0,35.0],[21,3,76,90.0,35.0],[21,4,71,95.0,35.0],[21,5,70,95.0,30.0],[21,6,0,40.0,50.0]],"1":[[1,0,0,40.0,50.0],[1,1,20,30.0,50.0],[1,2,24,25.0,50.0],[1,3,25,25.0,52.0],[1,4,27,23.0,52.0],[1,5,29,20.0,50.0],[1,6,30,20.0,55.0],[1,7,28,23.0,55.0],[1,8,26,25.0,55.0],[1,9,23,28.0,55.0],[1,10,22,28.0,52.0],[1,11,21,30.0,52.0],[1,12,0,40.0,50.0],[2,0,0,40.0,50.0],[2,1,43,33.0,35.0],[2,2,42,33.0,32.0],[2,3,41,35.0,32.0],[2,4,40,35.0,30.0],[2,5,44,32.0,30.0],[2,6,46,30.0,32.0],[2,7,45,30.0,30.0],[2,8,48,28.0,30.0],[2,9,51,25.0,30.0],[2,10,50,26.0,32.0],[2,11,52,25.0,35.0],[2,12,49,28.0,35.0],[2,13,47,30.0,35.0],[2,14,0,40.0,50.0],[3,0,0,40.0,50.0],[3,1,13,22.0,75.0],[3,2,17,18.0,75.0],[3,3,18,15.0,75.0],[3,4,19,15.0,80.0],[3,5,15,20.0,80.0],[3,6,16,20.0,85.0],[3,7,14,22.0,85.0],[3,8,12,25.0,85.0],[3,9,0,40.0,50.0],[4,0,0,40.0,50.0],[4,1,67,47.0,40.0],[4,2,65,48.0,40.0],[4,3,63,50.0,40.0],[4,4,62,50.0,35.0],[4,5,74,53.0,35.0],[4,6,72,53.0,30.0],[4,7,61,50.0,30.0],[4,8,64,48.0,30.0],[4,9,68,45.0,30.0],[4,10,66,47.0,35.0],[4,11,69,45.0,35.0],[4,12,0,40.0,50.0],[5,0,0,40.0,50.0],[5,1,98,58.0,75.0],[5,2,96,60.0,80.0],[5,3,95,62.0,80.0],[5,4,94,65.0,82.0],[5,5,92,67.0,85.0],[5,6,93,65.0,85.0],[5,7,97,60.0,85.0],[5,8,100,55.0,85.0],[5,9,99,55.0,80.0],[5,10,0,40.0,50.0],[6,0,0,40.0,50.0],[6,1,5,42.0,65.0],[6,2,3,42.0,66.0],[6,3,7,40.0,66.0],[6,4,8,38.0,68.0],[6,5,10,35.0,66.0],[6,6,11,35.0,69.0],[6,7,9,38.0,70.0],[6,8,6,40.0,69.0],[6,9,4,42.0,68.0],[6,10,2,45.0,70.0],[6,11,1,45.0,68.0],[6,12,75,45.0,65.0],[6,13,0,40.0,50.0],[7,0,0,40.0,50.0],[7,1,32,10.0,40.0],[7,2,33,8.0,40.0],[7,3,31,10.0,35.0],[7,4,35,5.0,35.0],[7,5,37,2.0,40.0],[7,6,38,0.0,40.0],[7,7,39,0.0,45.0],[7,8,36,5.0,45.0],[7,9,34,8.0,45.0],[7,10,0,40.0,50.0],[8,0,0,40.0,50.0],[8,1,90,60.0,55.0],[8,2,87,65.0,55.0],[8,3,86,66.0,55.0],[8,4,83,72.0,55.0],[8,5,82,75.0,55.0],[8,6,84,70.0,58.0],[8,7,85,68.0,60.0],[8,8,88,65.0,60.0],[8,9,89,63.0,58.0],[8,10,91,60.0,60.0],[8,11,0,40.0,50.0],[9,0,0,40.0,50.0],[9,1,57,40.0,15.0],[9,2,55,42.0,15.0],[9,3,54,42.0,10.0],[9,4,53,44.0,5.0],[9,5,56,40.0,5.0],[9,6,58,38.0,5.0],[9,7,60,35.0,5.0],[9,8,59,38.0,15.0],[9,9,0,40.0,50.0],[10,0,0,40.0,50.0],[10,1,81,85.0,35.0],[10,2,78,88.0,35.0],[10,3,76,90.0,35.0],[10,4,71,95.0,35.0],[10,5,70,95.0,30.0],[10,6,73,92.0,30.0],[10,7,77,88.0,30.0],[10,8,79,87.0,30.0],[10,9,80,85.0,25.0],[10,10,0,40.0,50.0]],"3":[[1,0,0,40.0,50.0],[1,1,20,30.0,50.0],[1,2,24,25.0,50.0],[1,3,25,25.0,52.0],[1,4,27,23.0,52.0],[1,5,29,20.0,50.0],[1,6,30,20.0,55.0],[1,7,28,23.0,55.0],[1,8,26,25.0,55.0],[1,9,23,28.0,55.0],[1,10,22,28.0,52.0],[1,11,21,30.0,52.0],[1,12,0,40.0,50.0],[2,0,0,40.0,50.0],[2,1,81,85.0,35.0],[2,2,78,88.0,35.0],[2,3,76,90.0,35.0],[2,4,71,95.0,35.0],[2,5,70,95.0,30.0],[2,6,73,92.0,30.0],[2,7,77,88.0,30.0],[2,8,79,87.0,30.0],[2,9,80,85.0,25.0],[2,10,0,40.0,50.0],[3,0,0,40.0,50.0],[3,1,98,58.0,75.0],[3,2,96,60.0,80.0],[3,3,95,62.0,80.0],[3,4,94,65.0,82.0],[3,5,92,67.0,85.0],[3,6,93,65.0,85.0],[3,7,97,60.0,85.0],[3,8,100,55.0,85.0],[3,9,99,55.0,80.0],[3,10,0,40.0,50.0],[4,0,0,40.0,50.0],[4,1,43,33.0,35.0],[4,2,42,33.0,32.0],[4,3,41,35.0,32.0],[4,4,40,35.0,30.0],[4,5,44,32.0,30.0],[4,6,46,30.0,32.0],[4,7,45,30.0,30.0],[4,8,48,28.0,30.0],[4,9,51,25.0,30.0],[4,10,50,26.0,32.0],[4,11,52,25.0,35.0],[4,12,49,28.0,35.0],[4,13,47,30.0,35.0],[4,14,0,40.0,50.0],[5,0,0,40.0,50.0],[5,1,90,60.0,55.0],[5,2,87,65.0,55.0],[5,3,86,66.0,55.0],[5,4,83,72.0,55.0],[5,5,82,75.0,55.0],[5,6,84,70.0,58.0],[5,7,85,68.0,60.0],[5,8,88,65.0,60.0],[5,9,89,63.0,58.0],[5,10,91,60.0,60.0],[5,11,0,40.0,50.0],[6,0,0,40.0,50.0],[6,1,13,22.0,75.0],[6,2,17,18.0,75.0],[6,3,18,15.0,75.0],[6,4,19,15.0,80.0],[6,5,15,20.0,80.0],[6,6,16,20.0,85.0],[6,7,14,22.0,85.0],[6,8,12,25.0,85.0],[6,9,0,40.0,50.0],[7,0,0,40.0,50.0],[7,1,5,42.0,65.0],[7,2,3,42.0,66.0],[7,3,7,40.0,66.0],[7,4,8,38.0,68.0],[7,5,10,35.0,66.0],[7,6,11,35.0,69.0],[7,7,9,38.0,70.0],[7,8,6,40.0,69.0],[7,9,4,42.0,68.0],[7,10,2,45.0,70.0],[7,11,1,45.0,68.0],[7,12,75,45.0,65.0],[7,13,0,40.0,50.0],[8,0,0,40.0,50.0],[8,1,32,10.0,40.0],[8,2,33,8.0,40.0],[8,3,31,10.0,35.0],[8,4,35,5.0,35.0],[8,5,37,2.0,40.0],[8,6,38,0.0,40.0],[8,7,39,0.0,45.0],[8,8,36,5.0,45.0],[8,9,34,8.0,45.0],[8,10,0,40.0,50.0],[9,0,0,40.0,50.0],[9,1,57,40.0,15.0],[9,2,55,42.0,15.0],[9,3,54,42.0,10.0],[9,4,53,44.0,5.0],[9,5,56,40.0,5.0],[9,6,58,38.0,5.0],[9,7,60,35.0,5.0],[9,8,59,38.0,15.0],[9,9,0,40.0,50.0],[10,0,0,40.0,50.0],[10,1,67,47.0,40.0],[10,2,65,48.0,40.0],[10,3,63,50.0,40.0],[10,4,62,50.0,35.0],[10,5,74,53.0,35.0],[10,6,72,53.0,30.0],[10,7,61,50.0,30.0],[10,8,64,48.0,30.0],[10,9,68,45.0,30.0],[10,10,66,47.0,35.0],[10,11,69,45.0,35.0],[10,12,0,40.0,50.0]],"4":[[1,0,0,40.0,50.0],[1,1,20,30.0,50.0],[1,2,21,30.0,52.0],[1,3,47,30.0,35.0],[1,4,0,40.0,50.0],[2,0,0,40.0,50.0],[2,1,22,28.0,52.0],[2,2,49,28.0,35.0],[2,3,0,40.0,50.0],[3,0,0,40.0,50.0],[3,1,67,47.0,40.0],[3,2,65,48.0,40.0],[3,3,63,50.0,40.0],[3,4,62,50.0,35.0],[3,5,66,47.0,35.0],[3,6,69,45.0,35.0],[3,7,75,45.0,65.0],[3,8,0,40.0,50.0],[4,0,0,40.0,50.0],[4,1,23,28.0,55.0],[4,2,52,25.0,35.0],[4,3,0,40.0,50.0],[5,0,0,40.0,50.0],[5,1,24,25.0,50.0],[5,2,25,25.0,52.0],[5,3,27,23.0,52.0],[5,4,28,23.0,55.0],[5,5,26,25.0,55.0],[5,6,34,8.0,45.0],[5,7,50,26.0,32.0],[5,8,0,40.0,50.0],[6,0,0,40.0,50.0],[6,1,5,42.0,65.0],[6,2,3,42.0,66.0],[6,3,4,42.0,68.0],[6,4,1,45.0,68.0],[6,5,0,40.0,50.0],[7,0,0,40.0,50.0],[7,1,7,40.0,66.0],[7,2,8,38.0,68.0],[7,3,9,38.0,70.0],[7,4,6,40.0,69.0],[7,5,2,45.0,70.0],[7,6,0,40.0,50.0],[8,0,0,40.0,50.0],[8,1,43,33.0,35.0],[8,2,42,33.0,32.0],[8,3,41,35.0,32.0],[8,4,40,35.0,30.0],[8,5,44,32.0,30.0],[8,6,45,30.0,30.0],[8,7,48,28.0,30.0],[8,8,51,25.0,30.0],[8,9,91,60.0,60.0],[8,10,0,40.0,50.0],[9,0,0,40.0,50.0],[9,1,10,35.0,66.0],[9,2,11,35.0,69.0],[9,3,12,25.0,85.0],[9,4,99,55.0,80.0],[9,5,0,40.0,50.0],[10,0,0,40.0,50.0],[10,1,74,53.0,35.0],[10,2,72,53.0,30.0],[10,3,61,50.0,30.0],[10,4,64,48.0,30.0],[10,5,68,45.0,30.0],[10,6,0,40.0,50.0],[11,0,0,40.0,50.0],[11,1,29,20.0,50.0],[11,2,30,20.0,55.0],[11,3,36,5.0,45.0],[11,4,0,40.0,50.0],[12,0,0,40.0,50.0],[12,1,46,30.0,32.0],[12,2,59,38.0,15.0],[12,3,80,85.0,25.0],[12,4,0,40.0,50.0],[13,0,0,40.0,50.0],[13,1,90,60.0,55.0],[13,2,89,63.0,58.0],[13,3,0,40.0,50.0],[14,0,0,40.0,50.0],[14,1,87,65.0,55.0],[14,2,86,66.0,55.0],[14,3,84,70.0,58.0],[14,4,85,68.0,60.0],[14,5,88,65.0,60.0],[14,6,0,40.0,50.0],[15,0,0,40.0,50.0],[15,1,13,22.0,75.0],[15,2,17,18.0,75.0],[15,3,18,15.0,75.0],[15,4,19,15.0,80.0],[15,5,15,20.0,80.0],[15,6,16,20.0,85.0],[15,7,0,40.0,50.0],[16,0,0,40.0,50.0],[16,1,98,58.0,75.0],[16,2,96,60.0,80.0],[16,3,95,62.0,80.0],[16,4,94,65.0,82.0],[16,5,93,65.0,85.0],[16,6,97,60.0,85.0],[16,7,100,55.0,85.0],[16,8,0,40.0,50.0],[17,0,0,40.0,50.0],[17,1,32,10.0,40.0],[17,2,33,8.0,40.0],[17,3,31,10.0,35.0],[17,4,35,5.0,35.0],[17,5,37,2.0,40.0],[17,6,38,0.0,40.0],[17,7,79,87.0,30.0],[17,8,0,40.0,50.0],[18,0,0,40.0,50.0],[18,1,83,72.0,55.0],[18,2,82,75.0,55.0],[18,3,77,88.0,30.0],[18,4,0,40.0,50.0],[19,0,0,40.0,50.0],[19,1,57,40.0,15.0],[19,2,55,42.0,15.0],[19,3,54,42.0,10.0],[19,4,53,44.0,5.0],[19,5,56,40.0,5.0],[19,6,60,35.0,5.0],[19,7,0,40.0,50.0],[20,0,0,40.0,50.0],[20,1,14,22.0,85.0],[20,2,0,40.0,50.0],[21,0,0,40.0,50.0],[21,1,39,0.0,45.0],[21,2,0,40.0,50.0],[22,0,0,40.0,50.0],[22,1,92,67.0,85.0],[22,2,73,92.0,30.0],[22,3,0,40.0,50.0],[23,0,0,40.0,50.0],[23,1,58,38.0,5.0],[23,2,0,40.0,50.0],[24,0,0,40.0,50.0],[24,1,81,85.0,35.0],[24,2,78,88.0,35.0],[24,3,76,90.0,35.0],[24,4,71,95.0,35.0],[24,5,70,95.0,30.0],[24,6,0,40.0,50.0]],"5":[[1,0,0,40.0,50.0],[1,1,32,10.0,40.0],[1,2,33,8.0,40.0],[1,3,29,20.0,50.0],[1,4,30,20.0,55.0],[1,5,28,23.0,55.0],[1,6,26,25.0,55.0],[1,7,23,28.0,55.0],[1,8,0,40.0,50.0],[2,0,0,40.0,50.0],[2,1,5,42.0,65.0],[2,2,3,42.0,66.0],[2,3,7,40.0,66.0],[2,4,8,38.0,68.0],[2,5,10,35.0,66.0],[2,6,11,35.0,69.0],[2,7,9,38.0,70.0],[2,8,6,40.0,69.0],[2,9,4,42.0,68.0],[2,10,0,40.0,50.0],[3,0,0,40.0,50.0],[3,1,90,60.0,55.0],[3,2,96,60.0,80.0],[3,3,95,62.0,80.0],[3,4,94,65.0,82.0],[3,5,92,67.0,85.0],[3,6,93,65.0,85.0],[3,7,97,60.0,85.0],[3,8,99,55.0,80.0],[3,9,0,40.0,50.0],[4,0,0,40.0,50.0],[4,1,17,18.0,75.0],[4,2,18,15.0,75.0],[4,3,19,15.0,80.0],[4,4,15,20.0,80.0],[4,5,16,20.0,85.0],[4,6,14,22.0,85.0],[4,7,12,25.0,85.0],[4,8,0,40.0,50.0],[5,0,0,40.0,50.0],[5,1,67,47.0,40.0],[5,2,65,48.0,40.0],[5,3,63,50.0,40.0],[5,4,62,50.0,35.0],[5,5,74,53.0,35.0],[5,6,0,40.0,50.0],[6,0,0,40.0,50.0],[6,1,57,40.0,15.0],[6,2,55,42.0,15.0],[6,3,72,53.0,30.0],[6,4,61,50.0,30.0],[6,5,64,48.0,30.0],[6,6,66,47.0,35.0],[6,7,69,45.0,35.0],[6,8,0,40.0,50.0],[7,0,0,40.0,50.0],[7,1,54,42.0,10.0],[7,2,53,44.0,5.0],[7,3,56,40.0,5.0],[7,4,58,38.0,5.0],[7,5,60,35.0,5.0],[7,6,59,38.0,15.0],[7,7,68,45.0,30.0],[7,8,0,40.0,50.0],[8,0,0,40.0,50.0],[8,1,43,33.0,35.0],[8,2,42,33.0,32.0],[8,3,41,35.0,32.0],[8,4,40,35.0,30.0],[8,5,44,32.0,30.0],[8,6,46,30.0,32.0],[8,7,45,30.0,30.0],[8,8,48,28.0,30.0],[8,9,51,25.0,30.0],[8,10,50,26.0,32.0],[8,11,52,25.0,35.0],[8,12,49,28.0,35.0],[8,13,47,30.0,35.0],[8,14,0,40.0,50.0],[9,0,0,40.0,50.0],[9,1,98,58.0,75.0],[9,2,100,55.0,85.0],[9,3,2,45.0,70.0],[9,4,1,45.0,68.0],[9,5,75,45.0,65.0],[9,6,0,40.0,50.0],[10,0,0,40.0,50.0],[10,1,20,30.0,50.0],[10,2,24,25.0,50.0],[10,3,25,25.0,52.0],[10,4,27,23.0,52.0],[10,5,22,28.0,52.0],[10,6,21,30.0,52.0],[10,7,0,40.0,50.0],[11,0,0,40.0,50.0],[11,1,13,22.0,75.0],[11,2,31,10.0,35.0],[11,3,35,5.0,35.0],[11,4,37,2.0,40.0],[11,5,38,0.0,40.0],[11,6,39,0.0,45.0],[11,7,36,5.0,45.0],[11,8,34,8.0,45.0],[11,9,0,40.0,50.0],[12,0,0,40.0,50.0],[12,1,81,85.0,35.0],[12,2,78,88.0,35.0],[12,3,76,90.0,35.0],[12,4,71,95.0,35.0],[12,5,70,95.0,30.0],[12,6,73,92.0,30.0],[12,7,77,88.0,30.0],[12,8,79,87.0,30.0],[12,9,80,85.0,25.0],[12,10,0,40.0,50.0],[13,0,0,40.0,50.0],[13,1,87,65.0,55.0],[13,2,86,66.0,55.0],[13,3,83,72.0,55.0],[13,4,82,75.0,55.0],[13,5,84,70.0,58.0],[13,6,85,68.0,60.0],[13,7,88,65.0,60.0],[13,8,89,63.0,58.0],[13,9,91,60.0,60.0],[13,10,0,40.0,50.0]],"6":[[1,0,0,40.0,50.0],[1,1,20,30.0,50.0],[1,2,21,30.0,52.0],[1,3,47,30.0,35.0],[1,4,0,40.0,50.0],[2,0,0,40.0,50.0],[2,1,22,28.0,52.0],[2,2,49,28.0,35.0],[2,3,0,40.0,50.0],[3,0,0,40.0,50.0],[3,1,67,47.0,40.0],[3,2,65,48.0,40.0],[3,3,63,50.0,40.0],[3,4,62,50.0,35.0],[3,5,66,47.0,35.0],[3,6,69,45.0,35.0],[3,7,75,45.0,65.0],[3,8,0,40.0,50.0],[4,0,0,40.0,50.0],[4,1,23,28.0,55.0],[4,2,52,25.0,35.0],[4,3,0,40.0,50.0],[5,0,0,40.0,50.0],[5,1,24,25.0,50.0],[5,2,25,25.0,52.0],[5,3,27,23.0,52.0],[5,4,28,23.0,55.0],[5,5,26,25.0,55.0],[5,6,34,8.0,45.0],[5,7,50,26.0,32.0],[5,8,0,40.0,50.0],[6,0,0,40.0,50.0],[6,1,5,42.0,65.0],[6,2,3,42.0,66.0],[6,3,4,42.0,68.0],[6,4,1,45.0,68.0],[6,5,0,40.0,50.0],[7,0,0,40.0,50.0],[7,1,7,40.0,66.0],[7,2,8,38.0,68.0],[7,3,9,38.0,70.0],[7,4,6,40.0,69.0],[7,5,2,45.0,70.0],[7,6,0,40.0,50.0],[8,0,0,40.0,50.0],[8,1,43,33.0,35.0],[8,2,42,33.0,32.0],[8,3,41,35.0,32.0],[8,4,40,35.0,30.0],[8,5,44,32.0,30.0],[8,6,45,30.0,30.0],[8,7,48,28.0,30.0],[8,8,51,25.0,30.0],[8,9,91,60.0,60.0],[8,10,0,40.0,50.0],[9,0,0,40.0,50.0],[9,1,10,35.0,66.0],[9,2,11,35.0,69.0],[9,3,12,25.0,85.0],[9,4,99,55.0,80.0],[9,5,0,40.0,50.0],[10,0,0,40.0,50.0],[10,1,74,53.0,35.0],[10,2,72,53.0,30.0],[10,3,61,50.0,30.0],[10,4,64,48.0,30.0],[10,5,68,45.0,30.0],[10,6,0,40.0,50.0],[11,0,0,40.0,50.0],[11,1,29,20.0,50.0],[11,2,30,20.0,55.0],[11,3,36,5.0,45.0],[11,4,0,40.0,50.0],[12,0,0,40.0,50.0],[12,1,46,30.0,32.0],[12,2,59,38.0,15.0],[12,3,80,85.0,25.0],[12,4,0,40.0,50.0],[13,0,0,40.0,50.0],[13,1,90,60.0,55.0],[13,2,89,63.0,58.0],[13,3,0,40.0,50.0],[14,0,0,40.0,50.0],[14,1,87,65.0,55.0],[14,2,86,66.0,55.0],[14,3,84,70.0,58.0],[14,4,85,68.0,60.0],[14,5,88,65.0,60.0],[14,6,0,40.0,50.0],[15,0,0,40.0,50.0],[15,1,13,22.0,75.0],[15,2,17,18.0,75.0],[15,3,18,15.0,75.0],[15,4,19,15.0,80.0],[15,5,15,20.0,80.0],[15,6,16,20.0,85.0],[15,7,14,22.0,85.0],[15,8,100,55.0,85.0],[15,9,0,40.0,50.0],[16,0,0,40.0,50.0],[16,1,98,58.0,75.0],[16,2,96,60.0,80.0],[16,3,95,62.0,80.0],[16,4,94,65.0,82.0],[16,5,93,65.0,85.0],[16,6,97,60.0,85.0],[16,7,79,87.0,30.0],[16,8,0,40.0,50.0],[17,0,0,40.0,50.0],[17,1,32,10.0,40.0],[17,2,33,8.0,40.0],[17,3,31,10.0,35.0],[17,4,35,5.0,35.0],[17,5,37,2.0,40.0],[17,6,38,0.0,40.0],[17,7,39,0.0,45.0],[17,8,0,40.0,50.0],[18,0,0,40.0,50.0],[18,1,83,72.0,55.0],[18,2,82,75.0,55.0],[18,3,77,88.0,30.0],[18,4,0,40.0,50.0],[19,0,0,40.0,50.0],[19,1,57,40.0,15.0],[19,2,55,42.0,15.0],[19,3,54,42.0,10.0],[19,4,53,44.0,5.0],[19,5,56,40.0,5.0],[19,6,58,38.0,5.0],[19,7,60,35.0,5.0],[19,8,0,40.0,50.0],[20,0,0,40.0,50.0],[20,1,92,67.0,85.0],[20,2,73,92.0,30.0],[20,3,0,40.0,50.0],[21,0,0,40.0,50.0],[21,1,81,85.0,35.0],[21,2,78,88.0,35.0],[21,3,76,90.0,35.0],[21,4,71,95.0,35.0],[21,5,70,95.0,30.0],[21,6,0,40.0,50.0]],"7":[[1,0,0,40.0,50.0],[1,1,20,30.0,50.0],[1,2,24,25.0,50.0],[1,3,25,25.0,52.0],[1,4,27,23.0,52.0],[1,5,29,20.0,50.0],[1,6,30,20.0,55.0],[1,7,28,23.0,55.0],[1,8,26,25.0,55.0],[1,9,23,28.0,55.0],[1,10,22,28.0,52.0],[1,11,21,30.0,52.0],[1,12,0,40.0,50.0],[2,0,0,40.0,50.0],[2,1,13,22.0,75.0],[2,2,17,18.0,75.0],[2,3,18,15.0,75.0],[2,4,19,15.0,80.0],[2,5,15,20.0,80.0],[2,6,16,20.0,85.0],[2,7,14,22.0,85.0],[2,8,12,25.0,85.0],[2,9,0,40.0,50.0],[3,0,0,40.0,50.0],[3,1,43,33.0,35.0],[3,2,42,33.0,32.0],[3,3,41,35.0,32.0],[3,4,40,35.0,30.0],[3,5,44,32.0,30.0],[3,6,46,30.0,32.0],[3,7,45,30.0,30.0],[3,8,48,28.0,30.0],[3,9,51,25.0,30.0],[3,10,50,26.0,32.0],[3,11,52,25.0,35.0],[3,12,49,28.0,35.0],[3,13,47,30.0,35.0],[3,14,0,40.0,50.0],[4,0,0,40.0,50.0],[4,1,5,42.0,65.0],[4,2,3,42.0,66.0],[4,3,7,40.0,66.0],[4,4,8,38.0,68.0],[4,5,10,35.0,66.0],[4,6,11,35.0,69.0],[4,7,9,38.0,70.0],[4,8,6,40.0,69.0],[4,9,4,42.0,68.0],[4,10,2,45.0,70.0],[4,11,1,45.0,68.0],[4,12,75,45.0,65.0],[4,13,0,40.0,50.0],[5,0,0,40.0,50.0],[5,1,67,47.0,40.0],[5,2,65,48.0,40.0],[5,3,63,50.0,40.0],[5,4,62,50.0,35.0],[5,5,74,53.0,35.0],[5,6,72,53.0,30.0],[5,7,61,50.0,30.0],[5,8,64,48.0,30.0],[5,9,68,45.0,30.0],[5,10,66,47.0,35.0],[5,11,69,45.0,35.0],[5,12,0,40.0,50.0],[6,0,0,40.0,50.0],[6,1,98,58.0,75.0],[6,2,96,60.0,80.0],[6,3,95,62.0,80.0],[6,4,94,65.0,82.0],[6,5,92,67.0,85.0],[6,6,93,65.0,85.0],[6,7,97,60.0,85.0],[6,8,100,55.0,85.0],[6,9,99,55.0,80.0],[6,10,0,40.0,50.0],[7,0,0,40.0,50.0],[7,1,32,10.0,40.0],[7,2,33,8.0,40.0],[7,3,31,10.0,35.0],[7,4,35,5.0,35.0],[7,5,37,2.0,40.0],[7,6,38,0.0,40.0],[7,7,39,0.0,45.0],[7,8,36,5.0,45.0],[7,9,34,8.0,45.0],[7,10,0,40.0,50.0],[8,0,0,40.0,50.0],[8,1,90,60.0,55.0],[8,2,87,65.0,55.0],[8,3,86,66.0,55.0],[8,4,83,72.0,55.0],[8,5,82,75.0,55.0],[8,6,84,70.0,58.0],[8,7,85,68.0,60.0],[8,8,88,65.0,60.0],[8,9,89,63.0,58.0],[8,10,91,60.0,60.0],[8,11,0,40.0,50.0],[9,0,0,40.0,50.0],[9,1,57,40.0,15.0],[9,2,55,42.0,15.0],[9,3,54,42.0,10.0],[9,4,53,44.0,5.0],[9,5,56,40.0,5.0],[9,6,58,38.0,5.0],[9,7,60,35.0,5.0],[9,8,59,38.0,15.0],[9,9,0,40.0,50.0],[10,0,0,40.0,50.0],[10,1,81,85.0,35.0],[10,2,78,88.0,35.0],[10,3,76,90.0,35.0],[10,4,71,95.0,35.0],[10,5,70,95.0,30.0],[10,6,73,92.0,30.0],[10,7,77,88.0,30.0],[10,8,79,87.0,30.0],[10,9,80,85.0,25.0],[10,10,0,40.0,50.0]],"9":[[1,0,0,35.0,35.0],[1,1,27,35.0,40.0],[1,2,69,37.0,47.0],[1,3,76,49.0,42.0],[1,4,79,57.0,48.0],[1,5,3,55.0,45.0],[1,6,68,56.0,39.0],[1,7,0,35.0,35.0],[2,0,0,35.0,35.0],[2,1,2,35.0,17.0],[2,2,21,45.0,20.0],[2,3,73,44.0,17.0],[2,4,41,42.0,7.0],[2,5,56,53.0,12.0],[2,6,4,55.0,20.0],[2,7,0,35.0,35.0],[3,0,0,35.0,35.0],[3,1,59,21.0,24.0],[3,2,99,20.0,26.0],[3,3,94,26.0,27.0],[3,4,96,22.0,27.0],[3,5,0,35.0,35.0],[4,0,0,35.0,35.0],[4,1,36,2.0,60.0],[4,2,47,8.0,56.0],[4,3,19,15.0,60.0],[4,4,10,30.0,60.0],[4,5,0,35.0,35.0],[5,0,0,35.0,35.0],[5,1,28,41.0,37.0],[5,2,12,50.0,35.0],[5,3,54,57.0,29.0],[5,4,24,65.0,35.0],[5,5,80,56.0,37.0],[5,6,0,35.0,35.0],[6,0,0,35.0,35.0],[6,1,30,40.0,60.0],[6,2,51,49.0,58.0],[6,3,9,55.0,60.0],[6,4,66,49.0,73.0],[6,5,1,41.0,49.0],[6,6,0,35.0,35.0],[7,0,0,35.0,35.0],[7,1,92,22.0,22.0],[7,2,42,24.0,12.0],[7,3,15,30.0,5.0],[7,4,87,28.0,18.0],[7,5,57,32.0,12.0],[7,6,97,25.0,21.0],[7,7,0,35.0,35.0],[8,0,0,35.0,35.0],[8,1,31,31.0,52.0],[8,2,88,26.0,52.0],[8,3,7,20.0,50.0],[8,4,0,35.0,35.0],[9,0,0,35.0,35.0],[9,1,40,40.0,25.0],[9,2,53,37.0,31.0],[9,3,26,45.0,30.0],[9,4,0,35.0,35.0],[10,0,0,35.0,35.0],[10,1,63,27.0,69.0],[10,2,64,15.0,77.0],[10,3,49,6.0,68.0],[10,4,48,13.0,52.0],[10,5,0,35.0,35.0],[11,0,0,35.0,35.0],[11,1,95,25.0,24.0],[11,2,98,19.0,21.0],[11,3,16,10.0,20.0],[11,4,86,4.0,18.0],[11,5,91,15.0,19.0],[11,6,100,18.0,18.0],[11,7,0,35.0,35.0],[12,0,0,35.0,35.0],[12,1,33,53.0,52.0],[12,2,29,64.0,42.0],[12,3,78,61.0,52.0],[12,4,34,65.0,55.0],[12,5,35,63.0,65.0],[12,6,77,53.0,43.0],[12,7,0,35.0,35.0],[13,0,0,35.0,35.0],[13,1,39,60.0,12.0],[13,2,23,55.0,5.0],[13,3,67,67.0,5.0],[13,4,55,63.0,23.0],[13,5,25,65.0,20.0],[13,6,0,35.0,35.0],[14,0,0,35.0,35.0],[14,1,62,24.0,58.0],[14,2,11,20.0,65.0],[14,3,90,31.0,67.0],[14,4,20,45.0,65.0],[14,5,32,35.0,69.0],[14,6,70,37.0,56.0],[14,7,0,35.0,35.0],[15,0,0,35.0,35.0],[15,1,72,47.0,16.0],[15,2,75,49.0,11.0],[15,3,22,45.0,10.0],[15,4,74,46.0,13.0],[15,5,58,36.0,26.0],[15,6,0,35.0,35.0],[16,0,0,35.0,35.0],[16,1,5,15.0,30.0],[16,2,61,12.0,24.0],[16,3,85,16.0,22.0],[16,4,37,20.0,20.0],[16,5,93,18.0,24.0],[16,6,0,35.0,35.0],[17,0,0,35.0,35.0],[17,1,14,15.0,10.0],[17,2,44,11.0,14.0],[17,3,38,5.0,5.0],[17,4,43,23.0,3.0],[17,5,13,30.0,25.0],[17,6,0,35.0,35.0],[18,0,0,35.0,35.0],[18,1,52,27.0,43.0],[18,2,18,20.0,40.0],[18,3,6,25.0,30.0],[18,4,0,35.0,35.0],[19,0,0,35.0,35.0],[19,1,45,6.0,38.0],[19,2,83,14.0,37.0],[19,3,84,11.0,31.0],[19,4,60,17.0,34.0],[19,5,89,26.0,35.0],[19,6,0,35.0,35.0],[20,0,0,35.0,35.0],[20,1,65,62.0,77.0],[20,2,71,57.0,68.0],[20,3,81,55.0,54.0],[20,4,50,47.0,47.0],[20,5,0,35.0,35.0],[21,0,0,35.0,35.0],[21,1,82,15.0,47.0],[21,2,8,10.0,43.0],[21,3,46,2.0,48.0],[21,4,17,5.0,30.0],[21,5,0,35.0,35.0]],"11":[[1,0,0,40.0,50.0],[1,1,59,10.0,20.0],[1,2,75,5.0,5.0],[1,3,87,12.0,24.0],[1,4,97,4.0,18.0],[1,5,58,15.0,10.0],[1,6,77,23.0,3.0],[1,7,0,40.0,50.0],[2,0,0,40.0,50.0],[2,1,88,24.0,58.0],[2,2,7,15.0,75.0],[2,3,8,15.0,80.0],[2,4,3,22.0,85.0],[2,5,68,40.0,60.0],[2,6,0,40.0,50.0],[3,0,0,40.0,50.0],[3,1,61,45.0,65.0],[3,2,81,49.0,58.0],[3,3,90,37.0,47.0],[3,4,0,40.0,50.0],[4,0,0,40.0,50.0],[4,1,83,37.0,31.0],[4,2,23,38.0,5.0],[4,3,21,40.0,5.0],[4,4,19,42.0,10.0],[4,5,18,44.0,5.0],[4,6,48,42.0,5.0],[4,7,25,35.0,5.0],[4,8,0,40.0,50.0],[5,0,0,40.0,50.0],[5,1,69,31.0,52.0],[5,2,98,26.0,52.0],[5,3,12,8.0,45.0],[5,4,53,20.0,50.0],[5,5,55,30.0,60.0],[5,6,0,40.0,50.0],[6,0,0,40.0,50.0],[6,1,95,56.0,37.0],[6,2,62,65.0,35.0],[6,3,67,64.0,42.0],[6,4,71,65.0,55.0],[6,5,94,57.0,48.0],[6,6,0,40.0,50.0],[7,0,0,40.0,50.0],[7,1,5,20.0,85.0],[7,2,45,20.0,82.0],[7,3,2,22.0,75.0],[7,4,6,18.0,75.0],[7,5,46,18.0,80.0],[7,6,4,20.0,80.0],[7,7,1,25.0,85.0],[7,8,70,35.0,69.0],[7,9,100,31.0,67.0],[7,10,0,40.0,50.0],[8,0,0,40.0,50.0],[8,1,14,5.0,45.0],[8,2,47,2.0,45.0],[8,3,11,8.0,40.0],[8,4,15,2.0,40.0],[8,5,16,0.0,40.0],[8,6,9,10.0,35.0],[8,7,10,10.0,40.0],[8,8,13,5.0,35.0],[8,9,17,0.0,45.0],[8,10,0,40.0,50.0],[9,0,0,40.0,50.0],[9,1,73,2.0,60.0],[9,2,79,6.0,68.0],[9,3,78,8.0,56.0],[9,4,60,15.0,60.0],[9,5,0,40.0,50.0],[10,0,0,40.0,50.0],[10,1,64,45.0,30.0],[10,2,51,55.0,20.0],[10,3,76,60.0,12.0],[10,4,89,67.0,5.0],[10,5,91,49.0,42.0],[10,6,0,40.0,50.0],[11,0,0,40.0,50.0],[11,1,72,63.0,65.0],[11,2,39,60.0,80.0],[11,3,36,65.0,85.0],[11,4,40,60.0,85.0],[11,5,38,62.0,80.0],[11,6,41,58.0,75.0],[11,7,54,55.0,60.0],[11,8,96,55.0,54.0],[11,9,0,40.0,50.0],[12,0,0,40.0,50.0],[12,1,65,35.0,40.0],[12,2,52,25.0,30.0],[12,3,57,30.0,25.0],[12,4,22,40.0,15.0],[12,5,49,42.0,12.0],[12,6,20,42.0,15.0],[12,7,24,38.0,15.0],[12,8,0,40.0,50.0],[13,0,0,40.0,50.0],[13,1,82,27.0,43.0],[13,2,99,26.0,35.0],[13,3,86,21.0,24.0],[13,4,74,20.0,20.0],[13,5,0,40.0,50.0],[14,0,0,40.0,50.0],[14,1,63,65.0,20.0],[14,2,85,63.0,23.0],[14,3,84,57.0,29.0],[14,4,56,50.0,35.0],[14,5,66,41.0,37.0],[14,6,0,40.0,50.0],[15,0,0,40.0,50.0],[15,1,92,53.0,43.0],[15,2,33,85.0,25.0],[15,3,28,92.0,30.0],[15,4,30,88.0,30.0],[15,5,34,85.0,35.0],[15,6,50,72.0,35.0],[15,7,80,47.0,47.0],[15,8,0,40.0,50.0],[16,0,0,40.0,50.0],[16,1,42,55.0,80.0],[16,2,44,55.0,82.0],[16,3,43,55.0,85.0],[16,4,37,65.0,82.0],[16,5,35,67.0,85.0],[16,6,0,40.0,50.0],[17,0,0,40.0,50.0],[17,1,31,88.0,35.0],[17,2,29,90.0,35.0],[17,3,27,95.0,35.0],[17,4,26,95.0,30.0],[17,5,32,87.0,30.0],[17,6,93,61.0,52.0],[17,7,0,40.0,50.0]]},"thresholds":[0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9],"params":{"km":[0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5],"lit":[8,9,10,11,12,13,14],"price":[18000,19000,20000,21000,22000,23000,24000,25000,26000]}};</script>
+<script>
+'use strict';
+/* Delivery Insights - bảng điều khiển chạy trong trình duyệt.
+   Dữ liệu là các khối đã tổng hợp từ data/dashboard/*.csv (xem scripts/build_dashboard_web.py);
+   mọi con số được tính lại theo bộ lọc ở đây, không có số cố định. */
+(function () {
+const D = window.__DATA__;
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const cs = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const nz = v => v == null || Number.isNaN(v);
+const pct = (v, d = 1) => nz(v) ? '–' : (v * 100).toFixed(d).replace('.', ',') + '%';
+const num = v => nz(v) ? '–' : Math.round(v).toLocaleString('vi-VN');
+const dec = (v, d = 2) => nz(v) ? '–' : v.toFixed(d).replace('.', ',');
+const dec1 = v => nz(v) ? '–' : v.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const monthText = m => m.slice(5, 7) + '/' + m.slice(0, 4);
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const toHex = a => '#' + a.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
+const mix = (a, b, t) => { t = Math.max(0, Math.min(1, t)); const A = hex(a), B = hex(b); return toHex(A.map((v, i) => v + (B[i] - v) * t)); };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+const MODES = D.modes, MARKETS = D.markets, REG = D.regions, MONTHS = D.months, POL = D.policies, CASES = D.cases;
+const POL_DEFAULT = (POL.find(p => p.id === 'bounded_plus1_keep_same_day') || POL[1]).id;
+const CASE_DEFAULT = (CASES.find(c => c.id === 'c101|base|ortools') || CASES[0]).id;
+const GLOBAL = (() => { let n = 0, late = 0; for (const r of D.A) { n += r[4]; late += r[5]; } return { n, late, rate: late / n }; })();
+const AVG = GLOBAL.rate;
+
+const S = { page: 'p1', mode: null, market: null, region: null, thr: 0.5, policy: POL_DEFAULT, cas: CASE_DEFAULT, km: 1, lit: 10, price: 22000, hover: null };
+const iMode = () => S.mode == null ? null : MODES.indexOf(S.mode);
+const iMkt = () => S.market == null ? null : MARKETS.indexOf(S.market);
+const iReg = () => S.region == null ? null : REG.findIndex(r => r.name === S.region);
+const fAll = () => ({ m: iMode(), k: iMkt(), r: iReg() });
+const fX = () => ({ m: null, k: iMkt(), r: iReg() });
+const fK = () => ({ m: null, k: null, r: iReg() });
+
+/* ------------------------------------------------------------------ tổng hợp */
+const ok = (r, f, o) => (f.m == null || r[o] === f.m) && (f.k == null || r[o + 1] === f.k) && (f.r == null || r[o + 2] === f.r);
+function aggA(f) { let n = 0, late = 0, ss = 0, sa = 0; for (const r of D.A) if (ok(r, f, 0)) { n += r[4]; late += r[5]; ss += r[6]; sa += r[7]; } return { n, late, ss, sa }; }
+function seriesA(f) { const o = MONTHS.map(() => ({ n: 0, late: 0, ss: 0, sa: 0 })); for (const r of D.A) if (ok(r, f, 0)) { const x = o[r[3]]; x.n += r[4]; x.late += r[5]; x.ss += r[6]; x.sa += r[7]; } return o; }
+function aggB(f, thr) { let n = 0, late = 0, alerts = 0, tp = 0; for (const r of D.B) if (ok(r, f, 0)) { n += r[4]; late += r[5]; if (r[3] >= thr - 1e-9) { alerts += r[4]; tp += r[5]; } } return { n, late, alerts, tp, fp: alerts - tp, fn: late - tp }; }
+function aggC(f, pi) { let n = 0, ex = 0, sp = 0, sa = 0, fb = 0; for (const r of D.C) if (r[0] === pi && ok(r, f, 1)) { n += r[4]; ex += r[5]; sp += r[6]; sa += r[7]; fb += r[8]; } return { n, ex, sp, sa, fb, rate: n ? ex / n : null, prop: n ? sp / n : null, add: n ? sa / n : null, fbr: n ? fb / n : null }; }
+
+/* ------------------------------------------------------------------ vòng tiến độ */
+function dial(id, val, color, uid, cap) {
+  const el = document.getElementById(id), W = el.clientWidth || parseInt(el.style.width) || 300, cx = W / 2, cy = 107, R = 70, sw = 24, C = 2 * Math.PI * R;
+  const v = nz(val) ? 0 : Math.max(0, Math.min(1, val)), a = 360 * v, ro = R + sw / 2, ri = R - sw / 2;
+  let s = `<svg width="${W}" height="214" viewBox="0 0 ${W} 214"><defs>
+   <linearGradient id="rg${uid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mix(color, '#ffffff', .42)}"/><stop offset=".5" stop-color="${color}"/><stop offset="1" stop-color="${mix(color, '#000000', .25)}"/></linearGradient>
+   <radialGradient id="rk${uid}" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="${cs('--face1')}"/><stop offset="1" stop-color="${cs('--face2')}"/></radialGradient></defs>`;
+  for (let i = 0; i < 40; i++) {
+    const th = i * 9 * Math.PI / 180 - Math.PI / 2, major = i % 10 === 0, r1 = ro + 6, r2 = ro + (major ? 15 : i % 5 === 0 ? 11 : 9);
+    s += `<line x1="${cx + r1 * Math.cos(th)}" y1="${cy + r1 * Math.sin(th)}" x2="${cx + r2 * Math.cos(th)}" y2="${cy + r2 * Math.sin(th)}" stroke="${cs('--ink2')}" stroke-width="${major ? 1.8 : 1}" opacity="${major ? .7 : .35}"/>`;
+  }
+  s += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${cs('--well1')}" stroke-width="${sw}"/>
+   <circle cx="${cx}" cy="${cy}" r="${ro - 1}" fill="none" stroke="${cs('--lo')}" stroke-width="2.2" opacity=".55"/>
+   <circle cx="${cx}" cy="${cy}" r="${ri + 1}" fill="none" stroke="${cs('--hi')}" stroke-width="2.2"/>`;
+  if (v > 0) {
+    s += `<g style="filter:drop-shadow(2px 3px 3px ${cs('--lo')})"><circle class="sweep" cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="url(#rg${uid})" stroke-width="${sw - 8}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})" style="stroke-dasharray:${(C * v).toFixed(1)} ${C.toFixed(1)}"/></g>
+   <circle class="sweep" cx="${cx}" cy="${cy}" r="${R + sw / 2 - 6}" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="1.4" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})" style="stroke-dasharray:${Math.max(0, 2 * Math.PI * (R + sw / 2 - 6) * v - 4).toFixed(1)} ${(2 * Math.PI * (R + sw / 2 - 6)).toFixed(1)}"/>`;
+  }
+  s += `<g class="knobg" style="transform-origin:${cx}px ${cy}px;transform:rotate(${a}deg)"><g style="filter:drop-shadow(3px 4px 3px ${cs('--lo')})"><circle cx="${cx}" cy="${cy - R}" r="${sw / 2 + 1}" fill="url(#rk${uid})"/></g><circle cx="${cx}" cy="${cy - R}" r="4" fill="${color}"/></g>
+   <g style="filter:drop-shadow(5px 6px 6px ${cs('--lo')}) drop-shadow(-4px -4px 5px ${cs('--hi')})"><circle cx="${cx}" cy="${cy}" r="${ri - 9}" fill="url(#rk${uid})"/></g></svg>`;
+  el.innerHTML = s + `<div class="rc"><b class="num" style="color:${color}">${pct(nz(val) ? null : val)}</b><span>${cap || ''}</span></div>`;
+}
+function spark(vals, color, w = 92, h = 32) {
+  const pts = vals.map((v, i) => [i, v]).filter(p => !nz(p[1]));
+  if (pts.length < 2) return '';
+  const lo = Math.min(...pts.map(p => p[1])), hi = Math.max(...pts.map(p => p[1])), n = vals.length - 1;
+  const x = i => 2 + i * (w - 4) / n, y = v => 3 + (hi - v) / (hi - lo || 1) * (h - 7);
+  const d = pts.map((p, k) => (k ? 'L' : 'M') + x(p[0]).toFixed(1) + ' ' + y(p[1]).toFixed(1)).join('');
+  const last = pts[pts.length - 1];
+  return `<svg width="${w}" height="${h}"><path class="spl" pathLength="1" d="${d}" fill="none" stroke="${color}" stroke-width="1.7" stroke-linejoin="round"/><circle cx="${x(last[0])}" cy="${y(last[1])}" r="2.6" fill="${color}"/></svg>`;
+}
+function sphereDefs(prefix, items) {
+  return items.map((c, i) => `<radialGradient id="${prefix}${i}" cx=".32" cy=".28" r=".85"><stop offset="0" stop-color="${mix(c, '#ffffff', .55)}"/><stop offset=".5" stop-color="${c}"/><stop offset="1" stop-color="${mix(c, '#000000', .38)}"/></radialGradient>`).join('');
+}
+function tileHTML(cls, c, name, big, unit, bd, lines, trackW, notch, extra = '') {
+  return `<div class="raise tile ${cls}" style="--c:${c}" ${extra}>
+   <div><div class="nm">${name}</div><div class="big num">${big}<small style="font-size:18px;font-weight:400;letter-spacing:0;margin-left:5px;opacity:.8">${unit}</small></div><div class="bd">${bd}</div></div>
+   <div>${lines.map((l, i) => `<div class="ln" ${i === lines.length - 1 && trackW == null ? 'style="border:0"' : ''}><span>${l[0]}</span><b class="num">${l[1]}</b></div>`).join('')}
+   ${trackW != null ? `<div class="track well"><i style="width:calc(${Math.max(0, Math.min(1, trackW)) * 100}% - 6px)"></i>${notch != null ? `<u style="left:${notch * 100}%"></u>` : ''}</div>` : ''}</div></div>`;
+}
+const barRow = (v, w, c, wd = 110) => `<span class="apb well" style="width:${wd}px"><i style="width:calc(${Math.max(0, Math.min(1, v / w)) * 100}% - 6px);background:linear-gradient(180deg,${mix(c, '#ffffff', .25)},${c})"></i></span><span class="apv num" style="width:52px">${pct(v)}</span>`;
+
+/* ------------------------------------------------------------------ rail */
+function renderRail() {
+  $('#rn').textContent = num(GLOBAL.n); $('#rm').textContent = num(MONTHS.length); $('#rk').textContent = num(MARKETS.length);
+  $('#rrate').textContent = pct(AVG); $('#rtube').style.height = `calc(${AVG * 100}% - 6px)`;
+}
+
+/* ------------------------------------------------------------------ 1. tổng quan */
+function render1() {
+  const red = cs('--red'), teal = cs('--teal'), steel = cs('--steel');
+  const g = aggA(fAll()), tot = aggA(fX());
+  $('#sub1').textContent = `DataCo · đơn không hủy · ${monthText(MONTHS[0])} – ${monthText(MONTHS[MONTHS.length - 1])} · ${num(g.n)} đơn`;
+  const rate = g.n ? g.late / g.n : null;
+  dial('dial1', rate, red, 'a', 'đơn giao trễ hạn');
+  $('#ring1sub').textContent = S.mode || 'toàn bộ đơn';
+  $('#f1a').innerHTML = `<b class="num">${num(g.late)}</b> đơn trễ`; $('#f1b').innerHTML = `<b class="num">${num(g.n - g.late)}</b> đúng hạn`;
+  const per = MODES.map((name, i) => { const a = aggA({ m: i, k: iMkt(), r: iReg() }); return { name, i, ...a, rate: a.n ? a.late / a.n : null, sched: a.n ? a.ss / a.n : null, act: a.n ? a.sa / a.n : null, share: tot.late ? a.late / tot.late : null }; })
+    .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1));
+  $('#tiles').innerHTML = per.map(m => {
+    const above = !nz(m.rate) && m.rate > AVG, hot = !nz(m.rate) && m.rate >= .95, c = above ? red : teal;
+    return `<div class="raise tile ${hot ? 'hot' : ''}" data-mode="${m.name}" style="--c:${c}">
+     <div><div class="nm">${m.name}</div><div class="big num">${nz(m.rate) ? '–' : pct(m.rate, m.rate === 1 ? 0 : 1)}</div><div class="bd">${nz(m.rate) ? 'KHÔNG CÓ ĐƠN' : above ? '▲ TRÊN TRUNG BÌNH' : '▼ DƯỚI TRUNG BÌNH'}</div></div>
+     <div><div class="ln"><span>Cam kết → thực tế</span><b class="num">${nz(m.sched) ? '–' : dec(m.sched) + ' → ' + dec(m.act) + ' ngày'}</b></div>
+      <div class="ln"><span>Đơn / đơn trễ</span><b class="num">${num(m.n)} / ${num(m.late)}</b></div>
+      <div class="ln" style="border:0"><span>Chiếm tổng đơn trễ</span><b class="num">${pct(m.share)}</b></div>
+      <div class="track well"><i style="width:calc(${(m.rate || 0) * 100}% - 6px)"></i><u style="left:${AVG * 100}%"></u></div></div></div>`;
+  }).join('');
+  /* bong bóng */
+  const live = per.filter(m => m.n > 0);
+  const W = 560, H = 176, L = 40, R = 16, T = 10, B = 22;
+  const xmax = Math.max(10000, Math.ceil(Math.max(1, ...live.map(m => m.n)) * 1.12 / 10000) * 10000), ylo = Math.min(.2, Math.floor(Math.min(1, ...live.map(m => m.rate)) * 10) / 10 - .1), yhi = 1.04;
+  const X = v => L + v / xmax * (W - L - R), Y = v => T + (yhi - v) / (yhi - ylo) * (H - T - B);
+  const cols = live.map(m => m.rate > AVG ? red : teal);
+  let b = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="margin-top:4px"><defs>${sphereDefs('sp', cols)}</defs><rect x="${L}" y="${T}" width="${W - L - R}" height="${Math.max(0, Y(AVG) - T)}" fill="${red}" opacity=".08"/>`;
+  [.25, .5, .75, 1].filter(v => v > ylo).forEach(v => b += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${cs('--rule')}"/><text x="${L - 6}" y="${Y(v) + 3.5}" text-anchor="end" font-size="10" fill="${cs('--muted')}">${v * 100}%</text>`);
+  for (let v = 0; v <= xmax; v += 10000) b += `<text x="${X(v)}" y="${H - 6}" text-anchor="middle" font-size="10" fill="${cs('--muted')}">${v ? num(v) : '0'}</text>`;
+  b += `<line x1="${L}" x2="${W - R}" y1="${Y(AVG)}" y2="${Y(AVG)}" stroke="${cs('--ink')}" stroke-dasharray="4 4" opacity=".45"/><text x="${W - R}" y="${Y(AVG) - 4}" text-anchor="end" font-size="10" fill="${cs('--ink2')}">trung bình toàn kỳ ${pct(AVG)}</text>`;
+  live.forEach((m, i) => {
+    const r = 7 + Math.sqrt(m.late) / Math.sqrt(Math.max(1, ...live.map(q => q.late))) * 15, left = m.n > xmax * .72 || m.rate > .95, lx = X(m.n) + (left ? -r - 7 : r + 7), an = left ? 'end' : 'start';
+    b += `<g class="bb" data-mode="${m.name}" data-tip="<b>${m.name}</b><br>Tỷ lệ trễ ${pct(m.rate)}<br>${num(m.n)} đơn · ${num(m.late)} trễ<br>Cam kết ${dec(m.sched)} → thực tế ${dec(m.act)} ngày"><g style="filter:drop-shadow(3px 4px 3px ${cs('--lo')})"><circle cx="${X(m.n)}" cy="${Y(m.rate)}" r="${r}" fill="url(#sp${i})"/></g>
+     <text x="${lx}" y="${Y(m.rate) - 1}" text-anchor="${an}" font-size="11.5" font-weight="650" fill="${cs('--ink')}">${m.name}</text><text x="${lx}" y="${Y(m.rate) + 11}" text-anchor="${an}" font-size="10.5" fill="${cs('--muted')}">${num(m.late)} đơn trễ</text></g>`;
+  });
+  $('#bubble').innerHTML = live.length ? b + '</svg>' : '<div class="nodata">Không có đơn ở bộ lọc này</div>';
+  /* phím nhiệt */
+  const shortName = { 'Pacific Asia': 'P. Asia' };
+  let k = '<div></div>' + MARKETS.map(c => `<div class="hd" data-col="${c}">${shortName[c] || c}</div>`).join('');
+  per.forEach(m => {
+    k += `<div class="rl" data-mode="${m.name}">${m.name}</div>`;
+    MARKETS.forEach((c, ci) => {
+      const a = aggA({ m: m.i, k: ci, r: iReg() }), v = a.n ? a.late / a.n : null, base = cs('--face1');
+      if (v == null) { k += `<div class="kk num" data-mode="${m.name}" data-col="${c}" style="background:${cs('--well1')};color:${cs('--muted')}">–</div>`; return; }
+      const col = v < AVG ? mix(base, teal, (AVG - v) / (AVG - .38) * .85) : mix(base, red, (v - AVG) / (1 - AVG) * .95), strong = v > .7 || v < .45;
+      k += `<div class="kk num" data-mode="${m.name}" data-col="${c}" data-tip="<b>${m.name} · ${c}</b><br>Tỷ lệ trễ ${pct(v)}<br>${num(a.n)} đơn" style="background:linear-gradient(145deg,${mix(col, '#ffffff', .18)},${mix(col, '#000000', .1)});color:${strong ? '#fff' : cs('--ink')}">${(v * 100).toFixed(0)}%</div>`;
+    });
+  });
+  $('#keypad').innerHTML = k;
+  $('#lgbar').style.background = `linear-gradient(90deg,${teal},${cs('--face1')},${red})`;
+  /* nhịp độ theo tháng */
+  const ser = seriesA(fAll()), valid = ser.filter(x => x.n > 0).length || 1;
+  const rows = [['Đơn mỗi tháng', num(g.n / valid), '', ser.map(x => x.n || null), steel, v => num(v)],
+    ['Giao thực tế trung bình', dec(g.n ? g.sa / g.n : null), 'ngày', ser.map(x => x.n ? x.sa / x.n : null), teal, v => dec(v)],
+    ['Chênh so với cam kết', g.n ? (g.sa - g.ss) / g.n >= 0 ? '+' + dec((g.sa - g.ss) / g.n) : dec((g.sa - g.ss) / g.n) : '–', 'ngày', ser.map(x => x.n ? (x.sa - x.ss) / x.n : null), red, v => dec(v)]];
+  const range = (a, f) => { const z = a.filter(v => !nz(v)); return z.length ? `${f(Math.min(...z))} – ${f(Math.max(...z))}` : '–'; };
+  $('#kpis').innerHTML = `<h3>Nhịp độ theo tháng</h3><div class="sub" style="margin-bottom:2px">trung bình theo bộ lọc · đường nhỏ là ${MONTHS.length} tháng</div>` +
+    rows.map(r => `<div class="eng"><div><span>${r[0]}</span><b class="num">${r[1]}<small>${r[2]}</small></b></div><div class="sp">${spark(r[3], r[4])}<small>${range(r[3], r[5])}</small></div></div>`).join('');
+  /* xu hướng */
+  const pts = ser.map((x, i) => x.n ? { i, v: x.late / x.n, n: x.n, act: x.sa / x.n, gap: (x.sa - x.ss) / x.n } : null).filter(Boolean);
+  const w = 1228, hh = 150, Lm = 40, Rm = 10, Tm = 12, Bm = 20;
+  if (pts.length < 2) { $('#trend').innerHTML = '<div class="nodata">Không đủ dữ liệu để vẽ xu hướng</div>'; window.__tr = null; }
+  else {
+    const mn = Math.min(...pts.map(p => p.v)), mxv = Math.max(...pts.map(p => p.v));
+    let lo = Math.max(0, Math.floor((mn - .01) * 50) / 50), hi = Math.min(1, Math.ceil((mxv + .01) * 50) / 50);
+    if (hi - lo < .08) { const mid = (hi + lo) / 2; lo = Math.max(0, mid - .04); hi = Math.min(1, mid + .04); }
+    const step = (w - Lm - Rm) / (MONTHS.length - 1), Xt = i => Lm + i * step, Yt = v => Tm + (hi - v) / (hi - lo) * (hh - Tm - Bm);
+    let t = `<svg viewBox="0 0 ${w} ${hh}" width="100%"><defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${steel}" stop-opacity=".35"/><stop offset="1" stop-color="${steel}" stop-opacity="0"/></linearGradient></defs>`;
+    for (let q = 0; q <= 3; q++) { const v = lo + (hi - lo) * q / 3; t += `<line x1="${Lm}" x2="${w - Rm}" y1="${Yt(v)}" y2="${Yt(v)}" stroke="${cs('--rule')}"/><text x="${Lm - 6}" y="${Yt(v) + 3.5}" text-anchor="end" font-size="10" fill="${cs('--muted')}">${(v * 100).toFixed(0)}%</text>`; }
+    const path = pts.map((p, q) => (q ? 'L' : 'M') + Xt(p.i).toFixed(1) + ' ' + Yt(p.v).toFixed(1)).join('');
+    t += `<path d="${path}L${Xt(pts[pts.length - 1].i)} ${Yt(lo)}L${Xt(pts[0].i)} ${Yt(lo)}Z" fill="url(#ar)"/>`;
+    if (AVG >= lo && AVG <= hi) t += `<line x1="${Lm}" x2="${w - Rm}" y1="${Yt(AVG)}" y2="${Yt(AVG)}" stroke="${cs('--ink')}" stroke-dasharray="4 4" opacity=".4"/>`;
+    t += `<path class="spl" pathLength="1" d="${path}" fill="none" stroke="${cs('--ink')}" stroke-width="2.2" stroke-linejoin="round" style="filter:drop-shadow(0 2px 2px ${cs('--lo')})"/>`;
+    [0, 12, 24, 36].filter(i => i < MONTHS.length).forEach(i => { t += `<line x1="${Xt(i)}" x2="${Xt(i)}" y1="${Tm}" y2="${hh - Bm}" stroke="${cs('--rule')}" stroke-dasharray="2 4"/><text x="${Xt(i)}" y="${hh - 4}" text-anchor="${i === MONTHS.length - 1 ? 'end' : i === 0 ? 'start' : 'middle'}" font-size="10" fill="${cs('--muted')}">${MONTHS[i]}</text>`; });
+    const hiP = pts.reduce((a, p) => p.v > a.v ? p : a), loP = pts.reduce((a, p) => p.v < a.v ? p : a);
+    [[hiP, 'cao nhất', -10], [loP, 'thấp nhất', 17]].forEach(([p, nme, dy]) => { t += `<circle cx="${Xt(p.i)}" cy="${Yt(p.v)}" r="5" fill="${red}" stroke="${cs('--face1')}" stroke-width="2"/><text x="${Xt(p.i)}" y="${Yt(p.v) + dy}" text-anchor="middle" font-size="11" font-weight="650" fill="${red}">${pct(p.v)} ${nme}</text>`; });
+    const lp = pts[pts.length - 1]; t += `<text x="${Xt(lp.i) - 8}" y="${Yt(lp.v) - 9}" text-anchor="end" font-size="10.5" fill="${cs('--ink2')}">gần nhất ${pct(lp.v)}</text>`;
+    t += `<g id="xh" style="opacity:0;transition:opacity .15s"><line id="xhl" y1="${Tm}" y2="${hh - Bm}" stroke="${red}" stroke-width="1.2"/><circle id="xhc" r="5.5" fill="${red}" stroke="${cs('--face1')}" stroke-width="2"/></g>`;
+    window.__tr = { w, hh, Lm, Rm, Tm, Bm, lo, hi, step, pts };
+    $('#trend').innerHTML = t + '</svg>';
+    $('#trendsub').textContent = `trục thu hẹp ${(lo * 100).toFixed(0)}–${(hi * 100).toFixed(0)}% · vạch đứt là trung bình toàn kỳ ${pct(AVG)}`;
+  }
+  /* kết luận */
+  const liveR = per.filter(m => m.n > 0), byLate = [...liveR].sort((a, b) => b.late - a.late);
+  $('#tape1').textContent = !g.n ? 'Không có đơn ở bộ lọc đang chọn.' : liveR.length < 2
+    ? `${liveR[0].name}: ${pct(liveR[0].rate)} đơn giao trễ (${num(liveR[0].late)} / ${num(liveR[0].n)}).`
+    : `${liveR[0].name} có tỷ lệ trễ cao nhất (${pct(liveR[0].rate)}); ${byLate[0].name} có nhiều đơn trễ nhất (${pct(byLate[0].share)} số đơn trễ).`;
+}
+
+/* ------------------------------------------------------------------ 2. rủi ro */
+function render2() {
+  const red = cs('--red'), teal = cs('--teal'), brass = cs('--brass'), steel = cs('--steel');
+  const a = aggB(fAll(), S.thr), tot = aggB(fX(), S.thr);
+  $('#sub2').textContent = `Tập kiểm tra · ${num(a.n)} đơn · ${monthText(D.testRange[0])} – ${monthText(D.testRange[1])} · ngưỡng cảnh báo ${dec(S.thr)}`;
+  const precision = a.alerts ? a.tp / a.alerts : null, recall = a.late ? a.tp / a.late : null;
+  dial('dial2', precision, teal, 'b', 'đúng trong số cảnh báo'); dial('dial3', recall, red, 'c', 'bắt được trong đơn trễ');
+  $('#f2a').innerHTML = `<b class="num">${num(a.tp)}</b> đúng`; $('#f2b').innerHTML = `<b class="num">${num(a.alerts)}</b> được báo`;
+  $('#f3a').innerHTML = `<b class="num">${num(a.tp)}</b> bắt được`; $('#f3b').innerHTML = `<b class="num">${num(a.late)}</b> đơn trễ`;
+  $('#funsub').textContent = `Từ toàn bộ đơn kiểm tra đến cảnh báo đúng · thêm ${num(a.fp)} cảnh báo sai`;
+  const F = [[num(a.n), 'đơn kiểm tra', a.n, steel], [num(a.late), 'đơn trễ thực tế', a.late, brass], [num(a.tp), 'cảnh báo đúng', a.tp, teal], [num(a.fn), 'bỏ sót', a.fn, red]];
+  $('#funnel').innerHTML = F.map(f => `<div class="fn"><div class="t"><b class="num">${f[0]}</b>${f[1]}</div><div class="track well" data-tip="<b>${f[1]}</b><br>${f[0]} đơn · ${pct(a.n ? f[2] / a.n : null)} số đơn kiểm tra" style="--c:${f[3]};height:26px;margin:0;border-radius:9px"><i style="width:calc(${a.n ? f[2] / a.n * 100 : 0}% - 6px);top:4px;bottom:4px;border-radius:6px"></i><span class="fp num" style="color:${f[3] === steel || f[3] === brass ? '#1D2A33' : '#fff'}">${pct(a.n ? f[2] / a.n : null)}</span></div></div>`).join('');
+  [[a.tp, 's1'], [a.fp, 's2'], [a.fn, 's3'], [a.late, 's4']].forEach(([v, id], i) => { $('#c' + (i + 1)).textContent = num(v); $('#' + id).innerHTML = `${pct(a.n ? v / a.n : null)}<br>tổng đơn kiểm tra`; });
+  $('#stkleg').innerHTML = [['Cảnh báo đúng', teal], ['Cảnh báo sai', brass], ['Bỏ sót', red]].map(x => `<span style="margin-left:14px"><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${x[1]};margin-right:5px;vertical-align:-1px"></i>${x[0]}</span>`).join('');
+  const st = MODES.map((name, i) => { const q = aggB({ m: i, k: iMkt(), r: iReg() }, S.thr); return { name, tp: q.tp, fp: q.fp, fn: q.fn, total: q.tp + q.fp + q.fn }; }).filter(x => x.total > 0).sort((p, q) => q.total - p.total);
+  const mx = Math.max(1, ...st.map(x => x.total));
+  $('#stack').innerHTML = st.length ? st.map(x => `<div class="fn" data-mode="${x.name}" style="grid-template-columns:120px 1fr;margin-top:24px"><div class="t"><b style="font-size:13.5px">${x.name}</b></div>
+   <div class="well" style="height:44px;border-radius:12px;padding:6px;display:flex;gap:3px">${[[x.tp, teal, 'Cảnh báo đúng'], [x.fp, brass, 'Cảnh báo sai'], [x.fn, red, 'Bỏ sót']].filter(z => z[0]).map(([v, kc, lb]) => `<i class="num gw" data-tip="<b>${x.name}</b><br>${lb}: ${num(v)} đơn" style="height:32px;width:${v / mx * 100}%;min-width:44px;border-radius:8px;display:grid;place-items:center;color:#fff;font-style:normal;font-weight:700;font-size:12px;background:linear-gradient(180deg,${mix(kc, '#ffffff', .25)},${kc} 55%,${mix(kc, '#000000', .2)});box-shadow:2px 3px 5px ${cs('--lo')},inset 0 1px 0 rgba(255,255,255,.4)">${num(v)}</i>`).join('')}</div></div>`).join('') : '<div class="nodata">Không có đơn kiểm tra ở bộ lọc này</div>';
+  const bestAp = Math.max(...D.models.map(m => m.ap));
+  $('#models').innerHTML = `<table class="table" style="margin-top:8px"><tr><th>Mô hình</th><th>ROC-AUC</th><th style="text-align:left;padding-left:12px">AP</th><th>Log loss</th></tr>` +
+    D.models.map(m => `<tr><td>${m.label}</td><td class="num">${dec(m.auc, 3)}</td><td style="text-align:left"><span class="apb well" style="width:104px"><i style="width:calc(${m.ap * 100}% - 6px)"></i></span><span class="apv num" style="${m.ap === bestAp ? '' : 'font-weight:500'}">${dec(m.ap, 3)}</span></td><td class="num">${dec(m.ll, 3)}</td></tr>`).join('') + '</table>';
+  const worst = st.length ? [...st].sort((p, q) => q.fn - p.fn)[0] : null;
+  $('#tape2').textContent = !a.alerts ? 'Không có cảnh báo ở ngưỡng đang chọn.'
+    : `Cảnh báo đúng ${pct(precision)} nhưng chỉ bắt được ${pct(recall)} đơn trễ; ${num(a.fn)} đơn trễ chưa được báo${worst && worst.fn > 0 && st.length > 1 ? `, nhiều nhất ở ${worst.name} (${num(worst.fn)})` : ''}.`;
+}
+
+/* ------------------------------------------------------------------ 3. cam kết */
+function render3() {
+  const red = cs('--red'), teal = cs('--teal'), brass = cs('--brass'), steel = cs('--steel');
+  const curI = POL.findIndex(p => p.id === 'current'), selI = POL.findIndex(p => p.id === S.policy), sel = POL[selI];
+  const fa = fAll(), cur = aggC(fa, curI), sl = aggC(fa, selI), cut = nz(cur.rate) || nz(sl.rate) ? null : cur.rate - sl.rate;
+  $('#sub3').textContent = `Mô phỏng · ${num(sl.n)} đơn kiểm tra · giữ nguyên thời gian giao thực tế`;
+  $('#selname').textContent = sel.label;
+  dial('dial4', sl.rate, red, 'd', 'đơn vượt hẹn tính lại');
+  $('#f4a').innerHTML = `hiện tại <b class="num">${pct(cur.rate)}</b>`; $('#f4b').innerHTML = `<b class="num">${num(sl.ex)}</b> đơn vượt hẹn`;
+  const sdI = MODES.indexOf('Same Day'), sdA = aggC({ m: sdI, k: iMkt(), r: iReg() }, selI);
+  let oSa = 0, oN = 0; MODES.forEach((_, i) => { if (i !== sdI) { const q = aggC({ m: i, k: iMkt(), r: iReg() }, selI); oSa += q.sa; oN += q.n; } });
+  const oth = oN ? oSa / oN : null;
+  const byMode = MODES.map((name, i) => ({ name, i, c: aggC({ m: i, k: iMkt(), r: iReg() }, curI), s: aggC({ m: i, k: iMkt(), r: iReg() }, selI) }));
+  const worstGrp = [...byMode].filter(m => m.s.n > 0).sort((p, q) => q.s.rate - p.s.rate)[0];
+  $('#ptiles').innerHTML =
+    tileHTML('good', teal, 'Giảm vượt hẹn', nz(cut) ? '–' : (cut >= 0 ? '' : '+') + dec(Math.abs(cut) * 100, 1), 'điểm %', cut >= 0 ? '▼ SO VỚI HIỆN TẠI' : '▲ SO VỚI HIỆN TẠI', [['Hiện tại', pct(cur.rate)], ['Phương án', pct(sl.rate)], ['Đơn hết vượt hẹn', num(cur.ex - sl.ex)]], sl.rate, cur.rate) +
+    tileHTML('', steel, 'Cam kết mới (TB)', dec(sl.prop), 'ngày', '▲ TĂNG CAM KẾT', [['Hiện tại', dec(cur.prop) + ' ngày'], ['Phương án', dec(sl.prop) + ' ngày'], ['Dùng dự phòng', pct(sl.fbr)]], null) +
+    tileHTML('', brass, 'Khách chờ thêm', (sl.add > 0 ? '+' : '') + dec(sl.add), 'ngày', '▲ CHI PHÍ PHƯƠNG ÁN', [['Same Day', sdA.add ? '+' + dec(sdA.add) + ' ngày' : 'giữ nguyên'], ['Ba phương thức còn lại', oth ? '+' + dec(oth) + ' ngày' : 'giữ nguyên'], ['Thời gian giao thực tế', 'không đổi']], null) +
+    tileHTML('', steel, 'Đơn trễ thực tế', num(cur.ex), '', 'TẬP KIỂM TRA', [['Giai đoạn', `${monthText(D.testRange[0])} – ${monthText(D.testRange[1])}`], ['Nhóm vượt hẹn cao nhất', worstGrp ? worstGrp.name : '–'], ['Đơn mô phỏng', num(sl.n)]], null);
+  /* đánh đổi */
+  const all = POL.map((p, i) => ({ p, a: aggC(fa, i), i })).filter(x => x.a.n > 0);
+  const groups = []; all.forEach(x => { const g = groups.find(q => Math.abs(q.a.rate - x.a.rate) < 1e-6 && Math.abs(q.a.add - x.a.add) < 1e-6); if (g) g.members.push(x); else groups.push({ a: x.a, members: [x] }); });
+  const W = 500, H = 176, L = 44, R = 120, T = 12, B = 26, xmax = Math.max(1, ...all.map(x => x.a.add)) * 1.1, ymax = Math.max(.1, ...all.map(x => x.a.rate)) * 1.1;
+  const X = v => L + 22 + v / xmax * (W - L - R - 22), Y = v => T + (ymax - v) / ymax * (H - T - B);
+  const colr = r => r > .4 ? red : r > .1 ? brass : teal;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="margin-top:6px"><defs>${sphereDefs('tp', groups.map(g => colr(g.a.rate)))}</defs>`;
+  [0, .25, .5, .75, 1].map(f => f * ymax).forEach(v => s += `<line x1="${L}" x2="${W - R + 30}" y1="${Y(v)}" y2="${Y(v)}" stroke="${cs('--rule')}"/><text x="${L - 6}" y="${Y(v) + 3.5}" text-anchor="end" font-size="10" fill="${cs('--muted')}">${(v * 100).toFixed(0)}%</text>`);
+  for (let v = 0; v <= xmax; v += 1) s += `<text x="${X(v)}" y="${H - 8}" text-anchor="middle" font-size="10" fill="${cs('--muted')}">+${v} ngày</text>`;
+  const sorted = [...groups].sort((p, q) => p.a.add - q.a.add);
+  s += `<path d="${sorted.map((g, i) => (i ? 'L' : 'M') + X(g.a.add).toFixed(1) + ' ' + Y(g.a.rate).toFixed(1)).join('')}" fill="none" stroke="${cs('--ink')}" stroke-dasharray="3 5" opacity=".35"/>`;
+  groups.forEach((g, i) => {
+    const x = X(g.a.add), y = Y(g.a.rate), isSel = g.members.some(m => m.i === selI), r = isSel ? 13 : 10, below = sorted.length >= 3 && sorted.indexOf(g) === sorted.length - 2, names = g.members.map(m => m.p.label.replace(/ đúng hẹn$/, '')), nm = names[0] + names.slice(1).map(n => ' / ' + (n.replace(/^\D+/, '') || n)).join('');
+    s += (isSel ? `<circle cx="${x}" cy="${y}" r="${r + 6}" fill="none" stroke="${cs('--ink')}" stroke-width="1.5" stroke-dasharray="2 3" opacity=".6"/>` : '') +
+      `<g class="sb" data-tip="<b>${esc(nm)}</b><br>Vượt hẹn ${pct(g.a.rate)}<br>Cam kết ${dec(g.a.prop)} ngày (+${dec(g.a.add)})"><g style="filter:drop-shadow(3px 4px 3px ${cs('--lo')})"><circle cx="${x}" cy="${y}" r="${r}" fill="url(#tp${i})"/></g>
+      <text x="${below ? x - r - 6 : x + r + 8}" y="${below ? y - 14 : y - 1}" text-anchor="${below ? 'end' : 'start'}" font-size="11.5" font-weight="650" fill="${cs('--ink')}">${esc(nm)}</text><text x="${below ? x - r - 6 : x + r + 8}" y="${below ? y - 2 : y + 11}" text-anchor="${below ? 'end' : 'start'}" font-size="10.5" fill="${cs('--muted')}">${pct(g.a.rate)} · +${dec(g.a.add)} ngày</text></g>`;
+  });
+  $('#trade').innerHTML = all.length ? s + '</svg>' : '<div class="nodata">Không có đơn ở bộ lọc này</div>';
+  /* bảng phương án */
+  $('#poltable').innerHTML = `<table class="table cp"><tr><th>Phương án</th><th style="text-align:left;padding-left:12px">Vượt hẹn tính lại</th><th>Cam kết TB</th><th>Tăng thêm</th></tr>` +
+    POL.map((p, i) => { const q = aggC(fa, i), on = i === selI; return `<tr class="clickrow ${on ? 'selrow' : ''}" data-pol="${p.id}"><td>${p.label}${on ? ' <span style="font-size:10px;font-weight:700;color:var(--red);letter-spacing:.06em;margin-left:6px">ĐANG XEM</span>' : ''}</td><td style="text-align:left;padding-left:12px">${barRow(q.rate || 0, Math.max(.001, ymax / 1.1 * 1.02), colr(q.rate || 0))}</td><td class="num">${dec(q.prop)} ngày</td><td class="num">${q.add ? '+' + dec(q.add) + ' ngày' : '—'}</td></tr>`; }).join('') + '</table>';
+  $('#modetable').innerHTML = `<table class="table cp"><tr><th>Phương thức</th><th style="text-align:left;padding-left:12px">Vượt hẹn hiện tại</th><th style="text-align:left;padding-left:12px">Vượt hẹn phương án</th><th>Cam kết hiện tại</th><th>Cam kết mới</th><th>Tăng thêm</th></tr>` +
+    [...byMode].sort((p, q) => (q.c.rate ?? -1) - (p.c.rate ?? -1)).map(m => `<tr data-mode="${m.name}"><td><b style="font-weight:600">${m.name}</b></td><td style="text-align:left;padding-left:12px">${barRow(m.c.rate || 0, 1.02, red)}</td><td style="text-align:left;padding-left:12px">${barRow(m.s.rate || 0, 1.02, (m.s.rate || 0) > .5 ? red : (m.s.rate || 0) > .1 ? brass : teal)}</td><td class="num">${dec(m.c.prop)} ngày</td><td class="num">${dec(m.s.prop)} ngày</td><td class="num">${m.s.add ? '+' + dec(m.s.add) + ' ngày' : '—'}</td></tr>`).join('') + '</table>';
+  $('#tape3').textContent = !sl.n ? 'Không có đơn ở bộ lọc đang chọn.' : S.policy === 'current'
+    ? `Đang xem phương án hiện tại (${pct(cur.rate)} đơn vượt hẹn); chọn một phương án khác để so sánh đánh đổi.`
+    : `${sel.label} đưa tỷ lệ vượt hẹn từ ${pct(cur.rate)} xuống ${pct(sl.rate)} (${nz(cut) ? '' : (cut >= 0 ? '−' : '+') + dec(Math.abs(cut) * 100, 1) + ' điểm %'}), đổi lại khách chờ thêm trung bình ${dec(sl.add)} ngày; đây là đổi cam kết, thời gian giao thực tế không đổi.`;
+}
+
+/* ------------------------------------------------------------------ 4. tuyến giao */
+const PALETTE = ['#D2472A', '#0E7C86', '#B8860B', '#4A6FB5', '#9B59B6', '#3E9B55', '#D17B2C', '#C23B7A', '#6B7A8F', '#2E9CA6'];
+const configKey = c => c.instance + '|' + c.scenario;
+function caseOf(key, method) { return CASES.find(c => configKey(c) === key && c.method === method); }
+function render4() {
+  const red = cs('--red'), teal = cs('--teal'), brass = cs('--brass'), steel = cs('--steel'), dark = document.documentElement.dataset.theme === 'dark';
+  const c = CASES.find(x => x.id === S.cas), ci = CASES.indexOf(c), ok1 = c.status === 'feasible';
+  const key = configKey(c), orC = caseOf(key, 'ortools'), ngC = caseOf(key, 'nearest_feasible');
+  const fe = x => x && x.status === 'feasible';
+  const dist = ok1 ? c.dist : null, fuel = ok1 ? dist * S.km * S.lit / 100 * S.price : null;
+  const red4 = ok1 && fe(ngC) ? (ngC.dist - c.dist) / ngC.dist : null;
+  const tileV = (cls, col, name, big, unit, bd, lines) => tileHTML('v ' + cls, col, name, big, unit, bd, lines, null);
+  $('#rtiles1').innerHTML =
+    tileV('', brass, 'Nhiên liệu mô phỏng', ok1 ? num(fuel) : 'Chưa có', ok1 ? 'VND' : '', 'GIẢ ĐỊNH, KHÔNG PHẢI SỐ ĐO', [['Tiêu hao', S.lit + ' lít / 100 km'], ['Giá nhiên liệu', num(S.price) + ' VND / lít'], ['Quy đổi', dec(S.km, 1) + ' km / đơn vị']]) +
+    tileV('', steel, 'Xe sử dụng', ok1 ? num(c.veh) : 'Chưa có', ok1 ? 'xe' : '', 'XE TRONG PHƯƠNG ÁN', [['Tải trọng', num(c.cap) + ' / xe'], ['Giới hạn', num(c.maxv) + ' xe']]);
+  $('#rtiles2').innerHTML =
+    tileV('', steel, 'Quãng đường chuẩn', ok1 ? dec(c.dist) : 'Chưa có', '', 'ĐƠN VỊ TỌA ĐỘ SOLOMON', [['Lưu ý', 'không phải km đường bộ']]) +
+    tileV('good', teal, 'Giảm quãng đường', nz(red4) ? 'Chưa có' : dec(red4 * 100, 1), nz(red4) ? '' : '%', '▼ SO VỚI ĐIỂM GẦN NHẤT', [['Đối chứng', fe(ngC) ? 'cùng cấu hình' : 'chưa có lời giải khả thi']]);
+  /* bản đồ */
+  const stops = D.stops[ci] || [];
+  if (!ok1 || !stops.length) { $('#rmap').innerHTML = '<div class="nodata">Chưa tìm được lời giải khả thi cho phương án này.<br>Không quy kết quả thiếu thành quãng đường bằng 0.</div>'; }
+  else {
+    const xs = stops.map(s => s[3]), ys = stops.map(s => s[4]), mnx = Math.min(...xs), mxx = Math.max(...xs), mny = Math.min(...ys), mxy = Math.max(...ys);
+    const MW = 608, MH = 372, pad = 22, sc = Math.min((MW - 2 * pad) / (mxx - mnx || 1), (MH - 2 * pad) / (mxy - mny || 1)), ox = (MW - (mxx - mnx) * sc) / 2, oy = (MH - (mxy - mny) * sc) / 2;
+    const MX = x => ox + (x - mnx) * sc, MY = y => MH - (oy + (y - mny) * sc);
+    const pal = PALETTE.map(p => dark ? mix(p, '#ffffff', .28) : p), veh = {};
+    stops.forEach(s => { (veh[s[0]] = veh[s[0]] || []).push(s); });
+    let m = `<svg viewBox="0 0 ${MW} ${MH}" width="100%" height="100%">`;
+    for (let g = 0; g <= 100; g += 10) m += `<line x1="${MX(g)}" x2="${MX(g)}" y1="0" y2="${MH}" stroke="${cs('--rule')}" stroke-width=".6" opacity=".7"/><line x1="0" x2="${MW}" y1="${MY(g)}" y2="${MY(g)}" stroke="${cs('--rule')}" stroke-width=".6" opacity=".7"/>`;
+    Object.keys(veh).map(Number).sort((p, q) => p - q).forEach((v, i) => {
+      const pts = veh[v].sort((p, q) => p[1] - q[1]), col = pal[i % pal.length]; let dd = 0;
+      for (let k = 1; k < pts.length; k++) dd += Math.hypot(pts[k][3] - pts[k - 1][3], pts[k][4] - pts[k - 1][4]);
+      m += `<g class="vh" data-veh="${v}" data-tip="<b>Xe ${v}</b><br>${pts.length - 2} điểm giao<br>Quãng đường ${dec1(dd)} đơn vị"><polyline class="spl" pathLength="1" points="${pts.map(p => MX(p[3]).toFixed(1) + ',' + MY(p[4]).toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".92" style="filter:drop-shadow(1px 2px 1.5px ${cs('--lo')})"/>`;
+      pts.forEach(p => { if (p[2] !== 0) m += `<circle cx="${MX(p[3])}" cy="${MY(p[4])}" r="3.2" fill="${col}" stroke="${cs('--face1')}" stroke-width="1"/>`; });
+      const f = pts[1] || pts[0]; m += `<g><circle cx="${MX(f[3])}" cy="${MY(f[4]) - 11}" r="7.5" fill="${col}"/><text x="${MX(f[3])}" y="${MY(f[4]) - 7.6}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">${v}</text></g></g>`;
+    });
+    const dp = stops.find(s => s[2] === 0);
+    m += `<g style="filter:drop-shadow(2px 3px 2px ${cs('--lo')})"><rect x="${MX(dp[3]) - 8}" y="${MY(dp[4]) - 8}" width="16" height="16" rx="3.5" fill="${cs('--ink')}"/></g><text x="${MX(dp[3])}" y="${MY(dp[4]) + 3.8}" text-anchor="middle" font-size="9.5" font-weight="700" fill="${cs('--face1')}">K</text>`;
+    $('#rmap').innerHTML = m + '</svg>';
+  }
+  /* so sánh cùng cấu hình */
+  const rowsCmp = [['Điểm gần nhất', ngC, red], ['OR Tools', orC, teal]], mxd = Math.max(1, ...rowsCmp.filter(r => fe(r[1])).map(r => r[1].dist));
+  $('#rcmp').innerHTML = rowsCmp.map(r => `<div class="fn" style="grid-template-columns:110px 1fr;margin-top:16px"><div class="t"><b class="num">${fe(r[1]) ? dec1(r[1].dist) : 'Chưa có'}</b>${r[0]}<br><span style="font-size:11px;color:var(--muted)">${fe(r[1]) ? r[1].veh + ' xe' : 'chưa có lời giải'}</span></div>
+    <div class="track well" style="--c:${r[2]};height:30px;margin:0;border-radius:10px"><i style="width:calc(${fe(r[1]) ? r[1].dist / mxd * 100 : 0}% - 6px);top:4px;bottom:4px;border-radius:7px"></i></div></div>`).join('') +
+    `<div class="callout2">${fe(orC) && fe(ngC) ? `OR Tools ngắn hơn <b class="num">${dec1(ngC.dist - orC.dist)}</b> đơn vị (<b>${pct((ngC.dist - orC.dist) / ngC.dist)}</b>) và ít hơn <b>${ngC.veh - orC.veh}</b> xe.` : 'Chỉ so sánh khi cả hai phương pháp có lời giải khả thi.'}</div>`;
+  /* bảng cấu hình */
+  const keys = [...new Set(CASES.map(configKey))];
+  const cell = x => fe(x) ? `<b class="num" style="font-weight:600">${dec1(x.dist)}</b> <span style="color:var(--muted)">· ${x.veh} xe</span>` : `<span style="color:var(--red);font-weight:600">Chưa có lời giải</span>`;
+  $('#rtable').innerHTML = `<table class="table cp"><tr><th>Cấu hình</th><th>OR Tools</th><th>Điểm gần nhất</th><th>Giảm quãng đường</th></tr>` + keys.map(k => {
+    const o = caseOf(k, 'ortools'), n = caseOf(k, 'nearest_feasible'), base = o || n, on = k === key, g = fe(o) && fe(n) ? (n.dist - o.dist) / n.dist : null;
+    return `<tr class="clickrow ${on ? 'selrow' : ''}" data-case="${(o || n).id}"><td>${base.instance.toUpperCase()} · tải ${base.cap} · tối đa ${base.maxv} xe${on ? ' <span style="font-size:10px;font-weight:700;color:var(--red);letter-spacing:.06em;margin-left:6px">ĐANG XEM</span>' : ''}</td><td>${cell(o)}</td><td>${cell(n)}</td><td class="num">${nz(g) ? '<span style="color:var(--muted)">chưa có đối chứng</span>' : `<b style="color:var(--teal);font-weight:700">${pct(g)}</b>`}</td></tr>`;
+  }).join('') + '</table>';
+  $('#tape4').textContent = ok1
+    ? `Phương án này dùng ${c.veh} xe và ${dec1(c.dist)} đơn vị quãng đường${nz(red4) ? '' : `, ngắn hơn ${pct(red4)} so với điểm gần nhất cùng cấu hình`}; nhiên liệu mô phỏng ${num(fuel)} VND theo giả định đã chọn.`
+    : 'Chưa tìm được lời giải khả thi cho phương án này; không quy về quãng đường hay chi phí bằng 0.';
+}
+
+/* ------------------------------------------------------------------ ngăn lịch trình */
+function openDrawer(vehicle) {
+  const c = CASES.find(x => x.id === S.cas), ci = CASES.indexOf(c), stops = D.stops[ci] || [], vs = [...new Set(stops.map(s => s[0]))].sort((a, b) => a - b);
+  const v = vehicle ?? 'all', list = stops.filter(s => v === 'all' || s[0] === v).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  $('#drawer').innerHTML = `<h2>Lịch trình tuyến</h2><div class="sub">${esc(c.label)} · điểm 0 là kho · tọa độ Solomon</div>
+    <div class="chips"><span class="chip2 ${v === 'all' ? 'on' : ''}" data-veh-chip="all">Tất cả xe</span>${vs.map(x => `<span class="chip2 ${v === x ? 'on' : ''}" data-veh-chip="${x}">Xe ${x}</span>`).join('')}</div>
+    ${list.length ? `<table class="table cp"><tr><th>Xe</th><th>Thứ tự</th><th>Điểm dừng</th><th>X</th><th>Y</th></tr>${list.map(s => `<tr><td>${s[0]}</td><td class="num">${s[1]}</td><td class="num">${s[2]}</td><td class="num">${dec(s[3], 1)}</td><td class="num">${dec(s[4], 1)}</td></tr>`).join('')}</table>` : '<div class="nodata">Chưa có lịch trình cho phương án này</div>'}`;
+  $('#drawer').classList.add('on'); $('#dbg').classList.add('on');
+}
+const closeDrawer = () => { $('#drawer').classList.remove('on'); $('#dbg').classList.remove('on'); };
+
+/* ------------------------------------------------------------------ bộ lọc */
+const fmtThr = v => dec(v);
+function filterSpec(page) {
+  const regs = () => ['Tất cả', ...REG.filter(r => S.market == null || r.market === MARKETS.indexOf(S.market)).map(r => r.name)];
+  const F = {
+    mode: { label: 'Phương thức', w: 172, cur: () => S.mode || 'Tất cả', opts: () => ['Tất cả', ...MODES], set: v => { S.mode = v === 'Tất cả' ? null : v; } },
+    market: { label: 'Thị trường', w: 172, cur: () => S.market || 'Tất cả', opts: () => ['Tất cả', ...MARKETS], set: v => { S.market = v === 'Tất cả' ? null : v; if (S.region && !REG.find(r => r.name === S.region && r.market === MARKETS.indexOf(S.market)) && S.market) S.region = null; } },
+    region: { label: 'Vùng giao', w: 200, cur: () => S.region || 'Tất cả', opts: regs, set: v => { S.region = v === 'Tất cả' ? null : v; } },
+    thr: { label: 'Ngưỡng cảnh báo', w: 172, cur: () => fmtThr(S.thr), opts: () => D.thresholds.map(fmtThr), set: v => { S.thr = parseFloat(v.replace(',', '.')); } },
+    policy: { label: 'Phương án đang xem', w: 210, cur: () => POL.find(p => p.id === S.policy).label, opts: () => POL.map(p => p.label), set: v => { S.policy = POL.find(p => p.label === v).id; } },
+    cas: { label: 'Phương án tuyến', w: 300, cur: () => CASES.find(c => c.id === S.cas).label, opts: () => CASES.map(c => c.label), set: v => { S.cas = CASES.find(c => c.label === v).id; } },
+    km: { label: 'Km / đơn vị', w: 112, cur: () => dec(S.km, 1), opts: () => D.params.km.map(v => dec(v, 1)), set: v => { S.km = parseFloat(v.replace(',', '.')); } },
+    lit: { label: 'Lít / 100 km', w: 112, cur: () => String(S.lit), opts: () => D.params.lit.map(String), set: v => { S.lit = parseFloat(v); } },
+    price: { label: 'VND / lít', w: 136, cur: () => num(S.price), opts: () => D.params.price.map(num), set: v => { S.price = parseInt(v.replace(/\./g, ''), 10); } },
+  };
+  const per = { p1: ['mode', 'market', 'region'], p2: ['thr', 'mode', 'region'], p3: ['policy', 'mode', 'region'], p4: ['cas', 'km', 'lit', 'price'] };
+  return per[page].map(k => ({ key: k, ...F[k] }));
+}
+let FILTERS = {};
+function renderFilters() {
+  const host = $('#fb' + S.page.slice(1)); FILTERS = {};
+  const specs = filterSpec(S.page);
+  host.innerHTML = specs.map(s => { FILTERS[s.key] = s; return `<div class="fil well" data-f="${s.key}" style="width:${s.w}px"><span>${s.label}</span><b>${esc(s.cur())}</b></div>`; }).join('') + (S.page === 'p4' ? '' : '<div class="reset">Xóa bộ lọc</div>');
+}
+function closeMenus(except) { $$('.fil.open').forEach(f => { if (f === except) return; f.classList.remove('open'); const m = f.querySelector('.menu'); if (m) { m.classList.add('out'); setTimeout(() => m.remove(), 170); } }); }
+function toast(t) { let el = $('.toast'); if (!el) { el = document.createElement('div'); el.className = 'toast raise small'; document.documentElement.appendChild(el); } el.textContent = t; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 2200); }
+
+/* ------------------------------------------------------------------ làm mới, đếm số, chuyển trang */
+function runCountUps(root) {
+  if (!root || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  $$('.big,.eng b,.cnt b,.rc b,.fn .t b,.dialfoot b,.pl-r b,.tl b', root).forEach(el => {
+    const node = [...el.childNodes].find(n => n.nodeType === 3 && n.nodeValue.trim());
+    if (!node) return;
+    const txt = node.nodeValue.trim(), m = txt.match(/^([+\-−]?)(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d+))?(%?)$/);
+    if (!m) return;
+    const dd = m[3] ? m[3].length : 0, target = parseFloat(m[2].replace(/\./g, '') + (m[3] ? '.' + m[3] : '')), t0 = performance.now() + 120;
+    cancelAnimationFrame(el._raf);
+    (function f(now) { const p = Math.max(0, Math.min(1, (now - t0) / 1100)), v = target * (1 - Math.pow(1 - p, 4)); node.nodeValue = m[1] + v.toLocaleString('vi-VN', { minimumFractionDigits: dd, maximumFractionDigits: dd }) + m[4]; if (p < 1) el._raf = requestAnimationFrame(f); else node.nodeValue = txt; })(performance.now());
+  });
+}
+function applyFocus() {
+  const m = S.hover || S.mode;
+  $$('[data-mode]').forEach(el => { el.classList.toggle('dim', !!m && el.dataset.mode !== m); el.classList.toggle('foc', !!m && el.dataset.mode === m && el.classList.contains('tile')); });
+  $$('[data-col]').forEach(el => el.classList.toggle('dimc', !!S.market && el.dataset.col !== S.market));
+}
+const RENDER = { p1: render1, p2: render2, p3: render3, p4: render4 };
+function render(animate = true) {
+  renderRail(); renderFilters(); RENDER[S.page]();
+  $$('.kk').forEach((el, i) => { el.style.animationDelay = (150 + i * 24) + 'ms'; });
+  applyFocus();
+  if (animate) runCountUps($('.page.on'));
+}
+function stagger(pg) { [...pg.children].forEach((row, r) => { row.style.animationDelay = (r * 70) + 'ms'; }); $$('.tile,.cnt', pg).forEach((el, k) => { el.style.animationDelay = (240 + k * 60) + 'ms'; }); }
+function showPage(id) {
+  S.page = id; closeDrawer();
+  $$('.key[data-p]').forEach(k => k.classList.toggle('on', k.dataset.p === id));
+  $$('.page').forEach(p => p.classList.toggle('on', p.id === id));
+  stagger($('#' + id)); tipHide(); closeMenus(); render();
+  try { history.replaceState(null, '', '#' + id); } catch (e) { /* mở từ file thì bỏ qua */ }
+}
+
+/* ------------------------------------------------------------------ chuột: gợi ý, nghiêng, gợn */
+const tip = document.createElement('div'); tip.className = 'tip raise small'; document.documentElement.appendChild(tip);
+function tipShow(html, x, y) { tip.innerHTML = html; tip.classList.add('on'); const w = tip.offsetWidth, h = tip.offsetHeight; let px = x + 16, py = y + 18; if (px + w > innerWidth - 8) px = x - w - 16; if (py + h > innerHeight - 8) py = y - h - 14; tip.style.transform = `translate(${px}px,${py}px)`; }
+function tipHide() { tip.classList.remove('on'); }
+let tiltEl = null; const resetTilt = el => { el.style.setProperty('--ry', '0deg'); el.style.setProperty('--rx', '0deg'); };
+document.addEventListener('pointerover', e => {
+  const t = e.target.closest && e.target.closest('[data-mode]'), v = e.target.closest && e.target.closest('[data-veh]');
+  const nm = t ? t.dataset.mode : null; if (nm !== S.hover) { S.hover = nm; applyFocus(); }
+  $$('.vh').forEach(g => g.classList.toggle('dim', !!v && g.dataset.veh !== v.dataset.veh));
+});
+document.addEventListener('pointermove', e => {
+  const tg = e.target.closest && e.target.closest('[data-tip]'), sv = e.target.closest && e.target.closest('#trend svg'), xh = $('#xh');
+  if (tg) tipShow(tg.dataset.tip, e.clientX, e.clientY);
+  else if (sv && window.__tr) {
+    const T = window.__tr, r = sv.getBoundingClientRect(), xv = (e.clientX - r.left) / (r.width / T.w), idx = (xv - T.Lm) / T.step;
+    const p = T.pts.reduce((a, q) => Math.abs(q.i - idx) < Math.abs(a.i - idx) ? q : a), x = T.Lm + p.i * T.step, y = T.Tm + (T.hi - p.v) / (T.hi - T.lo) * (T.hh - T.Tm - T.Bm);
+    $('#xhl').setAttribute('x1', x); $('#xhl').setAttribute('x2', x); $('#xhc').setAttribute('cx', x); $('#xhc').setAttribute('cy', y); xh.style.opacity = 1;
+    tipShow(`<b>${monthText(MONTHS[p.i])}</b><br>Tỷ lệ trễ ${pct(p.v)}<br>${num(p.n)} đơn<br>Giao thực tế ${dec(p.act)} ngày · chênh ${p.gap >= 0 ? '+' : ''}${dec(p.gap)}`, e.clientX, e.clientY);
+  } else tipHide();
+  if (xh && !sv) xh.style.opacity = 0;
+  const el = e.target.closest && e.target.closest('.tile,.cnt,.plate');
+  if (tiltEl && tiltEl !== el) resetTilt(tiltEl);
+  if (!el) { tiltEl = null; return; }
+  tiltEl = el; const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height, deg = 5 * 300 / Math.max(300, r.width);
+  el.style.setProperty('--ry', ((px - .5) * 2 * deg).toFixed(2) + 'deg'); el.style.setProperty('--rx', ((.5 - py) * 2 * deg).toFixed(2) + 'deg');
+  el.style.setProperty('--mx', (px * 100).toFixed(1) + '%'); el.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+});
+document.documentElement.addEventListener('pointerleave', () => { tipHide(); if (tiltEl) resetTilt(tiltEl); S.hover = null; applyFocus(); });
+document.addEventListener('pointerdown', e => {
+  const t = e.target.closest && e.target.closest('.key,.reset,.knob,.btn'); if (!t) return;
+  const r = t.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2.2, s = document.createElement('span'); s.className = 'ripple';
+  s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`; t.appendChild(s); setTimeout(() => s.remove(), 700);
+});
+document.addEventListener('click', e => {
+  const tg = e.target;
+  const it = tg.closest && tg.closest('.menu div'), f = tg.closest && tg.closest('.fil');
+  if (it) { const f2 = it.closest('.fil'), spec = FILTERS[f2.dataset.f]; e.stopPropagation(); spec.set(it.textContent); closeMenus(); render(); return; }
+  closeMenus(f);
+  if (f) {
+    if (f.classList.contains('open')) { closeMenus(); return; }
+    const spec = FILTERS[f.dataset.f], cur = spec.cur(); f.classList.add('open');
+    const m = document.createElement('div'); m.className = 'menu'; m.innerHTML = spec.opts().map(x => `<div class="${x === cur ? 'sel' : ''}">${esc(x)}</div>`).join(''); f.appendChild(m);
+    const sel = m.querySelector('.sel'); if (sel) m.scrollTop = Math.max(0, sel.offsetTop - 80); return;
+  }
+  if (tg.closest && tg.closest('.reset')) { S.mode = null; S.market = null; S.region = null; S.thr = .5; S.policy = POL_DEFAULT; render(); toast('Đã xóa bộ lọc'); return; }
+  if (tg.closest && tg.closest('#openStops')) { openDrawer(); return; }
+  const chip = tg.closest && tg.closest('[data-veh-chip]'); if (chip) { const v = chip.dataset.vehChip; openDrawer(v === 'all' ? 'all' : parseInt(v, 10)); return; }
+  if (tg.closest && tg.closest('#dbg')) { closeDrawer(); return; }
+  const pr = tg.closest && tg.closest('[data-pol]'); if (pr) { S.policy = pr.dataset.pol; render(); return; }
+  const cr = tg.closest && tg.closest('[data-case]'); if (cr) { S.cas = cr.dataset.case; render(); return; }
+  const md = tg.closest && tg.closest('[data-mode]'); if (md && S.page !== 'p4') { const m = md.dataset.mode; S.mode = S.mode === m ? null : m; render(false); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeMenus(); closeDrawer(); } });
+$$('.key[data-p]').forEach(k => { k.onclick = () => showPage(k.dataset.p); });
+$('#tog').onclick = e => {
+  const kn = e.currentTarget; kn.classList.toggle('spin');
+  const apply = () => { const h = document.documentElement; h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark'; render(); };
+  if (!document.startViewTransition || matchMedia('(prefers-reduced-motion:reduce)').matches) { apply(); return; }
+  const r = kn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  const vt = document.startViewTransition(apply);
+  vt.ready.then(() => document.documentElement.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${R}px at ${x}px ${y}px)`] }, { duration: 800, easing: 'cubic-bezier(.2,.8,.2,1)', pseudoElement: '::view-transition-new(root)' }));
+};
+const fit = () => { document.body.style.zoom = Math.min(1.6, Math.max(.4, innerWidth / 1440)); };
+fit(); addEventListener('resize', fit);
+
+/* khởi động */
+const start = (location.hash || '').slice(1);
+if (RENDER[start]) { S.page = start; $$('.key[data-p]').forEach(k => k.classList.toggle('on', k.dataset.p === start)); $$('.page').forEach(p => p.classList.toggle('on', p.id === start)); }
+stagger($('.page.on')); render();
+window.__api = { S, aggA, aggB, aggC, render, showPage, D };
+})();
+
+</script>
+</body>
+</html>

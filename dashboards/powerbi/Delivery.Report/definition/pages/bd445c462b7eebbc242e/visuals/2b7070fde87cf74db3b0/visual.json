@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "2b7070fde87cf74db3b0",
   "position": {
-    "x": 44,
-    "y": 304,
+    "x": 28,
+    "y": 424,
     "z": 18,
-    "width": 344,
-    "height": 60,
+    "width": 76,
+    "height": 548,
     "tabOrder": 18
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "textbox",
     "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -78,7 +78,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -87,7 +87,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#D7D3C8'"
                     }
                   }
                 }
@@ -109,7 +109,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#D7D3C8'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "16D"
                 }
               }
             }
@@ -180,52 +180,28 @@
             }
           }
         }
-      ]
-    },
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Orders"
-                    }
-                  },
-                  "Property": "Thẻ Tỷ lệ trễ"
-                }
-              },
-              "queryRef": "Orders.Thẻ Tỷ lệ trễ",
-              "nativeQueryRef": "Thẻ Tỷ lệ trễ"
-            }
-          ]
-        }
-      }
-    },
-    "objects": {
-      "labels": [
+      ],
+      "dropShadow": [
         {
           "properties": {
-            "fontFamily": {
+            "show": {
               "expr": {
                 "Literal": {
-                  "Value": "'Segoe UI'"
+                  "Value": "true"
                 }
               }
             },
-            "fontSize": {
+            "preset": {
               "expr": {
                 "Literal": {
-                  "Value": "34D"
+                  "Value": "'Custom'"
                 }
               }
             },
-            "labelDisplayUnits": {
+            "position": {
               "expr": {
                 "Literal": {
-                  "Value": "1D"
+                  "Value": "'Inner'"
                 }
               }
             },
@@ -234,28 +210,73 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#686044'"
                     }
                   }
                 }
               }
-            }
-          }
-        }
-      ],
-      "categoryLabels": [
-        {
-          "properties": {
-            "show": {
+            },
+            "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "52D"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "angle": {
+              "expr": {
+                "Literal": {
+                  "Value": "45D"
+                }
+              }
+            },
+            "shadowDistance": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
                 }
               }
             }
           }
         }
       ]
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
     }
-  }
+  },
+  "annotations": [
+    {
+      "name": "designRole",
+      "value": "background"
+    }
+  ]
 }

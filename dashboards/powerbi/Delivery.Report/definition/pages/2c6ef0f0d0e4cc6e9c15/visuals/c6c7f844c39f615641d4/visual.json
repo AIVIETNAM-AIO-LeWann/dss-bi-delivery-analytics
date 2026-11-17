@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "c6c7f844c39f615641d4",
   "position": {
-    "x": 44,
-    "y": 304,
+    "x": 32,
+    "y": 456,
     "z": 20,
-    "width": 344,
-    "height": 60,
+    "width": 68,
+    "height": 30,
     "tabOrder": 20
   },
   "visual": {
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#F6F3ED'"
                     }
                   }
                 }
@@ -194,11 +194,11 @@
                       "Entity": "Orders"
                     }
                   },
-                  "Property": "Thẻ Precision theo ngưỡng"
+                  "Property": "Thẻ Số đơn toàn kỳ"
                 }
               },
-              "queryRef": "Orders.Thẻ Precision theo ngưỡng",
-              "nativeQueryRef": "Thẻ Precision theo ngưỡng"
+              "queryRef": "Orders.Thẻ Số đơn toàn kỳ",
+              "nativeQueryRef": "Thẻ Số đơn toàn kỳ"
             }
           ]
         }
@@ -211,14 +211,14 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Segoe UI'"
+                  "Value": "'Segoe UI Light'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "34D"
+                  "Value": "15D"
                 }
               }
             },
@@ -234,7 +234,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }

@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "19deac40f8822f21a534",
   "position": {
-    "x": 28,
-    "y": 388,
+    "x": 140,
+    "y": 58,
     "z": 30,
-    "width": 680,
-    "height": 476,
+    "width": 540,
+    "height": 24,
     "tabOrder": 30
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "textbox",
     "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
@@ -19,14 +19,14 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Thứ tự phục vụ'"
+                  "Value": "''"
                 }
               }
             },
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -78,7 +78,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -109,7 +109,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#F6F3ED'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "0D"
                 }
               }
             }
@@ -140,28 +140,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "0D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "0D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "0D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "0D"
                 }
               }
             }
@@ -182,407 +182,24 @@
         }
       ]
     },
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteStops"
-                    }
-                  },
-                  "Property": "vehicle"
-                }
-              },
-              "queryRef": "RouteStops.vehicle",
-              "nativeQueryRef": "vehicle",
-              "displayName": "Xe"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteStops"
-                    }
-                  },
-                  "Property": "sequence"
-                }
-              },
-              "queryRef": "RouteStops.sequence",
-              "nativeQueryRef": "sequence",
-              "displayName": "Thứ tự"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteStops"
-                    }
-                  },
-                  "Property": "node"
-                }
-              },
-              "queryRef": "RouteStops.node",
-              "nativeQueryRef": "node",
-              "displayName": "Điểm dừng"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteStops"
-                    }
-                  },
-                  "Property": "x"
-                }
-              },
-              "queryRef": "RouteStops.x",
-              "nativeQueryRef": "x",
-              "displayName": "Tọa độ X"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "RouteStops"
-                    }
-                  },
-                  "Property": "y"
-                }
-              },
-              "queryRef": "RouteStops.y",
-              "nativeQueryRef": "y",
-              "displayName": "Tọa độ Y"
-            }
-          ]
-        }
-      }
-    },
     "objects": {
-      "columnWidth": [
-        {
-          "selector": {
-            "metadata": "RouteStops.vehicle"
-          },
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "102.4D"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.sequence"
-          },
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "102.4D"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.node"
-          },
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "128.0D"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.x"
-          },
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "153.6D"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.y"
-          },
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "153.6D"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "grid": [
+      "general": [
         {
           "properties": {
-            "textSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "11D"
-                }
-              }
-            },
-            "rowPadding": {
-              "expr": {
-                "Literal": {
-                  "Value": "3D"
-                }
-              }
-            },
-            "gridVertical": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "gridHorizontal": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "gridHorizontalColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#EBEFEF'"
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Bộ bài toán Solomon · điểm 0 là kho",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "10pt",
+                      "color": "#5E6D76"
                     }
                   }
-                }
+                ]
               }
-            }
-          }
-        }
-      ],
-      "columnHeaders": [
-        {
-          "properties": {
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "10D"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#627780'"
-                    }
-                  }
-                }
-              }
-            },
-            "backColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#FFFFFF'"
-                    }
-                  }
-                }
-              }
-            },
-            "wordWrap": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "autoSizeColumnWidth": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "columnAdjustment": {
-              "expr": {
-                "Literal": {
-                  "Value": "'fixedWidth'"
-                }
-              }
-            },
-            "customColumnWidth": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.vehicle"
-          },
-          "properties": {
-            "alignment": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Left'"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.sequence"
-          },
-          "properties": {
-            "alignment": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Right'"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.node"
-          },
-          "properties": {
-            "alignment": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Right'"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.x"
-          },
-          "properties": {
-            "alignment": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Right'"
-                }
-              }
-            }
-          }
-        },
-        {
-          "selector": {
-            "metadata": "RouteStops.y"
-          },
-          "properties": {
-            "alignment": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Right'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "values": [
-        {
-          "properties": {
-            "fontColorPrimary": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#142D3B'"
-                    }
-                  }
-                }
-              }
-            },
-            "backColorPrimary": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#FFFFFF'"
-                    }
-                  }
-                }
-              }
-            },
-            "fontColorSecondary": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#142D3B'"
-                    }
-                  }
-                }
-              }
-            },
-            "backColorSecondary": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#F3F7F7'"
-                    }
-                  }
-                }
-              }
-            },
-            "wordWrap": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "total": [
-        {
-          "properties": {
-            "totals": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
+            ]
           }
         }
       ]

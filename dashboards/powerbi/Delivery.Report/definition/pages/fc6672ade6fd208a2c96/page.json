@@ -3,7 +3,7 @@
   "name": "fc6672ade6fd208a2c96",
   "displayName": "Tuyến giao",
   "displayOption": "FitToPage",
-  "height": 884,
+  "height": 1000,
   "width": 1440,
   "objects": {
     "background": [
@@ -14,7 +14,7 @@
               "color": {
                 "expr": {
                   "Literal": {
-                    "Value": "'#F3F6F6'"
+                    "Value": "'#E4E0D7'"
                   }
                 }
               }

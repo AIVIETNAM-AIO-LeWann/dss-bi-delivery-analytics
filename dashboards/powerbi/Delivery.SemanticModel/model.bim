@@ -218,6 +218,160 @@
             "expression": "IF([Số đơn] > 0, FORMAT(MIN(Orders[order_date]), \"MM/yyyy\") & \" đến \" & FORMAT(MAX(Orders[order_date]), \"MM/yyyy\"), \"Không có dữ liệu\")"
           },
           {
+            "name": "Số đơn toàn kỳ",
+            "expression": "CALCULATE([Số đơn], REMOVEFILTERS(Orders))",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Số tháng toàn kỳ",
+            "expression": "CALCULATE(DISTINCTCOUNT(Orders[month_start]), REMOVEFILTERS(Orders))",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Số thị trường toàn kỳ",
+            "expression": "CALCULATE(DISTINCTCOUNT(Orders[market]), REMOVEFILTERS(Orders))",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Tỷ lệ trễ toàn kỳ",
+            "expression": "CALCULATE([Tỷ lệ trễ], REMOVEFILTERS(Orders))",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Chiếm đơn trễ",
+            "expression": "DIVIDE([Số đơn trễ], CALCULATE([Số đơn trễ], REMOVEFILTERS(Orders[shipping_mode])))",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Chữ cam kết thực tế",
+            "expression": "IF([Số đơn] > 0, FORMAT([Cam kết TB], \"0.00\", \"vi-VN\") & \" → \" & FORMAT([Thực tế TB], \"0.00\", \"vi-VN\") & \" ngày\", \"Chưa có\")"
+          },
+          {
+            "name": "Chữ đơn và đơn trễ",
+            "expression": "IF([Số đơn] > 0, FORMAT([Số đơn], \"#,0\", \"vi-VN\") & \" / \" & FORMAT([Số đơn trễ], \"#,0\", \"vi-VN\"), \"Chưa có\")"
+          },
+          {
+            "name": "Chữ đơn trễ",
+            "expression": "FORMAT([Số đơn trễ], \"#,0\", \"vi-VN\") & \" đơn trễ\""
+          },
+          {
+            "name": "Chữ đơn đúng hạn",
+            "expression": "FORMAT([Số đơn] - [Số đơn trễ], \"#,0\", \"vi-VN\") & \" đúng hạn\""
+          },
+          {
+            "name": "Nhãn so với trung bình",
+            "expression": "IF([Số đơn] = 0, \"\", IF([Tỷ lệ trễ] > [Tỷ lệ trễ toàn kỳ], \"▲ TRÊN TRUNG BÌNH\", \"▼ DƯỚI TRUNG BÌNH\"))"
+          },
+          {
+            "name": "Cảnh báo đúng trên đơn test",
+            "expression": "DIVIDE([Cảnh báo đúng], [Đơn test])",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Cảnh báo sai trên đơn test",
+            "expression": "DIVIDE([Cảnh báo sai], [Đơn test])",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Bỏ sót trên đơn test",
+            "expression": "DIVIDE([Bỏ sót], [Đơn test])",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Đơn trễ trên đơn test",
+            "expression": "DIVIDE([Đơn trễ test], [Đơn test])",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Kết luận tổng quan",
+            "expression": "VAR t = FILTER(ADDCOLUMNS(VALUES(Orders[shipping_mode]), \"n\", [Số đơn], \"r\", [Tỷ lệ trễ], \"l\", [Số đơn trễ]), [n] > 0)\nVAR a = TOPN(1, t, [r], DESC, Orders[shipping_mode], ASC)\nVAR b = TOPN(1, t, [l], DESC, Orders[shipping_mode], ASC)\nVAR total = SUMX(t, [l])\nRETURN IF(COUNTROWS(t) = 0, \"Không có dữ liệu\",\n    MAXX(a, Orders[shipping_mode]) & \" có tỷ lệ trễ cao nhất (\" & FORMAT(MAXX(a, [r]), \"0.0%\", \"vi-VN\") & \"); \"\n    & MAXX(b, Orders[shipping_mode]) & \" có nhiều đơn trễ nhất (\" & FORMAT(DIVIDE(MAXX(b, [l]), total), \"0.0%\", \"vi-VN\") & \" số đơn trễ).\")"
+          },
+          {
+            "name": "Kết luận rủi ro",
+            "expression": "IF([Cảnh báo] = 0, \"Không có cảnh báo ở ngưỡng đang chọn.\", \"Cảnh báo đúng \" & FORMAT([Precision theo ngưỡng], \"0.0%\", \"vi-VN\") & \" nhưng chỉ bắt được \" & FORMAT([Recall theo ngưỡng], \"0.0%\", \"vi-VN\") & \" đơn trễ; \" & FORMAT([Bỏ sót], \"#,0\", \"vi-VN\") & \" đơn trễ chưa được cảnh báo.\")"
+          },
+          {
+            "name": "Đơn mỗi tháng",
+            "expression": "DIVIDE([Số đơn], DISTINCTCOUNT(Orders[month_start]))",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Chữ cảnh báo đúng",
+            "expression": "FORMAT([Cảnh báo đúng], \"#,0\", \"vi-VN\") & \" đúng\""
+          },
+          {
+            "name": "Chữ cảnh báo",
+            "expression": "FORMAT([Cảnh báo], \"#,0\", \"vi-VN\") & \" được báo\""
+          },
+          {
+            "name": "Chữ bắt được",
+            "expression": "FORMAT([Cảnh báo đúng], \"#,0\", \"vi-VN\") & \" bắt được\""
+          },
+          {
+            "name": "Chữ đơn trễ test",
+            "expression": "FORMAT([Đơn trễ test], \"#,0\", \"vi-VN\") & \" đơn trễ\""
+          },
+          {
+            "name": "Chữ cảnh báo sai",
+            "expression": "\"Có thêm \" & FORMAT([Cảnh báo sai], \"#,0\", \"vi-VN\") & \" cảnh báo sai (báo trễ nhưng giao đúng hạn)\""
+          },
+          {
+            "name": "Logo",
+            "expression": "\"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2272%22%20height=%2272%22%20viewBox=%220%200%2072%2072%22%3E%0A%3Cdefs%3E%0A%3ClinearGradient%20id=%22b%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23F1EEE7%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%23DAD6CC%22/%3E%3C/linearGradient%3E%0A%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%223%22%20dy=%224%22%20stdDeviation=%223.5%22%20flood-color=%22%23686044%22%20flood-opacity=%220.45%22/%3E%3C/filter%3E%0A%3C/defs%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Crect%20x=%226%22%20y=%226%22%20width=%2260%22%20height=%2260%22%20rx=%2220%22%20fill=%22url%28%23b%29%22/%3E%3C/g%3E%0A%3Crect%20x=%2212%22%20y=%2212%22%20width=%2248%22%20height=%2248%22%20rx=%2215%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.22%22%20stroke-width=%222%22/%3E%0A%3Cg%20transform=%22translate%2836%2038%29%22%3E%0A%3Cpolygon%20points=%220,-17%2015,-8.5%200,0%20-15,-8.5%22%20fill=%22%2393C4C9%22/%3E%0A%3Cpolygon%20points=%22-15,-8.5%200,0%200,17%20-15,8.5%22%20fill=%22%230E7C86%22/%3E%0A%3Cpolygon%20points=%2215,-8.5%200,0%200,17%2015,8.5%22%20fill=%22%230A636B%22/%3E%0A%3Cpath%20d=%22M-15,-8.5%20L0,0%20L15,-8.5%20M0,0%20V17%22%20fill=%22none%22%20stroke=%22%23FFFFFF%22%20stroke-opacity=%22.5%22%20stroke-width=%221%22/%3E%0A%3Cpath%20d=%22M-8,-4.2%20L6,3.8%22%20stroke=%22%23FFFFFF%22%20stroke-opacity=%22.85%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-dasharray=%221%204%22/%3E%0A%3Ccircle%20cx=%2214%22%20cy=%22-14%22%20r=%226%22%20fill=%22%23D2472A%22%20stroke=%22%23F1EEE7%22%20stroke-width=%222.2%22/%3E%0A%3C/g%3E%3C/svg%3E\"",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
+            "name": "Vòng tỷ lệ trễ",
+            "expression": "VAR raw = [Tỷ lệ trễ]\nVAR v = MAX(0, MIN(1, COALESCE(raw, 0)))\nVAR txt = IF(ISBLANK(raw), \"–\", SUBSTITUTE(FORMAT(v, \"0.0%\", \"vi-VN\"), \"%\", \"%25\"))\nRETURN \"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22300%22%20height=%22214%22%20viewBox=%220%200%20300%20214%22%3E%0A%3Cdefs%3E%0A%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23E59483%22/%3E%3Cstop%20offset=%22.5%22%20stop-color=%22%23D2472A%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%239E3520%22/%3E%3C/linearGradient%3E%0A%3CradialGradient%20id=%22k%22%20cx=%22.35%22%20cy=%22.3%22%20r=%22.9%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23F1EEE7%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%23DAD6CC%22/%3E%3C/radialGradient%3E%0A%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%224%22%20dy=%225%22%20stdDeviation=%224%22%20flood-color=%22%23686044%22%20flood-opacity=%220.42%22/%3E%3C/filter%3E%0A%3C/defs%3E%0A%3Cline%20x1=%22150.0%22%20y1=%2219.0%22%20x2=%22150.0%22%20y2=%2210.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22163.8%22%20y1=%2220.1%22%20x2=%22164.2%22%20y2=%2217.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22177.2%22%20y1=%2223.3%22%20x2=%22178.1%22%20y2=%2220.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22190.0%22%20y1=%2228.6%22%20x2=%22191.3%22%20y2=%2225.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22201.7%22%20y1=%2235.8%22%20x2=%22203.5%22%20y2=%2233.4%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22212.2%22%20y1=%2244.8%22%20x2=%22215.8%22%20y2=%2241.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22221.2%22%20y1=%2255.3%22%20x2=%22223.6%22%20y2=%2253.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22228.4%22%20y1=%2267.0%22%20x2=%22231.1%22%20y2=%2265.7%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22233.7%22%20y1=%2279.8%22%20x2=%22236.5%22%20y2=%2278.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22236.9%22%20y1=%2293.2%22%20x2=%22239.9%22%20y2=%2292.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22238.0%22%20y1=%22107.0%22%20x2=%22247.0%22%20y2=%22107.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22236.9%22%20y1=%22120.8%22%20x2=%22239.9%22%20y2=%22121.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22233.7%22%20y1=%22134.2%22%20x2=%22236.5%22%20y2=%22135.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22228.4%22%20y1=%22147.0%22%20x2=%22231.1%22%20y2=%22148.3%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22221.2%22%20y1=%22158.7%22%20x2=%22223.6%22%20y2=%22160.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22212.2%22%20y1=%22169.2%22%20x2=%22215.8%22%20y2=%22172.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22201.7%22%20y1=%22178.2%22%20x2=%22203.5%22%20y2=%22180.6%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22190.0%22%20y1=%22185.4%22%20x2=%22191.3%22%20y2=%22188.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22177.2%22%20y1=%22190.7%22%20x2=%22178.1%22%20y2=%22193.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22163.8%22%20y1=%22193.9%22%20x2=%22164.2%22%20y2=%22196.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22150.0%22%20y1=%22195.0%22%20x2=%22150.0%22%20y2=%22204.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22136.2%22%20y1=%22193.9%22%20x2=%22135.8%22%20y2=%22196.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22122.8%22%20y1=%22190.7%22%20x2=%22121.9%22%20y2=%22193.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22110.0%22%20y1=%22185.4%22%20x2=%22108.7%22%20y2=%22188.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2298.3%22%20y1=%22178.2%22%20x2=%2296.5%22%20y2=%22180.6%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2287.8%22%20y1=%22169.2%22%20x2=%2284.2%22%20y2=%22172.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2278.8%22%20y1=%22158.7%22%20x2=%2276.4%22%20y2=%22160.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2271.6%22%20y1=%22147.0%22%20x2=%2268.9%22%20y2=%22148.3%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2266.3%22%20y1=%22134.2%22%20x2=%2263.5%22%20y2=%22135.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2263.1%22%20y1=%22120.8%22%20x2=%2260.1%22%20y2=%22121.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2262.0%22%20y1=%22107.0%22%20x2=%2253.0%22%20y2=%22107.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%2263.1%22%20y1=%2293.2%22%20x2=%2260.1%22%20y2=%2292.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2266.3%22%20y1=%2279.8%22%20x2=%2263.5%22%20y2=%2278.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2271.6%22%20y1=%2267.0%22%20x2=%2268.9%22%20y2=%2265.7%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2278.8%22%20y1=%2255.3%22%20x2=%2276.4%22%20y2=%2253.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2287.8%22%20y1=%2244.8%22%20x2=%2284.2%22%20y2=%2241.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2298.3%22%20y1=%2235.8%22%20x2=%2296.5%22%20y2=%2233.4%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22110.0%22%20y1=%2228.6%22%20x2=%22108.7%22%20y2=%2225.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22122.8%22%20y1=%2223.3%22%20x2=%22121.9%22%20y2=%2220.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22136.2%22%20y1=%2220.1%22%20x2=%22135.8%22%20y2=%2217.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2270%22%20fill=%22none%22%20stroke=%22%23D3CFC4%22%20stroke-width=%2224%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2281.0%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.45%22%20stroke-width=%222.2%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2259.0%22%20fill=%22none%22%20stroke=%22%23FFFFFF%22%20stroke-opacity=%22.8%22%20stroke-width=%222.2%22/%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2270%22%20fill=%22none%22%20stroke=%22url%28%23g%29%22%20stroke-width=%2216%22%20stroke-linecap=%22round%22%20stroke-dasharray=%22\" & FORMAT(v * 439.82, \"0.0\", \"en-US\") & \"%20440%22%20transform=%22rotate%28-90%20150%20107%29%22/%3E%3C/g%3E%0A%3Cg%20transform=%22rotate%28\" & FORMAT(v * 360, \"0.0\", \"en-US\") & \"%20150%20107%29%22%3E%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%2237%22%20r=%2213.0%22%20fill=%22url%28%23k%29%22/%3E%3C/g%3E%3Ccircle%20cx=%22150%22%20cy=%2237%22%20r=%224%22%20fill=%22%23D2472A%22/%3E%3C/g%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2249.0%22%20fill=%22url%28%23k%29%22/%3E%3C/g%3E%0A%3Ctext%20x=%22150%22%20y=%22112%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%20Light,%20Segoe%20UI%22%20font-size=%2230%22%20fill=%22%23D2472A%22%3E\" & txt & \"%3C/text%3E%0A%3Ctext%20x=%22150%22%20y=%22129%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%2210%22%20fill=%22%235E6D76%22%3E%C4%91%C6%A1n%20giao%20tr%E1%BB%85%20h%E1%BA%A1n%3C/text%3E%0A%3C/svg%3E\"",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
+            "name": "Vòng độ chính xác",
+            "expression": "VAR raw = [Precision theo ngưỡng]\nVAR v = MAX(0, MIN(1, COALESCE(raw, 0)))\nVAR txt = IF(ISBLANK(raw), \"–\", SUBSTITUTE(FORMAT(v, \"0.0%\", \"vi-VN\"), \"%\", \"%25\"))\nRETURN \"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22300%22%20height=%22214%22%20viewBox=%220%200%20300%20214%22%3E%0A%3Cdefs%3E%0A%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%2373B3B9%22/%3E%3Cstop%20offset=%22.5%22%20stop-color=%22%230E7C86%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%230A5D64%22/%3E%3C/linearGradient%3E%0A%3CradialGradient%20id=%22k%22%20cx=%22.35%22%20cy=%22.3%22%20r=%22.9%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23F1EEE7%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%23DAD6CC%22/%3E%3C/radialGradient%3E%0A%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%224%22%20dy=%225%22%20stdDeviation=%224%22%20flood-color=%22%23686044%22%20flood-opacity=%220.42%22/%3E%3C/filter%3E%0A%3C/defs%3E%0A%3Cline%20x1=%22150.0%22%20y1=%2219.0%22%20x2=%22150.0%22%20y2=%2210.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22163.8%22%20y1=%2220.1%22%20x2=%22164.2%22%20y2=%2217.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22177.2%22%20y1=%2223.3%22%20x2=%22178.1%22%20y2=%2220.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22190.0%22%20y1=%2228.6%22%20x2=%22191.3%22%20y2=%2225.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22201.7%22%20y1=%2235.8%22%20x2=%22203.5%22%20y2=%2233.4%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22212.2%22%20y1=%2244.8%22%20x2=%22215.8%22%20y2=%2241.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22221.2%22%20y1=%2255.3%22%20x2=%22223.6%22%20y2=%2253.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22228.4%22%20y1=%2267.0%22%20x2=%22231.1%22%20y2=%2265.7%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22233.7%22%20y1=%2279.8%22%20x2=%22236.5%22%20y2=%2278.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22236.9%22%20y1=%2293.2%22%20x2=%22239.9%22%20y2=%2292.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22238.0%22%20y1=%22107.0%22%20x2=%22247.0%22%20y2=%22107.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22236.9%22%20y1=%22120.8%22%20x2=%22239.9%22%20y2=%22121.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22233.7%22%20y1=%22134.2%22%20x2=%22236.5%22%20y2=%22135.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22228.4%22%20y1=%22147.0%22%20x2=%22231.1%22%20y2=%22148.3%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22221.2%22%20y1=%22158.7%22%20x2=%22223.6%22%20y2=%22160.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22212.2%22%20y1=%22169.2%22%20x2=%22215.8%22%20y2=%22172.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22201.7%22%20y1=%22178.2%22%20x2=%22203.5%22%20y2=%22180.6%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22190.0%22%20y1=%22185.4%22%20x2=%22191.3%22%20y2=%22188.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22177.2%22%20y1=%22190.7%22%20x2=%22178.1%22%20y2=%22193.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22163.8%22%20y1=%22193.9%22%20x2=%22164.2%22%20y2=%22196.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22150.0%22%20y1=%22195.0%22%20x2=%22150.0%22%20y2=%22204.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22136.2%22%20y1=%22193.9%22%20x2=%22135.8%22%20y2=%22196.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22122.8%22%20y1=%22190.7%22%20x2=%22121.9%22%20y2=%22193.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22110.0%22%20y1=%22185.4%22%20x2=%22108.7%22%20y2=%22188.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2298.3%22%20y1=%22178.2%22%20x2=%2296.5%22%20y2=%22180.6%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2287.8%22%20y1=%22169.2%22%20x2=%2284.2%22%20y2=%22172.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2278.8%22%20y1=%22158.7%22%20x2=%2276.4%22%20y2=%22160.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2271.6%22%20y1=%22147.0%22%20x2=%2268.9%22%20y2=%22148.3%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2266.3%22%20y1=%22134.2%22%20x2=%2263.5%22%20y2=%22135.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2263.1%22%20y1=%22120.8%22%20x2=%2260.1%22%20y2=%22121.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2262.0%22%20y1=%22107.0%22%20x2=%2253.0%22%20y2=%22107.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%2263.1%22%20y1=%2293.2%22%20x2=%2260.1%22%20y2=%2292.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2266.3%22%20y1=%2279.8%22%20x2=%2263.5%22%20y2=%2278.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2271.6%22%20y1=%2267.0%22%20x2=%2268.9%22%20y2=%2265.7%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2278.8%22%20y1=%2255.3%22%20x2=%2276.4%22%20y2=%2253.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2287.8%22%20y1=%2244.8%22%20x2=%2284.2%22%20y2=%2241.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2298.3%22%20y1=%2235.8%22%20x2=%2296.5%22%20y2=%2233.4%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22110.0%22%20y1=%2228.6%22%20x2=%22108.7%22%20y2=%2225.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22122.8%22%20y1=%2223.3%22%20x2=%22121.9%22%20y2=%2220.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22136.2%22%20y1=%2220.1%22%20x2=%22135.8%22%20y2=%2217.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2270%22%20fill=%22none%22%20stroke=%22%23D3CFC4%22%20stroke-width=%2224%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2281.0%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.45%22%20stroke-width=%222.2%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2259.0%22%20fill=%22none%22%20stroke=%22%23FFFFFF%22%20stroke-opacity=%22.8%22%20stroke-width=%222.2%22/%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2270%22%20fill=%22none%22%20stroke=%22url%28%23g%29%22%20stroke-width=%2216%22%20stroke-linecap=%22round%22%20stroke-dasharray=%22\" & FORMAT(v * 439.82, \"0.0\", \"en-US\") & \"%20440%22%20transform=%22rotate%28-90%20150%20107%29%22/%3E%3C/g%3E%0A%3Cg%20transform=%22rotate%28\" & FORMAT(v * 360, \"0.0\", \"en-US\") & \"%20150%20107%29%22%3E%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%2237%22%20r=%2213.0%22%20fill=%22url%28%23k%29%22/%3E%3C/g%3E%3Ccircle%20cx=%22150%22%20cy=%2237%22%20r=%224%22%20fill=%22%230E7C86%22/%3E%3C/g%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2249.0%22%20fill=%22url%28%23k%29%22/%3E%3C/g%3E%0A%3Ctext%20x=%22150%22%20y=%22112%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%20Light,%20Segoe%20UI%22%20font-size=%2230%22%20fill=%22%230E7C86%22%3E\" & txt & \"%3C/text%3E%0A%3Ctext%20x=%22150%22%20y=%22129%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%2210%22%20fill=%22%235E6D76%22%3E%C4%91%C3%BAng%20trong%20s%E1%BB%91%20c%E1%BA%A3nh%20b%C3%A1o%3C/text%3E%0A%3C/svg%3E\"",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
+            "name": "Vòng độ bao phủ",
+            "expression": "VAR raw = [Recall theo ngưỡng]\nVAR v = MAX(0, MIN(1, COALESCE(raw, 0)))\nVAR txt = IF(ISBLANK(raw), \"–\", SUBSTITUTE(FORMAT(v, \"0.0%\", \"vi-VN\"), \"%\", \"%25\"))\nRETURN \"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22300%22%20height=%22214%22%20viewBox=%220%200%20300%20214%22%3E%0A%3Cdefs%3E%0A%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23E59483%22/%3E%3Cstop%20offset=%22.5%22%20stop-color=%22%23D2472A%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%239E3520%22/%3E%3C/linearGradient%3E%0A%3CradialGradient%20id=%22k%22%20cx=%22.35%22%20cy=%22.3%22%20r=%22.9%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23F1EEE7%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%23DAD6CC%22/%3E%3C/radialGradient%3E%0A%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%224%22%20dy=%225%22%20stdDeviation=%224%22%20flood-color=%22%23686044%22%20flood-opacity=%220.42%22/%3E%3C/filter%3E%0A%3C/defs%3E%0A%3Cline%20x1=%22150.0%22%20y1=%2219.0%22%20x2=%22150.0%22%20y2=%2210.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22163.8%22%20y1=%2220.1%22%20x2=%22164.2%22%20y2=%2217.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22177.2%22%20y1=%2223.3%22%20x2=%22178.1%22%20y2=%2220.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22190.0%22%20y1=%2228.6%22%20x2=%22191.3%22%20y2=%2225.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22201.7%22%20y1=%2235.8%22%20x2=%22203.5%22%20y2=%2233.4%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22212.2%22%20y1=%2244.8%22%20x2=%22215.8%22%20y2=%2241.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22221.2%22%20y1=%2255.3%22%20x2=%22223.6%22%20y2=%2253.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22228.4%22%20y1=%2267.0%22%20x2=%22231.1%22%20y2=%2265.7%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22233.7%22%20y1=%2279.8%22%20x2=%22236.5%22%20y2=%2278.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22236.9%22%20y1=%2293.2%22%20x2=%22239.9%22%20y2=%2292.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22238.0%22%20y1=%22107.0%22%20x2=%22247.0%22%20y2=%22107.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22236.9%22%20y1=%22120.8%22%20x2=%22239.9%22%20y2=%22121.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22233.7%22%20y1=%22134.2%22%20x2=%22236.5%22%20y2=%22135.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22228.4%22%20y1=%22147.0%22%20x2=%22231.1%22%20y2=%22148.3%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22221.2%22%20y1=%22158.7%22%20x2=%22223.6%22%20y2=%22160.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22212.2%22%20y1=%22169.2%22%20x2=%22215.8%22%20y2=%22172.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22201.7%22%20y1=%22178.2%22%20x2=%22203.5%22%20y2=%22180.6%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22190.0%22%20y1=%22185.4%22%20x2=%22191.3%22%20y2=%22188.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22177.2%22%20y1=%22190.7%22%20x2=%22178.1%22%20y2=%22193.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22163.8%22%20y1=%22193.9%22%20x2=%22164.2%22%20y2=%22196.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22150.0%22%20y1=%22195.0%22%20x2=%22150.0%22%20y2=%22204.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22136.2%22%20y1=%22193.9%22%20x2=%22135.8%22%20y2=%22196.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22122.8%22%20y1=%22190.7%22%20x2=%22121.9%22%20y2=%22193.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22110.0%22%20y1=%22185.4%22%20x2=%22108.7%22%20y2=%22188.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2298.3%22%20y1=%22178.2%22%20x2=%2296.5%22%20y2=%22180.6%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2287.8%22%20y1=%22169.2%22%20x2=%2284.2%22%20y2=%22172.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2278.8%22%20y1=%22158.7%22%20x2=%2276.4%22%20y2=%22160.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2271.6%22%20y1=%22147.0%22%20x2=%2268.9%22%20y2=%22148.3%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2266.3%22%20y1=%22134.2%22%20x2=%2263.5%22%20y2=%22135.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2263.1%22%20y1=%22120.8%22%20x2=%2260.1%22%20y2=%22121.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2262.0%22%20y1=%22107.0%22%20x2=%2253.0%22%20y2=%22107.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%2263.1%22%20y1=%2293.2%22%20x2=%2260.1%22%20y2=%2292.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2266.3%22%20y1=%2279.8%22%20x2=%2263.5%22%20y2=%2278.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2271.6%22%20y1=%2267.0%22%20x2=%2268.9%22%20y2=%2265.7%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2278.8%22%20y1=%2255.3%22%20x2=%2276.4%22%20y2=%2253.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2287.8%22%20y1=%2244.8%22%20x2=%2284.2%22%20y2=%2241.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2298.3%22%20y1=%2235.8%22%20x2=%2296.5%22%20y2=%2233.4%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22110.0%22%20y1=%2228.6%22%20x2=%22108.7%22%20y2=%2225.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22122.8%22%20y1=%2223.3%22%20x2=%22121.9%22%20y2=%2220.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22136.2%22%20y1=%2220.1%22%20x2=%22135.8%22%20y2=%2217.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2270%22%20fill=%22none%22%20stroke=%22%23D3CFC4%22%20stroke-width=%2224%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2281.0%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.45%22%20stroke-width=%222.2%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2259.0%22%20fill=%22none%22%20stroke=%22%23FFFFFF%22%20stroke-opacity=%22.8%22%20stroke-width=%222.2%22/%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2270%22%20fill=%22none%22%20stroke=%22url%28%23g%29%22%20stroke-width=%2216%22%20stroke-linecap=%22round%22%20stroke-dasharray=%22\" & FORMAT(v * 439.82, \"0.0\", \"en-US\") & \"%20440%22%20transform=%22rotate%28-90%20150%20107%29%22/%3E%3C/g%3E%0A%3Cg%20transform=%22rotate%28\" & FORMAT(v * 360, \"0.0\", \"en-US\") & \"%20150%20107%29%22%3E%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%2237%22%20r=%2213.0%22%20fill=%22url%28%23k%29%22/%3E%3C/g%3E%3Ccircle%20cx=%22150%22%20cy=%2237%22%20r=%224%22%20fill=%22%23D2472A%22/%3E%3C/g%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2249.0%22%20fill=%22url%28%23k%29%22/%3E%3C/g%3E%0A%3Ctext%20x=%22150%22%20y=%22112%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%20Light,%20Segoe%20UI%22%20font-size=%2230%22%20fill=%22%23D2472A%22%3E\" & txt & \"%3C/text%3E%0A%3Ctext%20x=%22150%22%20y=%22129%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%2210%22%20fill=%22%235E6D76%22%3Eb%E1%BA%AFt%20%C4%91%C6%B0%E1%BB%A3c%20trong%20%C4%91%C6%A1n%20tr%E1%BB%85%3C/text%3E%0A%3C/svg%3E\"",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
+            "name": "Thanh tỷ lệ trễ",
+            "expression": "VAR v = MAX(0, MIN(1, COALESCE([Tỷ lệ trễ], 0)))\nVAR a = MAX(0, MIN(1, COALESCE([Tỷ lệ trễ toàn kỳ], 0)))\nRETURN \"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22240%22%20height=%2216%22%20viewBox=%220%200%20240%2016%22%3E%0A%3Cdefs%3E%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%221%22%20dy=%222%22%20stdDeviation=%221.5%22%20flood-color=%22%23686044%22%20flood-opacity=%220.4%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20x=%220%22%20y=%220%22%20width=%22240%22%20height=%2216%22%20rx=%228%22%20fill=%22%23D3CFC4%22/%3E%0A%3Crect%20x=%220.75%22%20y=%220.75%22%20width=%22238.5%22%20height=%2214.5%22%20rx=%227.25%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.35%22%20stroke-width=%221.5%22/%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Crect%20x=%223%22%20y=%223%22%20width=%22\" & FORMAT(MAX(4, v * 234), \"0.0\", \"en-US\") & \"%22%20height=%2210%22%20rx=%225%22%20fill=%22\" & IF(v > a, \"%23D2472A\", \"%230E7C86\") & \"%22/%3E%3C/g%3E%0A%3Crect%20x=%225%22%20y=%224%22%20width=%22\" & FORMAT(MAX(2, v * 234 - 4), \"0.0\", \"en-US\") & \"%22%20height=%222.6%22%20rx=%221.3%22%20fill=%22%23FFFFFF%22%20opacity=%22.38%22/%3E%0A%3Crect%20x=%22\" & FORMAT(2 + a * 234, \"0.0\", \"en-US\") & \"%22%20y=%220%22%20width=%222%22%20height=%2216%22%20fill=%22%231D2A33%22%20opacity=%22.55%22/%3E%0A%3C/svg%3E\"",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
+            "name": "Nhiệt kế toàn kỳ",
+            "expression": "VAR v = MAX(0, MIN(1, COALESCE([Tỷ lệ trễ toàn kỳ], 0)))\nRETURN \"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2244%22%20height=%22250%22%20viewBox=%220%200%2044%20250%22%3E%0A%3Cdefs%3E%0A%3ClinearGradient%20id=%22f%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%220%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23E8A394%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%23D2472A%22/%3E%3C/linearGradient%3E%0A%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%222%22%20dy=%222%22%20stdDeviation=%222%22%20flood-color=%22%23686044%22%20flood-opacity=%220.4%22/%3E%3C/filter%3E%0A%3C/defs%3E%0A%3Crect%20x=%228%22%20y=%222%22%20width=%2228%22%20height=%22244%22%20rx=%2214%22%20fill=%22%23D3CFC4%22/%3E%0A%3Crect%20x=%228%22%20y=%222%22%20width=%2228%22%20height=%22244%22%20rx=%2214%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.4%22%20stroke-width=%222%22/%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Crect%20x=%2212%22%20y=%22\" & FORMAT(6 + (1 - v) * 236, \"0.0\", \"en-US\") & \"%22%20width=%2220%22%20height=%22\" & FORMAT(MAX(4, v * 236), \"0.0\", \"en-US\") & \"%22%20rx=%2210%22%20fill=%22url%28%23f%29%22/%3E%3C/g%3E%0A%3Cline%20x1=%228%22%20y1=%22124%22%20x2=%2236%22%20y2=%22124%22%20stroke=%22%231D2A33%22%20stroke-opacity=%22.3%22/%3E%0A%3C/svg%3E\"",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
+            "name": "Bàn phím nhiệt",
+            "expression": "VAR grid = ADDCOLUMNS(\n    CROSSJOIN(VALUES(Orders[shipping_mode]), VALUES(Orders[market])),\n    \"ri\", SWITCH(Orders[shipping_mode], \"First Class\", 0, \"Second Class\", 1, \"Same Day\", 2, \"Standard Class\", 3, 4),\n    \"ci\", SWITCH(Orders[market], \"Africa\", 0, \"Europe\", 1, \"LATAM\", 2, \"Pacific Asia\", 3, \"USCA\", 4, 5),\n    \"val\", [Tỷ lệ trễ])\nVAR baseline = COALESCE([Tỷ lệ trễ], 0.57)\nRETURN \"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22340%22%20height=%22172%22%20viewBox=%220%200%20340%20172%22%3E%3Cdefs%3E%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%222%22%20dy=%223%22%20stdDeviation=%222.5%22%20flood-color=%22%23686044%22%20flood-opacity=%220.42%22/%3E%3C/filter%3E%3C/defs%3E%3Ctext%20x=%22114%22%20y=%2212%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%229.5%22%20fill=%22%235E6D76%22%3EAfrica%3C/text%3E%3Ctext%20x=%22163%22%20y=%2212%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%229.5%22%20fill=%22%235E6D76%22%3EEurope%3C/text%3E%3Ctext%20x=%22212%22%20y=%2212%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%229.5%22%20fill=%22%235E6D76%22%3ELATAM%3C/text%3E%3Ctext%20x=%22261%22%20y=%2212%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%229.5%22%20fill=%22%235E6D76%22%3EP.%20Asia%3C/text%3E%3Ctext%20x=%22310%22%20y=%2212%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%229.5%22%20fill=%22%235E6D76%22%3EUSCA%3C/text%3E%3Ctext%20x=%220%22%20y=%2239%22%20font-family=%22Segoe%20UI%22%20font-size=%2211.5%22%20font-weight=%22600%22%20fill=%22%2345545E%22%3EFirst%20Class%3C/text%3E%3Ctext%20x=%220%22%20y=%2275%22%20font-family=%22Segoe%20UI%22%20font-size=%2211.5%22%20font-weight=%22600%22%20fill=%22%2345545E%22%3ESecond%20Class%3C/text%3E%3Ctext%20x=%220%22%20y=%22111%22%20font-family=%22Segoe%20UI%22%20font-size=%2211.5%22%20font-weight=%22600%22%20fill=%22%2345545E%22%3ESame%20Day%3C/text%3E%3Ctext%20x=%220%22%20y=%22147%22%20font-family=%22Segoe%20UI%22%20font-size=%2211.5%22%20font-weight=%22600%22%20fill=%22%2345545E%22%3EStandard%20Class%3C/text%3E\" & CONCATENATEX(FILTER(grid, NOT ISBLANK([val])),\n    VAR v = [val]\n    VAR hot = v >= baseline\n    VAR t = IF(hot, MIN(1, DIVIDE(v - baseline, 1 - baseline)) * 0.95, MIN(1, DIVIDE(baseline - v, baseline - 0.38)) * 0.85)\n    VAR rr = ROUND(239 + (IF(hot, 210, 14) - 239) * t, 0)\n    VAR gg = ROUND(236 + (IF(hot, 71, 124) - 236) * t, 0)\n    VAR bb = ROUND(229 + (IF(hot, 42, 134) - 229) * t, 0)\n    VAR strong = v > 0.7 || v < 0.45\n    RETURN \"%3Cg%20filter=%22url%28%23s%29%22%3E%3Crect%20x=%22\" & FORMAT(92 + [ci] * 49, \"0\", \"en-US\") & \"%22%20y=%22\" & FORMAT(20 + [ri] * 36, \"0\", \"en-US\") & \"%22%20width=%2244%22%20height=%2230%22%20rx=%229%22%20fill=%22rgb%28\" & FORMAT(rr, \"0\", \"en-US\") & \",\" & FORMAT(gg, \"0\", \"en-US\") & \",\" & FORMAT(bb, \"0\", \"en-US\") & \"%29%22/%3E%3C/g%3E%3Ctext%20x=%22\" & FORMAT(92 + [ci] * 49 + 22, \"0\", \"en-US\") & \"%22%20y=%22\" & FORMAT(20 + [ri] * 36 + 20, \"0\", \"en-US\") & \"%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%2212%22%20font-weight=%22700%22%20fill=%22\" & IF(strong, \"%23FFFFFF\", \"%231D2A33\") & \"%22%3E\" & SUBSTITUTE(FORMAT(v, \"0%\", \"vi-VN\"), \"%\", \"%25\") & \"%3C/text%3E\", \"\") & \"%3C/svg%3E\"",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
+            "name": "Phễu phát hiện",
+            "expression": "VAR tot = COALESCE([Đơn test], 0)\nVAR late = COALESCE([Đơn trễ test], 0)\nVAR caught = COALESCE([Cảnh báo đúng], 0)\nVAR missed = COALESCE([Bỏ sót], 0)\nRETURN IF(tot = 0, BLANK(), \"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22592%22%20height=%22200%22%20viewBox=%220%200%20592%20200%22%3E%3Cdefs%3E%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%222%22%20dy=%223%22%20stdDeviation=%222.5%22%20flood-color=%22%23686044%22%20flood-opacity=%220.4%22/%3E%3C/filter%3E%3C/defs%3E%3Ctext%20x=%220%22%20y=%2219%22%20font-family=%22Segoe%20UI%22%20font-size=%2216%22%20font-weight=%22600%22%20fill=%22%231D2A33%22%3E\" & FORMAT(tot, \"#,0\", \"vi-VN\") & \"%3C/text%3E%3Ctext%20x=%220%22%20y=%2235%22%20font-family=%22Segoe%20UI%22%20font-size=%2211%22%20fill=%22%235E6D76%22%3E%C4%91%C6%A1n%20ki%E1%BB%83m%20tra%3C/text%3E%3Crect%20x=%22136%22%20y=%224%22%20width=%22456%22%20height=%2232%22%20rx=%2211%22%20fill=%22%23D3CFC4%22/%3E%3Crect%20x=%22136.75%22%20y=%224.75%22%20width=%22454.5%22%20height=%2230.5%22%20rx=%2210.25%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.35%22%20stroke-width=%221.5%22/%3E%3Cg%20filter=%22url%28%23s%29%22%3E%3Crect%20x=%22140%22%20y=%228%22%20width=%22\" & FORMAT(MAX(6, DIVIDE(tot, tot) * 448), \"0.0\", \"en-US\") & \"%22%20height=%2224%22%20rx=%228%22%20fill=%22%238E9AA3%22/%3E%3C/g%3E%3Ctext%20x=%22152%22%20y=%2224%22%20font-family=%22Segoe%20UI%22%20font-size=%2211.5%22%20font-weight=%22700%22%20fill=%22%231D2A33%22%3E\" & SUBSTITUTE(FORMAT(DIVIDE(tot, tot), \"0.0%\", \"vi-VN\"), \"%\", \"%25\") & \"%3C/text%3E%3Ctext%20x=%220%22%20y=%2267%22%20font-family=%22Segoe%20UI%22%20font-size=%2216%22%20font-weight=%22600%22%20fill=%22%231D2A33%22%3E\" & FORMAT(late, \"#,0\", \"vi-VN\") & \"%3C/text%3E%3Ctext%20x=%220%22%20y=%2283%22%20font-family=%22Segoe%20UI%22%20font-size=%2211%22%20fill=%22%235E6D76%22%3E%C4%91%C6%A1n%20tr%E1%BB%85%20th%E1%BB%B1c%20t%E1%BA%BF%3C/text%3E%3Crect%20x=%22136%22%20y=%2252%22%20width=%22456%22%20height=%2232%22%20rx=%2211%22%20fill=%22%23D3CFC4%22/%3E%3Crect%20x=%22136.75%22%20y=%2252.75%22%20width=%22454.5%22%20height=%2230.5%22%20rx=%2210.25%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.35%22%20stroke-width=%221.5%22/%3E%3Cg%20filter=%22url%28%23s%29%22%3E%3Crect%20x=%22140%22%20y=%2256%22%20width=%22\" & FORMAT(MAX(6, DIVIDE(late, tot) * 448), \"0.0\", \"en-US\") & \"%22%20height=%2224%22%20rx=%228%22%20fill=%22%23B8860B%22/%3E%3C/g%3E%3Ctext%20x=%22152%22%20y=%2272%22%20font-family=%22Segoe%20UI%22%20font-size=%2211.5%22%20font-weight=%22700%22%20fill=%22%231D2A33%22%3E\" & SUBSTITUTE(FORMAT(DIVIDE(late, tot), \"0.0%\", \"vi-VN\"), \"%\", \"%25\") & \"%3C/text%3E%3Ctext%20x=%220%22%20y=%22115%22%20font-family=%22Segoe%20UI%22%20font-size=%2216%22%20font-weight=%22600%22%20fill=%22%231D2A33%22%3E\" & FORMAT(caught, \"#,0\", \"vi-VN\") & \"%3C/text%3E%3Ctext%20x=%220%22%20y=%22131%22%20font-family=%22Segoe%20UI%22%20font-size=%2211%22%20fill=%22%235E6D76%22%3Ec%E1%BA%A3nh%20b%C3%A1o%20%C4%91%C3%BAng%3C/text%3E%3Crect%20x=%22136%22%20y=%22100%22%20width=%22456%22%20height=%2232%22%20rx=%2211%22%20fill=%22%23D3CFC4%22/%3E%3Crect%20x=%22136.75%22%20y=%22100.75%22%20width=%22454.5%22%20height=%2230.5%22%20rx=%2210.25%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.35%22%20stroke-width=%221.5%22/%3E%3Cg%20filter=%22url%28%23s%29%22%3E%3Crect%20x=%22140%22%20y=%22104%22%20width=%22\" & FORMAT(MAX(6, DIVIDE(caught, tot) * 448), \"0.0\", \"en-US\") & \"%22%20height=%2224%22%20rx=%228%22%20fill=%22%230E7C86%22/%3E%3C/g%3E%3Ctext%20x=%22152%22%20y=%22120%22%20font-family=%22Segoe%20UI%22%20font-size=%2211.5%22%20font-weight=%22700%22%20fill=%22%23FFFFFF%22%3E\" & SUBSTITUTE(FORMAT(DIVIDE(caught, tot), \"0.0%\", \"vi-VN\"), \"%\", \"%25\") & \"%3C/text%3E%3Ctext%20x=%220%22%20y=%22163%22%20font-family=%22Segoe%20UI%22%20font-size=%2216%22%20font-weight=%22600%22%20fill=%22%231D2A33%22%3E\" & FORMAT(missed, \"#,0\", \"vi-VN\") & \"%3C/text%3E%3Ctext%20x=%220%22%20y=%22179%22%20font-family=%22Segoe%20UI%22%20font-size=%2211%22%20fill=%22%235E6D76%22%3Eb%E1%BB%8F%20s%C3%B3t%3C/text%3E%3Crect%20x=%22136%22%20y=%22148%22%20width=%22456%22%20height=%2232%22%20rx=%2211%22%20fill=%22%23D3CFC4%22/%3E%3Crect%20x=%22136.75%22%20y=%22148.75%22%20width=%22454.5%22%20height=%2230.5%22%20rx=%2210.25%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.35%22%20stroke-width=%221.5%22/%3E%3Cg%20filter=%22url%28%23s%29%22%3E%3Crect%20x=%22140%22%20y=%22152%22%20width=%22\" & FORMAT(MAX(6, DIVIDE(missed, tot) * 448), \"0.0\", \"en-US\") & \"%22%20height=%2224%22%20rx=%228%22%20fill=%22%23D2472A%22/%3E%3C/g%3E%3Ctext%20x=%22152%22%20y=%22168%22%20font-family=%22Segoe%20UI%22%20font-size=%2211.5%22%20font-weight=%22700%22%20fill=%22%23FFFFFF%22%3E\" & SUBSTITUTE(FORMAT(DIVIDE(missed, tot), \"0.0%\", \"vi-VN\"), \"%\", \"%25\") & \"%3C/text%3E%3C/svg%3E\")",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
             "name": "Thẻ Số đơn",
             "expression": "IF(ISBLANK([Số đơn]), \"Chưa có\", FORMAT([Số đơn], \"#,0\", \"vi-VN\"))",
             "isHidden": true,
@@ -316,6 +470,66 @@
           {
             "name": "Thẻ Tỷ trọng cảnh báo",
             "expression": "IF(ISBLANK([Tỷ trọng cảnh báo]), \"Chưa có\", FORMAT([Tỷ trọng cảnh báo], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Số đơn toàn kỳ",
+            "expression": "IF(ISBLANK([Số đơn toàn kỳ]), \"Chưa có\", FORMAT([Số đơn toàn kỳ], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Số tháng toàn kỳ",
+            "expression": "IF(ISBLANK([Số tháng toàn kỳ]), \"Chưa có\", FORMAT([Số tháng toàn kỳ], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Số thị trường toàn kỳ",
+            "expression": "IF(ISBLANK([Số thị trường toàn kỳ]), \"Chưa có\", FORMAT([Số thị trường toàn kỳ], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Tỷ lệ trễ toàn kỳ",
+            "expression": "IF(ISBLANK([Tỷ lệ trễ toàn kỳ]), \"Chưa có\", FORMAT([Tỷ lệ trễ toàn kỳ], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Chiếm đơn trễ",
+            "expression": "IF(ISBLANK([Chiếm đơn trễ]), \"Chưa có\", FORMAT([Chiếm đơn trễ], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Cảnh báo đúng trên đơn test",
+            "expression": "IF(ISBLANK([Cảnh báo đúng trên đơn test]), \"Chưa có\", FORMAT([Cảnh báo đúng trên đơn test], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Cảnh báo sai trên đơn test",
+            "expression": "IF(ISBLANK([Cảnh báo sai trên đơn test]), \"Chưa có\", FORMAT([Cảnh báo sai trên đơn test], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Bỏ sót trên đơn test",
+            "expression": "IF(ISBLANK([Bỏ sót trên đơn test]), \"Chưa có\", FORMAT([Bỏ sót trên đơn test], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Đơn trễ trên đơn test",
+            "expression": "IF(ISBLANK([Đơn trễ trên đơn test]), \"Chưa có\", FORMAT([Đơn trễ trên đơn test], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Đơn mỗi tháng",
+            "expression": "IF(ISBLANK([Đơn mỗi tháng]), \"Chưa có\", FORMAT([Đơn mỗi tháng], \"#,0\", \"vi-VN\"))",
             "isHidden": true,
             "displayFolder": "Trình bày"
           }
@@ -425,6 +639,45 @@
             "formatString": "0.0%"
           },
           {
+            "name": "Cam kết hiện tại TB",
+            "expression": "CALCULATE(AVERAGE(PromiseScenarios[proposed_days]), KEEPFILTERS(Policies[policy_id] = \"current\"))",
+            "formatString": "0.00\" ngày\""
+          },
+          {
+            "name": "Đơn vượt hẹn tính lại",
+            "expression": "ROUND([Vượt hẹn tính lại] * [Đơn kịch bản], 0)",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Đơn hết vượt hẹn",
+            "expression": "[Đơn trễ test] - [Đơn vượt hẹn tính lại]",
+            "formatString": "#,0"
+          },
+          {
+            "name": "Dự phòng",
+            "expression": "VAR p = COALESCE(SELECTEDVALUE(Policies[policy_id]), SELECTEDVALUE(PolicySelector[policy_id]), \"bounded_plus1_keep_same_day\") RETURN DIVIDE(CALCULATE(SUM(PromiseScenarios[fallback]), KEEPFILTERS(Policies[policy_id] = p)), [Đơn kịch bản])",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Kết luận cam kết",
+            "expression": "IF([Đơn kịch bản] = 0, \"Không có dữ liệu\", [Chính sách đang xem] & \" đưa tỷ lệ vượt hẹn từ \" & FORMAT([Trễ hiện trạng test], \"0.0%\", \"vi-VN\") & \" xuống \" & FORMAT([Vượt hẹn tính lại], \"0.0%\", \"vi-VN\") & \", đổi lại khách chờ thêm trung bình \" & FORMAT([Tăng cam kết TB], \"0.00\", \"vi-VN\") & \" ngày; đây là đổi cam kết, thời gian giao thực tế không đổi.\")"
+          },
+          {
+            "name": "Chữ hiện tại",
+            "expression": "\"hiện tại \" & FORMAT([Trễ hiện trạng test], \"0.0%\", \"vi-VN\")"
+          },
+          {
+            "name": "Chữ đơn vượt hẹn",
+            "expression": "FORMAT([Đơn vượt hẹn tính lại], \"#,0\", \"vi-VN\") & \" đơn vượt hẹn\""
+          },
+          {
+            "name": "Vòng vượt hẹn",
+            "expression": "VAR raw = [Vượt hẹn tính lại]\nVAR v = MAX(0, MIN(1, COALESCE(raw, 0)))\nVAR txt = IF(ISBLANK(raw), \"–\", SUBSTITUTE(FORMAT(v, \"0.0%\", \"vi-VN\"), \"%\", \"%25\"))\nRETURN \"data:image/svg+xml;utf8,\" & \"%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22300%22%20height=%22214%22%20viewBox=%220%200%20300%20214%22%3E%0A%3Cdefs%3E%0A%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23E59483%22/%3E%3Cstop%20offset=%22.5%22%20stop-color=%22%23D2472A%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%239E3520%22/%3E%3C/linearGradient%3E%0A%3CradialGradient%20id=%22k%22%20cx=%22.35%22%20cy=%22.3%22%20r=%22.9%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23F1EEE7%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%23DAD6CC%22/%3E%3C/radialGradient%3E%0A%3Cfilter%20id=%22s%22%20x=%22-30%25%22%20y=%22-30%25%22%20width=%22160%25%22%20height=%22160%25%22%3E%3CfeDropShadow%20dx=%224%22%20dy=%225%22%20stdDeviation=%224%22%20flood-color=%22%23686044%22%20flood-opacity=%220.42%22/%3E%3C/filter%3E%0A%3C/defs%3E%0A%3Cline%20x1=%22150.0%22%20y1=%2219.0%22%20x2=%22150.0%22%20y2=%2210.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22163.8%22%20y1=%2220.1%22%20x2=%22164.2%22%20y2=%2217.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22177.2%22%20y1=%2223.3%22%20x2=%22178.1%22%20y2=%2220.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22190.0%22%20y1=%2228.6%22%20x2=%22191.3%22%20y2=%2225.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22201.7%22%20y1=%2235.8%22%20x2=%22203.5%22%20y2=%2233.4%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22212.2%22%20y1=%2244.8%22%20x2=%22215.8%22%20y2=%2241.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22221.2%22%20y1=%2255.3%22%20x2=%22223.6%22%20y2=%2253.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22228.4%22%20y1=%2267.0%22%20x2=%22231.1%22%20y2=%2265.7%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22233.7%22%20y1=%2279.8%22%20x2=%22236.5%22%20y2=%2278.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22236.9%22%20y1=%2293.2%22%20x2=%22239.9%22%20y2=%2292.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22238.0%22%20y1=%22107.0%22%20x2=%22247.0%22%20y2=%22107.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22236.9%22%20y1=%22120.8%22%20x2=%22239.9%22%20y2=%22121.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22233.7%22%20y1=%22134.2%22%20x2=%22236.5%22%20y2=%22135.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22228.4%22%20y1=%22147.0%22%20x2=%22231.1%22%20y2=%22148.3%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22221.2%22%20y1=%22158.7%22%20x2=%22223.6%22%20y2=%22160.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22212.2%22%20y1=%22169.2%22%20x2=%22215.8%22%20y2=%22172.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22201.7%22%20y1=%22178.2%22%20x2=%22203.5%22%20y2=%22180.6%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22190.0%22%20y1=%22185.4%22%20x2=%22191.3%22%20y2=%22188.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22177.2%22%20y1=%22190.7%22%20x2=%22178.1%22%20y2=%22193.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22163.8%22%20y1=%22193.9%22%20x2=%22164.2%22%20y2=%22196.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22150.0%22%20y1=%22195.0%22%20x2=%22150.0%22%20y2=%22204.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%22136.2%22%20y1=%22193.9%22%20x2=%22135.8%22%20y2=%22196.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22122.8%22%20y1=%22190.7%22%20x2=%22121.9%22%20y2=%22193.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22110.0%22%20y1=%22185.4%22%20x2=%22108.7%22%20y2=%22188.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2298.3%22%20y1=%22178.2%22%20x2=%2296.5%22%20y2=%22180.6%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2287.8%22%20y1=%22169.2%22%20x2=%2284.2%22%20y2=%22172.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2278.8%22%20y1=%22158.7%22%20x2=%2276.4%22%20y2=%22160.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2271.6%22%20y1=%22147.0%22%20x2=%2268.9%22%20y2=%22148.3%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2266.3%22%20y1=%22134.2%22%20x2=%2263.5%22%20y2=%22135.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2263.1%22%20y1=%22120.8%22%20x2=%2260.1%22%20y2=%22121.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2262.0%22%20y1=%22107.0%22%20x2=%2253.0%22%20y2=%22107.0%22%20stroke=%22%2345545E%22%20stroke-width=%221.8%22%20opacity=%220.7%22/%3E%3Cline%20x1=%2263.1%22%20y1=%2293.2%22%20x2=%2260.1%22%20y2=%2292.8%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2266.3%22%20y1=%2279.8%22%20x2=%2263.5%22%20y2=%2278.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2271.6%22%20y1=%2267.0%22%20x2=%2268.9%22%20y2=%2265.7%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2278.8%22%20y1=%2255.3%22%20x2=%2276.4%22%20y2=%2253.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2287.8%22%20y1=%2244.8%22%20x2=%2284.2%22%20y2=%2241.2%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%2298.3%22%20y1=%2235.8%22%20x2=%2296.5%22%20y2=%2233.4%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22110.0%22%20y1=%2228.6%22%20x2=%22108.7%22%20y2=%2225.9%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22122.8%22%20y1=%2223.3%22%20x2=%22121.9%22%20y2=%2220.5%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%3Cline%20x1=%22136.2%22%20y1=%2220.1%22%20x2=%22135.8%22%20y2=%2217.1%22%20stroke=%22%2345545E%22%20stroke-width=%221%22%20opacity=%220.35%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2270%22%20fill=%22none%22%20stroke=%22%23D3CFC4%22%20stroke-width=%2224%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2281.0%22%20fill=%22none%22%20stroke=%22%23686044%22%20stroke-opacity=%22.45%22%20stroke-width=%222.2%22/%3E%0A%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2259.0%22%20fill=%22none%22%20stroke=%22%23FFFFFF%22%20stroke-opacity=%22.8%22%20stroke-width=%222.2%22/%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2270%22%20fill=%22none%22%20stroke=%22url%28%23g%29%22%20stroke-width=%2216%22%20stroke-linecap=%22round%22%20stroke-dasharray=%22\" & FORMAT(v * 439.82, \"0.0\", \"en-US\") & \"%20440%22%20transform=%22rotate%28-90%20150%20107%29%22/%3E%3C/g%3E%0A%3Cg%20transform=%22rotate%28\" & FORMAT(v * 360, \"0.0\", \"en-US\") & \"%20150%20107%29%22%3E%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%2237%22%20r=%2213.0%22%20fill=%22url%28%23k%29%22/%3E%3C/g%3E%3Ccircle%20cx=%22150%22%20cy=%2237%22%20r=%224%22%20fill=%22%23D2472A%22/%3E%3C/g%3E%0A%3Cg%20filter=%22url%28%23s%29%22%3E%3Ccircle%20cx=%22150%22%20cy=%22107%22%20r=%2249.0%22%20fill=%22url%28%23k%29%22/%3E%3C/g%3E%0A%3Ctext%20x=%22150%22%20y=%22112%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%20Light,%20Segoe%20UI%22%20font-size=%2230%22%20fill=%22%23D2472A%22%3E\" & txt & \"%3C/text%3E%0A%3Ctext%20x=%22150%22%20y=%22129%22%20text-anchor=%22middle%22%20font-family=%22Segoe%20UI%22%20font-size=%2210%22%20fill=%22%235E6D76%22%3E%C4%91%C6%A1n%20v%C6%B0%E1%BB%A3t%20h%E1%BA%B9n%20t%C3%ADnh%20l%E1%BA%A1i%3C/text%3E%0A%3C/svg%3E\"",
+            "dataCategory": "ImageUrl",
+            "isHidden": true,
+            "displayFolder": "Hình ảnh"
+          },
+          {
             "name": "Thẻ Đơn kịch bản",
             "expression": "IF(ISBLANK([Đơn kịch bản]), \"Chưa có\", FORMAT([Đơn kịch bản], \"#,0\", \"vi-VN\"))",
             "isHidden": true,
@@ -463,6 +716,30 @@
           {
             "name": "Thẻ Vượt hẹn nhóm cao nhất",
             "expression": "IF(ISBLANK([Vượt hẹn nhóm cao nhất]), \"Chưa có\", FORMAT([Vượt hẹn nhóm cao nhất], \"0.0%\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Cam kết hiện tại TB",
+            "expression": "IF(ISBLANK([Cam kết hiện tại TB]), \"Chưa có\", FORMAT([Cam kết hiện tại TB], \"0.00\"\" ngày\"\"\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Đơn vượt hẹn tính lại",
+            "expression": "IF(ISBLANK([Đơn vượt hẹn tính lại]), \"Chưa có\", FORMAT([Đơn vượt hẹn tính lại], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Đơn hết vượt hẹn",
+            "expression": "IF(ISBLANK([Đơn hết vượt hẹn]), \"Chưa có\", FORMAT([Đơn hết vượt hẹn], \"#,0\", \"vi-VN\"))",
+            "isHidden": true,
+            "displayFolder": "Trình bày"
+          },
+          {
+            "name": "Thẻ Dự phòng",
+            "expression": "IF(ISBLANK([Dự phòng]), \"Chưa có\", FORMAT([Dự phòng], \"0.0%\", \"vi-VN\"))",
             "isHidden": true,
             "displayFolder": "Trình bày"
           }
@@ -650,6 +927,30 @@
             "name": "Giảm quãng đường",
             "expression": "VAR d = [Quãng đường benchmark]\nVAR i = SELECTEDVALUE(RouteCases[instance])\nVAR s = SELECTEDVALUE(RouteCases[scenario])\nVAR k = SELECTEDVALUE(RouteCases[max_vehicles])\nVAR q = SELECTEDVALUE(RouteCases[capacity])\nVAR b = CALCULATE(MAX(RouteCases[distance_units]), REMOVEFILTERS(RouteCases), RouteCases[instance] = i,\nRouteCases[scenario] = s, RouteCases[max_vehicles] = k, RouteCases[capacity] = q,\nRouteCases[method] = \"nearest_feasible\", RouteCases[status] = \"feasible\")\nRETURN IF(NOT ISBLANK(d) && NOT ISBLANK(b), DIVIDE(b - d, b))",
             "formatString": "0.0%"
+          },
+          {
+            "name": "Chữ tiêu hao",
+            "expression": "FORMAT(SELECTEDVALUE(FuelConsumption[Value], 10), \"0\", \"vi-VN\") & \" lít / 100 km\""
+          },
+          {
+            "name": "Chữ giá nhiên liệu",
+            "expression": "FORMAT(SELECTEDVALUE(FuelPrice[Value], 22000), \"#,0\", \"vi-VN\") & \" VND / lít\""
+          },
+          {
+            "name": "Chữ quy đổi",
+            "expression": "FORMAT(SELECTEDVALUE(KmPerUnit[Value], 1), \"0.0\", \"vi-VN\") & \" km / đơn vị\""
+          },
+          {
+            "name": "Chữ tải trọng",
+            "expression": "IF(HASONEVALUE(RouteCases[case_id]), FORMAT(SELECTEDVALUE(RouteCases[capacity]), \"#,0\", \"vi-VN\") & \" / xe\", \"—\")"
+          },
+          {
+            "name": "Chữ xe tối đa",
+            "expression": "IF(HASONEVALUE(RouteCases[case_id]), FORMAT(SELECTEDVALUE(RouteCases[max_vehicles]), \"0\", \"vi-VN\") & \" xe\", \"—\")"
+          },
+          {
+            "name": "Kết luận tuyến",
+            "expression": "IF(NOT ISBLANK([Quãng đường benchmark]), \"Phương án này dùng \" & FORMAT([Số xe sử dụng], \"0\", \"vi-VN\") & \" xe và \" & FORMAT([Quãng đường benchmark], \"#,0.0\", \"vi-VN\") & \" đơn vị quãng đường\" & IF(NOT ISBLANK([Giảm quãng đường]), \", ngắn hơn \" & FORMAT([Giảm quãng đường], \"0.0%\", \"vi-VN\") & \" so với điểm gần nhất cùng cấu hình\", \"\") & \"; nhiên liệu mô phỏng \" & FORMAT([Nhiên liệu mô phỏng], \"#,0\", \"vi-VN\") & \" VND theo giả định đã chọn.\", [Trạng thái tuyến])"
           },
           {
             "name": "Thẻ Quãng đường benchmark",

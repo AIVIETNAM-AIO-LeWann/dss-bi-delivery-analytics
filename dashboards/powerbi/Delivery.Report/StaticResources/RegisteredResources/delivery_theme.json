@@ -1,27 +1,27 @@
 {
   "name": "delivery_theme.json",
   "dataColors": [
-    "#087E7C",
-    "#BC935F",
-    "#BC6156",
-    "#6D88A0",
-    "#91ADA2"
+    "#0E7C86",
+    "#B8860B",
+    "#D2472A",
+    "#8E9AA3",
+    "#4A6FB5"
   ],
-  "background": "#FFFFFF",
-  "foreground": "#142D3B",
-  "tableAccent": "#087E7C",
+  "background": "#EAE7DF",
+  "foreground": "#1D2A33",
+  "tableAccent": "#0E7C86",
   "textClasses": {
     "title": {
       "fontFace": "Segoe UI",
-      "fontSize": 13
+      "fontSize": 11
     },
     "label": {
       "fontFace": "Segoe UI",
-      "fontSize": 11
+      "fontSize": 10
     },
     "callout": {
-      "fontFace": "Segoe UI",
-      "fontSize": 32
+      "fontFace": "Segoe UI Light",
+      "fontSize": 30
     }
   }
 }

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "1847a4215bfb0779a379",
   "position": {
-    "x": 768,
-    "y": 154,
+    "x": 94,
+    "y": 296,
     "z": 14,
-    "width": 432,
-    "height": 22,
+    "width": 6,
+    "height": 6,
     "tabOrder": 14
   },
   "visual": {
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -56,7 +56,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#142D3B'"
+                      "Value": "'#1D2A33'"
                     }
                   }
                 }
@@ -78,7 +78,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -87,7 +87,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#D2472A'"
                     }
                   }
                 }
@@ -109,7 +109,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -118,7 +118,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DFE7E7'"
+                      "Value": "'#D2472A'"
                     }
                   }
                 }
@@ -127,7 +127,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "3D"
                 }
               }
             }
@@ -190,13 +190,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Vùng giao",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "12pt",
-                      "color": "#142D3B",
-                      "fontWeight": "bold"
-                    }
+                    "value": ""
                   }
                 ]
               }
@@ -205,5 +199,11 @@
         }
       ]
     }
-  }
+  },
+  "annotations": [
+    {
+      "name": "designRole",
+      "value": "background"
+    }
+  ]
 }

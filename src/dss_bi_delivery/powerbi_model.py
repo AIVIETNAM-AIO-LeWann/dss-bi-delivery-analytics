@@ -134,6 +134,72 @@ MEASURES['ModelMetrics'] += [
 ]
 
 
+# ---- Control-panel redesign: dynamic text, whole-period figures and SVG pictures ----
+from .powerbi_svg import (funnel_expression, keypad_expression, logo_expression, ring_expression,
+                          thermometer_expression, track_expression, RED, TEAL)
+
+MEASURES['Orders'] += [
+    ('Số đơn toàn kỳ', 'CALCULATE([Số đơn], REMOVEFILTERS(Orders))', '#,0'),
+    ('Số tháng toàn kỳ', 'CALCULATE(DISTINCTCOUNT(Orders[month_start]), REMOVEFILTERS(Orders))', '#,0'),
+    ('Số thị trường toàn kỳ', 'CALCULATE(DISTINCTCOUNT(Orders[market]), REMOVEFILTERS(Orders))', '#,0'),
+    ('Tỷ lệ trễ toàn kỳ', 'CALCULATE([Tỷ lệ trễ], REMOVEFILTERS(Orders))', '0.0%'),
+    ('Chiếm đơn trễ', 'DIVIDE([Số đơn trễ], CALCULATE([Số đơn trễ], REMOVEFILTERS(Orders[shipping_mode])))', '0.0%'),
+    ('Chữ cam kết thực tế', 'IF([Số đơn] > 0, FORMAT([Cam kết TB], "0.00", "vi-VN") & " → " & FORMAT([Thực tế TB], "0.00", "vi-VN") & " ngày", "Chưa có")', None),
+    ('Chữ đơn và đơn trễ', 'IF([Số đơn] > 0, FORMAT([Số đơn], "#,0", "vi-VN") & " / " & FORMAT([Số đơn trễ], "#,0", "vi-VN"), "Chưa có")', None),
+    ('Chữ đơn trễ', 'FORMAT([Số đơn trễ], "#,0", "vi-VN") & " đơn trễ"', None),
+    ('Chữ đơn đúng hạn', 'FORMAT([Số đơn] - [Số đơn trễ], "#,0", "vi-VN") & " đúng hạn"', None),
+    ('Nhãn so với trung bình', 'IF([Số đơn] = 0, "", IF([Tỷ lệ trễ] > [Tỷ lệ trễ toàn kỳ], "▲ TRÊN TRUNG BÌNH", "▼ DƯỚI TRUNG BÌNH"))', None),
+    ('Cảnh báo đúng trên đơn test', 'DIVIDE([Cảnh báo đúng], [Đơn test])', '0.0%'),
+    ('Cảnh báo sai trên đơn test', 'DIVIDE([Cảnh báo sai], [Đơn test])', '0.0%'),
+    ('Bỏ sót trên đơn test', 'DIVIDE([Bỏ sót], [Đơn test])', '0.0%'),
+    ('Đơn trễ trên đơn test', 'DIVIDE([Đơn trễ test], [Đơn test])', '0.0%'),
+    ('Kết luận tổng quan', """VAR t = FILTER(ADDCOLUMNS(VALUES(Orders[shipping_mode]), "n", [Số đơn], "r", [Tỷ lệ trễ], "l", [Số đơn trễ]), [n] > 0)
+VAR a = TOPN(1, t, [r], DESC, Orders[shipping_mode], ASC)
+VAR b = TOPN(1, t, [l], DESC, Orders[shipping_mode], ASC)
+VAR total = SUMX(t, [l])
+RETURN IF(COUNTROWS(t) = 0, "Không có dữ liệu",
+    MAXX(a, Orders[shipping_mode]) & " có tỷ lệ trễ cao nhất (" & FORMAT(MAXX(a, [r]), "0.0%", "vi-VN") & "); "
+    & MAXX(b, Orders[shipping_mode]) & " có nhiều đơn trễ nhất (" & FORMAT(DIVIDE(MAXX(b, [l]), total), "0.0%", "vi-VN") & " số đơn trễ).")""", None),
+    ('Kết luận rủi ro', 'IF([Cảnh báo] = 0, "Không có cảnh báo ở ngưỡng đang chọn.", "Cảnh báo đúng " & FORMAT([Precision theo ngưỡng], "0.0%", "vi-VN") & " nhưng chỉ bắt được " & FORMAT([Recall theo ngưỡng], "0.0%", "vi-VN") & " đơn trễ; " & FORMAT([Bỏ sót], "#,0", "vi-VN") & " đơn trễ chưa được cảnh báo.")', None),
+    ('Đơn mỗi tháng', 'DIVIDE([Số đơn], DISTINCTCOUNT(Orders[month_start]))', '#,0'),
+    ('Chữ cảnh báo đúng', 'FORMAT([Cảnh báo đúng], "#,0", "vi-VN") & " đúng"', None),
+    ('Chữ cảnh báo', 'FORMAT([Cảnh báo], "#,0", "vi-VN") & " được báo"', None),
+    ('Chữ bắt được', 'FORMAT([Cảnh báo đúng], "#,0", "vi-VN") & " bắt được"', None),
+    ('Chữ đơn trễ test', 'FORMAT([Đơn trễ test], "#,0", "vi-VN") & " đơn trễ"', None),
+    ('Chữ cảnh báo sai', '"Có thêm " & FORMAT([Cảnh báo sai], "#,0", "vi-VN") & " cảnh báo sai (báo trễ nhưng giao đúng hạn)"', None),
+    ('Logo', logo_expression(), None),
+    ('Vòng tỷ lệ trễ', ring_expression('[Tỷ lệ trễ]', RED, 'đơn giao trễ hạn'), None),
+    ('Vòng độ chính xác', ring_expression('[Precision theo ngưỡng]', TEAL, 'đúng trong số cảnh báo'), None),
+    ('Vòng độ bao phủ', ring_expression('[Recall theo ngưỡng]', RED, 'bắt được trong đơn trễ'), None),
+    ('Thanh tỷ lệ trễ', track_expression('[Tỷ lệ trễ]', '[Tỷ lệ trễ toàn kỳ]'), None),
+    ('Nhiệt kế toàn kỳ', thermometer_expression('[Tỷ lệ trễ toàn kỳ]'), None),
+    ('Bàn phím nhiệt', keypad_expression('[Tỷ lệ trễ]', 'Orders[shipping_mode]', 'Orders[market]'), None),
+    ('Phễu phát hiện', funnel_expression('[Đơn test]', '[Đơn trễ test]', '[Cảnh báo đúng]', '[Bỏ sót]'), None),
+]
+_POLICY = 'COALESCE(SELECTEDVALUE(Policies[policy_id]), SELECTEDVALUE(PolicySelector[policy_id]), "bounded_plus1_keep_same_day")'
+MEASURES['PromiseScenarios'] += [
+    ('Cam kết hiện tại TB', 'CALCULATE(AVERAGE(PromiseScenarios[proposed_days]), KEEPFILTERS(Policies[policy_id] = "current"))', '0.00" ngày"'),
+    ('Đơn vượt hẹn tính lại', 'ROUND([Vượt hẹn tính lại] * [Đơn kịch bản], 0)', '#,0'),
+    ('Đơn hết vượt hẹn', '[Đơn trễ test] - [Đơn vượt hẹn tính lại]', '#,0'),
+    ('Dự phòng', f'VAR p = {_POLICY} RETURN DIVIDE(CALCULATE(SUM(PromiseScenarios[fallback]), KEEPFILTERS(Policies[policy_id] = p)), [Đơn kịch bản])', '0.0%'),
+    ('Kết luận cam kết', 'IF([Đơn kịch bản] = 0, "Không có dữ liệu", [Chính sách đang xem] & " đưa tỷ lệ vượt hẹn từ " & FORMAT([Trễ hiện trạng test], "0.0%", "vi-VN") & " xuống " & FORMAT([Vượt hẹn tính lại], "0.0%", "vi-VN") & ", đổi lại khách chờ thêm trung bình " & FORMAT([Tăng cam kết TB], "0.00", "vi-VN") & " ngày; đây là đổi cam kết, thời gian giao thực tế không đổi.")', None),
+    ('Chữ hiện tại', '"hiện tại " & FORMAT([Trễ hiện trạng test], "0.0%", "vi-VN")', None),
+    ('Chữ đơn vượt hẹn', 'FORMAT([Đơn vượt hẹn tính lại], "#,0", "vi-VN") & " đơn vượt hẹn"', None),
+    ('Vòng vượt hẹn', ring_expression('[Vượt hẹn tính lại]', RED, 'đơn vượt hẹn tính lại'), None),
+]
+MEASURES['RouteCases'] += [
+    ('Chữ tiêu hao', 'FORMAT(SELECTEDVALUE(FuelConsumption[Value], 10), "0", "vi-VN") & " lít / 100 km"', None),
+    ('Chữ giá nhiên liệu', 'FORMAT(SELECTEDVALUE(FuelPrice[Value], 22000), "#,0", "vi-VN") & " VND / lít"', None),
+    ('Chữ quy đổi', 'FORMAT(SELECTEDVALUE(KmPerUnit[Value], 1), "0.0", "vi-VN") & " km / đơn vị"', None),
+    ('Chữ tải trọng', 'IF(HASONEVALUE(RouteCases[case_id]), FORMAT(SELECTEDVALUE(RouteCases[capacity]), "#,0", "vi-VN") & " / xe", "—")', None),
+    ('Chữ xe tối đa', 'IF(HASONEVALUE(RouteCases[case_id]), FORMAT(SELECTEDVALUE(RouteCases[max_vehicles]), "0", "vi-VN") & " xe", "—")', None),
+    ('Kết luận tuyến', 'IF(NOT ISBLANK([Quãng đường benchmark]), "Phương án này dùng " & FORMAT([Số xe sử dụng], "0", "vi-VN") & " xe và " & FORMAT([Quãng đường benchmark], "#,0.0", "vi-VN") & " đơn vị quãng đường" & IF(NOT ISBLANK([Giảm quãng đường]), ", ngắn hơn " & FORMAT([Giảm quãng đường], "0.0%", "vi-VN") & " so với điểm gần nhất cùng cấu hình", "") & "; nhiên liệu mô phỏng " & FORMAT([Nhiên liệu mô phỏng], "#,0", "vi-VN") & " VND theo giả định đã chọn.", [Trạng thái tuyến])', None),
+]
+IMAGE_MEASURES = {'Bản đồ tuyến', 'Logo', 'Vòng tỷ lệ trễ', 'Vòng độ chính xác', 'Vòng độ bao phủ', 'Vòng vượt hẹn',
+                  'Thanh tỷ lệ trễ', 'Nhiệt kế toàn kỳ', 'Bàn phím nhiệt', 'Phễu phát hiện'}
+
+
+
 # Keep numeric measures reusable; card-only measures handle Vietnamese formatting and missing data.
 for _table, _items in MEASURES.items():
     for _name, _expression, _format in list(_items):
@@ -185,7 +251,7 @@ def model():
             'expression':'DATATABLE("method", STRING, "method_label", STRING, {{"nearest_feasible", "Điểm gần nhất"}, {"ortools", "OR Tools"}})'}}]})
     for table in tables:
         if table['name'] in MEASURES:
-            table['measures'] = [{'name':name,'expression':expression, **({'formatString':fmt} if fmt else {}), **({'dataCategory':'ImageUrl'} if name == 'Bản đồ tuyến' else {}), **({'isHidden':True,'displayFolder':'Trình bày'} if name.startswith('Thẻ ') else {})} for name,expression,fmt in MEASURES[table['name']]]
+            table['measures'] = [{'name':name,'expression':expression, **({'formatString':fmt} if fmt else {}), **({'dataCategory':'ImageUrl'} if name in IMAGE_MEASURES else {}), **({'isHidden':True,'displayFolder':'Trình bày'} if name.startswith('Thẻ ') else {}), **({'isHidden':True,'displayFolder':'Hình ảnh'} if name in IMAGE_MEASURES and name != 'Bản đồ tuyến' else {})} for name,expression,fmt in MEASURES[table['name']]]
     relationships = []
     for many,column,one,key in [('PromiseScenarios','order_id','Orders','order_id'),('PromiseScenarios','policy_id','Policies','policy_id'),('RouteStops','case_id','RouteCases','case_id')]:
         relationships.append({'name':f'{many}_{column}_{one}','fromTable':many,'fromColumn':column,'toTable':one,'toColumn':key,

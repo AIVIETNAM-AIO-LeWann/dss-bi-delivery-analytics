@@ -3,7 +3,7 @@
   "name": "3a44788d006adcb566a2",
   "displayName": "Cam kết",
   "displayOption": "FitToPage",
-  "height": 936,
+  "height": 1000,
   "width": 1440,
   "objects": {
     "background": [
@@ -14,7 +14,7 @@
               "color": {
                 "expr": {
                   "Literal": {
-                    "Value": "'#F3F6F6'"
+                    "Value": "'#E4E0D7'"
                   }
                 }
               }

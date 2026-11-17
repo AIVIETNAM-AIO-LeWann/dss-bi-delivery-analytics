@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery Insights</title>
+<style>
+/*STYLE*/
+</style>
+</head>
+<body>
+
+<aside class="rail raise">
+  <div class="logo"><div class="badge"><svg width="42" height="42" viewBox="-21 -21 42 42" aria-label="Logo">
+    <polygon points="0,-17 15,-8.5 0,0 -15,-8.5" style="fill:color-mix(in srgb,var(--teal) 55%,#fff)"/>
+    <polygon points="-15,-8.5 0,0 0,17 -15,8.5" style="fill:var(--teal)"/>
+    <polygon points="15,-8.5 0,0 0,17 15,8.5" style="fill:var(--teal2)"/>
+    <path d="M-15,-8.5 L0,0 L15,-8.5 M0,0 V17" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1"/>
+    <path d="M-8,-4.2 L6,3.8" stroke="#fff" stroke-opacity=".85" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 4"/>
+    <circle cx="14" cy="-14" r="6" style="fill:var(--red)" stroke="var(--face1)" stroke-width="2.2"/></svg></div>
+    <div class="wm"><b>Delivery</b><span>Insights</span></div></div>
+  <div class="key on" data-p="p1"><small>01</small><b>Tổng quan</b></div>
+  <div class="key" data-p="p2"><small>02</small><b>Rủi ro</b></div>
+  <div class="key" data-p="p3"><small>03</small><b>Cam kết</b></div>
+  <div class="key" data-p="p4"><small>04</small><b>Tuyến giao</b></div>
+  <div class="plaque well">
+    <div class="pl-h">Dữ liệu</div>
+    <div class="pl-r"><b class="num" id="rn"></b><span>đơn</span></div>
+    <div class="pl-r"><b class="num" id="rm"></b><span>tháng</span></div>
+    <div class="pl-r"><b class="num" id="rk"></b><span>thị trường</span></div>
+    <div class="therm"><div class="tube well"><i id="rtube"></i><u style="bottom:50%"></u></div><div class="tl">trễ toàn kỳ<b class="num" id="rrate"></b></div></div>
+  </div>
+  <div class="knob" id="tog" title="Đổi giao diện sáng / tối"><span>◐</span></div>
+</aside>
+
+<div class="main">
+
+<!-- ================= 1. TỔNG QUAN ================= -->
+<div class="page on" id="p1">
+  <div class="head"><div class="tt"><h1>Hiệu suất giao hàng</h1><p id="sub1"></p></div><div class="fbar" id="fb1"></div></div>
+  <div class="tape"><em>KẾT LUẬN</em><span id="tape1"></span></div>
+  <div class="g" style="grid-template-columns:340px 1fr;height:282px">
+    <div class="plate raise">
+      <div class="ph"><h3>Tỷ lệ giao trễ</h3><span class="sub" id="ring1sub" style="font-size:11.5px;color:var(--muted)"></span></div>
+      <div class="dialwrap" id="dial1"></div>
+      <div class="dialfoot"><span id="f1a"></span><span id="f1b"></span></div>
+    </div>
+    <div class="g" style="grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;margin:0" id="tiles"></div>
+  </div>
+  <div class="g" style="grid-template-columns:600px 360px 1fr;height:268px">
+    <div class="plate raise"><h3>Nên ưu tiên phương thức nào?</h3><div class="sub">Số đơn (ngang) × tỷ lệ trễ (dọc) · cỡ khối cầu là số đơn trễ</div><div id="bubble"></div></div>
+    <div class="plate raise"><h3>Phương thức × thị trường</h3><div class="sub">Màu cho thấy chênh lệch so với mức trung bình toàn kỳ</div><div class="keypad" id="keypad"></div>
+      <div class="legendbar"><span>thấp</span><i id="lgbar"></i><span>cao</span></div></div>
+    <div class="plate raise" id="kpis"></div>
+  </div>
+  <div class="g" style="grid-template-columns:1fr;height:196px"><div class="plate raise"><div class="ph"><h3>Diễn biến tỷ lệ trễ theo tháng</h3><span class="sub" id="trendsub" style="font-size:11.5px;color:var(--muted)"></span></div><div id="trend"></div></div></div>
+</div>
+
+<!-- ================= 2. RỦI RO ================= -->
+<div class="page" id="p2">
+  <div class="head"><div class="tt"><h1>Rủi ro giao trễ</h1><p id="sub2"></p></div><div class="fbar" id="fb2"></div></div>
+  <div class="tape"><em>KẾT LUẬN</em><span id="tape2"></span></div>
+  <div class="g" style="grid-template-columns:316px 316px 1fr;height:296px">
+    <div class="plate raise"><div class="ph"><h3>Độ chính xác</h3><span class="sub" style="font-size:11.5px;color:var(--muted)">đúng / số cảnh báo</span></div><div class="dialwrap" id="dial2" style="width:276px"></div><div class="dialfoot"><span id="f2a"></span><span id="f2b"></span></div></div>
+    <div class="plate raise"><div class="ph"><h3>Độ bao phủ</h3><span class="sub" style="font-size:11.5px;color:var(--muted)">bắt được / đơn trễ</span></div><div class="dialwrap" id="dial3" style="width:276px"></div><div class="dialfoot"><span id="f3a"></span><span id="f3b"></span></div></div>
+    <div class="plate raise"><h3>Phễu phát hiện đơn trễ</h3><div class="sub" id="funsub"></div><div id="funnel"></div></div>
+  </div>
+  <div class="g" style="grid-template-columns:repeat(4,1fr);height:92px">
+    <div class="plate raise cnt" style="--c:var(--teal)"><i></i><div><span>Cảnh báo đúng</span><b class="num" id="c1"></b></div><em class="pc" id="s1"></em></div>
+    <div class="plate raise cnt" style="--c:var(--brass)"><i></i><div><span>Cảnh báo sai</span><b class="num" id="c2"></b></div><em class="pc" id="s2"></em></div>
+    <div class="plate raise cnt" style="--c:var(--red)"><i></i><div><span>Đơn trễ bị bỏ sót</span><b class="num" id="c3"></b></div><em class="pc" id="s3"></em></div>
+    <div class="plate raise cnt" style="--c:var(--steel)"><i></i><div><span>Đơn trễ thực tế</span><b class="num" id="c4"></b></div><em class="pc" id="s4"></em></div>
+  </div>
+  <div class="g" style="grid-template-columns:1fr 480px;height:340px">
+    <div class="plate raise"><div class="ph"><div><h3>Cảnh báo và bỏ sót theo phương thức</h3><div class="sub">Số đơn trên tập kiểm tra</div></div><div class="legend" id="stkleg"></div></div><div id="stack" style="margin-top:6px"></div></div>
+    <div class="plate raise"><h3>Chất lượng mô hình</h3><div class="sub">Toàn tập kiểm tra, không đổi theo bộ lọc · thanh lõm thể hiện AP</div><div id="models"></div></div>
+  </div>
+</div>
+
+<!-- ================= 3. CAM KẾT ================= -->
+<div class="page" id="p3">
+  <div class="head"><div class="tt"><h1>Phương án cam kết</h1><p id="sub3"></p></div><div class="fbar" id="fb3"></div></div>
+  <div class="tape"><em>KẾT LUẬN</em><span id="tape3"></span></div>
+  <div class="g" style="grid-template-columns:340px 1fr;height:282px">
+    <div class="plate raise">
+      <div class="ph"><h3>Tỷ lệ vượt hẹn tính lại</h3><span class="sub" id="selname" style="font-size:11.5px;color:var(--muted)"></span></div>
+      <div class="dialwrap" id="dial4"></div>
+      <div class="dialfoot"><span id="f4a"></span><span id="f4b"></span></div>
+    </div>
+    <div class="g" style="grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;margin:0" id="ptiles"></div>
+  </div>
+  <div class="g" style="grid-template-columns:540px 1fr;height:268px">
+    <div class="plate raise"><h3>Đánh đổi giữa vượt hẹn và ngày chờ thêm</h3><div class="sub">Mỗi khối cầu là một phương án · càng sang phải khách càng chờ lâu</div><div id="trade"></div></div>
+    <div class="plate raise"><h3>So sánh các phương án</h3><div class="sub">Luôn hiện đủ năm phương án; dòng đang xem được ấn lõm · bấm một dòng để chọn</div><div id="poltable"></div></div>
+  </div>
+  <div class="g" style="grid-template-columns:1fr;height:236px"><div class="plate raise"><h3>Cam kết theo phương thức</h3><div class="sub">Phương án đang xem so với hiện tại · tăng cam kết không có nghĩa là giao nhanh hơn</div><div id="modetable"></div></div></div>
+</div>
+
+<!-- ================= 4. TUYẾN GIAO ================= -->
+<div class="page" id="p4">
+  <div class="head"><div class="tt"><h1>Tuyến giao và nhiên liệu</h1><p>Bộ bài toán Solomon · phương án đã tính</p></div><div class="fbar" id="fb4"></div></div>
+  <div class="tape"><em>KẾT LUẬN</em><span id="tape4"></span></div>
+  <div class="g" style="grid-template-columns:640px 1fr;height:462px">
+    <div class="plate raise" style="padding-bottom:14px">
+      <div class="ph"><h3>Sơ đồ tuyến theo xe</h3><span class="sub" style="font-size:11.5px;color:var(--muted)">tọa độ Solomon, không phải đường bộ</span></div>
+      <div class="well" id="rmap" style="margin-top:10px;height:392px;border-radius:14px;padding:8px"></div>
+    </div>
+    <div style="display:grid;grid-template-rows:1fr 1fr;gap:16px">
+      <div class="g" style="grid-template-columns:1fr 1fr;margin:0;gap:16px" id="rtiles1"></div>
+      <div class="g" style="grid-template-columns:1fr 1fr;margin:0;gap:16px" id="rtiles2"></div>
+    </div>
+  </div>
+  <div class="g" style="grid-template-columns:420px 1fr;height:330px">
+    <div class="plate raise"><h3>Quãng đường cùng cấu hình</h3><div class="sub">Đơn vị tọa độ · chỉ so sánh khi cả hai có lời giải khả thi</div><div id="rcmp"></div></div>
+    <div class="plate raise"><div class="ph"><div><h3>Các cấu hình đã tính</h3><div class="sub">Bấm một dòng để xem tuyến OR Tools của cấu hình đó</div></div><div class="btn" id="openStops">Lịch trình chi tiết ›</div></div><div id="rtable"></div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="drawer-bg" id="dbg"></div>
+<aside class="drawer raise" id="drawer"></aside>
+
+<script>window.__DATA__=/*DATA*/;</script>
+<script>
+/*APP*/
+</script>
+</body>
+</html>
