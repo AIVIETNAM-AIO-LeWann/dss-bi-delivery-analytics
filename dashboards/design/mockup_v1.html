@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Delivery Insights – Mockup v1</title>
+<style>
+:root{
+  --ink:#142D3B; --ink2:#3F5661; --muted:#627780; --line:#E3EAEA; --paper:#F2F5F5; --card:#fff;
+  --teal:#087E7C; --teal-soft:#E3F1F0; --risk:#B5533C; --risk-soft:#F8E8E3; --slate:#9DB0B8;
+  --nav:#0F2430;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--paper);color:var(--ink);font:13px/1.4 "Segoe UI",system-ui,sans-serif;width:1440px;margin:0 auto;padding-bottom:28px}
+.num{font-variant-numeric:tabular-nums}
+/* top bar */
+.top{height:60px;background:var(--nav);display:flex;align-items:center;padding:0 28px;gap:36px}
+.brand{color:#fff;font-weight:700;letter-spacing:.14em;font-size:13px;display:flex;align-items:center;gap:10px}
+.brand i{width:10px;height:10px;border-radius:3px;background:var(--teal);display:block}
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tab{color:#A9BEC6;padding:19px 18px 17px;font-size:13px;border-bottom:3px solid transparent;cursor:pointer}
+.tab.on{color:#fff;border-color:#2BB5B0;font-weight:600}
+.page{display:none}.page.on{display:block}
+/* header */
+.head{display:flex;align-items:flex-end;justify-content:space-between;padding:22px 28px 14px}
+.head h1{font-size:26px;letter-spacing:-.01em}
+.head p{color:var(--muted);margin-top:2px}
+.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;color:var(--ink2);font-size:12px}
+/* filters */
+.filters{margin:0 28px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;height:56px;display:flex;align-items:center;padding:0 16px;gap:22px}
+.filters .lab{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.sel{border:1px solid var(--line);border-radius:8px;height:34px;min-width:150px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--ink)}
+.sel:after{content:"";width:7px;height:7px;border:solid var(--muted);border-width:0 1.5px 1.5px 0;transform:rotate(45deg) translateY(-2px)}
+.clear{margin-left:auto;color:var(--teal);font-weight:600}
+/* grid */
+.row{display:grid;gap:16px;margin:0 28px 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;position:relative}
+.card h3{font-size:13px;font-weight:700}
+.card .sub{color:var(--muted);font-size:11.5px;margin-top:2px}
+/* kpi */
+.kpi{padding:16px 20px 18px;overflow:hidden}
+.kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--teal)}
+.kpi.warn:before{background:var(--risk)}
+.kpi .t{color:var(--muted);font-size:12px;font-weight:600}
+.kpi .v{font-size:34px;font-weight:600;letter-spacing:-.02em;margin-top:6px}
+.kpi .d{color:var(--muted);font-size:11.5px;margin-top:2px}
+.kpi.hero{background:var(--nav);border-color:var(--nav);color:#fff}
+.kpi.hero:before{background:#2BB5B0}
+.kpi.hero .t,.kpi.hero .d{color:#B4C9D0}
+.kpi.hero .v{font-size:46px}
+.bar{height:6px;border-radius:3px;background:#27424F;margin-top:12px;overflow:hidden}
+.bar b{display:block;height:100%;background:#2BB5B0;border-radius:3px}
+/* insight */
+.insight{display:flex;gap:14px;align-items:flex-start;background:var(--risk-soft);border:1px solid #EBCFC6;border-radius:12px;padding:14px 18px}
+.insight .tag{background:var(--risk);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.08em;padding:3px 8px;border-radius:5px;margin-top:1px;white-space:nowrap}
+.insight p{color:var(--ink);font-size:13.5px}
+.insight b{font-weight:700}
+/* bars (html) */
+.hb{display:grid;grid-template-columns:118px 1fr 60px;align-items:center;gap:12px;height:44px}
+.hb .nm{color:var(--ink2)} .hb .nm small{display:block;color:var(--muted);font-size:11px}
+.hb .tr{height:22px;background:#EEF3F3;border-radius:4px;position:relative}
+.hb .tr i{font-style:normal;position:absolute;left:0;top:0;bottom:0;border-radius:4px 4px 4px 4px}
+.hb .tr u{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--ink);opacity:.55}
+.hb .vl{text-align:right;font-weight:700}
+.legend{display:flex;gap:16px;color:var(--muted);font-size:11.5px;margin-top:8px}
+.legend span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c);vertical-align:-1px}
+/* table */
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;border-bottom:1px solid var(--ink);text-align:right}
+th:first-child,td:first-child{text-align:left}
+td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:right}
+tr:last-child td{border-bottom:0}
+.chip{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:600}
+.chip.r{background:var(--risk-soft);color:var(--risk)} .chip.g{background:var(--teal-soft);color:var(--teal)} .chip.n{background:#EEF3F3;color:var(--ink2)}
+svg text{font-family:"Segoe UI",system-ui,sans-serif}
+.note{margin:16px 28px 0;color:var(--muted);font-size:11px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand"><i></i>DELIVERY INSIGHTS</div>
+  <div class="tabs">
+    <div class="tab on" data-p="p1">Tổng quan</div>
+    <div class="tab" data-p="p2">Rủi ro</div>
+    <div class="tab">Cam kết</div>
+    <div class="tab">Tuyến giao</div>
+  </div>
+</div>
+
+<!-- ===================== TỔNG QUAN ===================== -->
+<div class="page on" id="p1">
+  <div class="head">
+    <div><h1>Hiệu suất giao hàng</h1><p>Đơn DataCo không hủy · 01/2015 – 01/2018</p></div>
+    <span class="pill">62.897 đơn phân tích</span>
+  </div>
+  <div class="filters">
+    <span class="lab">Bộ lọc</span>
+    <div class="sel"><span>Phương thức: Tất cả</span></div>
+    <div class="sel"><span>Thị trường: Tất cả</span></div>
+    <div class="sel"><span>Vùng giao: Tất cả</span></div>
+    <span class="clear">Xóa bộ lọc</span>
+  </div>
+
+  <div class="row" style="grid-template-columns:1.25fr 1fr 1fr 1fr">
+    <div class="card kpi hero">
+      <div class="t">Tỷ lệ giao trễ</div>
+      <div class="v num">57,3%</div>
+      <div class="d num">36.048 / 62.897 đơn giao sau hạn cam kết</div>
+      <div class="bar"><b style="width:57.3%"></b></div>
+    </div>
+    <div class="card kpi"><div class="t">Số đơn phân tích</div><div class="v num">62.897</div><div class="d">Không tính đơn hủy</div></div>
+    <div class="card kpi"><div class="t">Giao thực tế trung bình</div><div class="v num">3,50 <small style="font-size:16px;font-weight:500">ngày</small></div><div class="d">Từ lúc đặt đến lúc nhận</div></div>
+    <div class="card kpi warn"><div class="t">Chênh so với cam kết</div><div class="v num">+0,57 <small style="font-size:16px;font-weight:500">ngày</small></div><div class="d">Thực tế trừ cam kết trung bình</div></div>
+  </div>
+
+  <div class="row">
+    <div class="insight"><span class="tag">NHẬN ĐỊNH</span>
+      <p><b>Phương thức giao quyết định việc trễ hạn:</b> First Class trễ <b>100%</b> và Second Class <b>80%</b>, trong khi thị trường và từng tháng chỉ dao động 55–60%.
+      Standard Class có nhiều đơn nhất (37.632) nhưng chỉ trễ 39,8%.</p></div>
+  </div>
+
+  <div class="row" style="grid-template-columns:1.55fr 1fr">
+    <div class="card">
+      <h3>Tỷ lệ trễ theo phương thức giao</h3>
+      <div class="sub">Vạch đứt là mức trung bình toàn bộ (57,3%) · nhãn ghi số đơn</div>
+      <div style="margin-top:14px" id="modes"></div>
+      <div class="legend"><span style="--c:var(--risk)">Trên mức trung bình</span><span style="--c:var(--teal)">Dưới mức trung bình</span></div>
+    </div>
+    <div class="card">
+      <h3>Cam kết và thực tế</h3>
+      <div class="sub">Số ngày trung bình theo phương thức</div>
+      <table>
+        <tr><th>Phương thức</th><th>Cam kết</th><th>Thực tế</th><th>Chênh</th></tr>
+        <tr><td>First Class</td><td class="num">1,00</td><td class="num">2,00</td><td><span class="chip r">+1,00</span></td></tr>
+        <tr><td>Second Class</td><td class="num">2,00</td><td class="num">4,00</td><td><span class="chip r">+2,00</span></td></tr>
+        <tr><td>Standard Class</td><td class="num">4,00</td><td class="num">3,99</td><td><span class="chip g">−0,01</span></td></tr>
+        <tr><td>Same Day</td><td class="num">0,00</td><td class="num">0,48</td><td><span class="chip n">+0,48</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="row" style="grid-template-columns:1.55fr 1fr">
+    <div class="card"><h3>Tỷ lệ trễ theo tháng</h3><div class="sub">Trục thu hẹp 50–62% để thấy dao động; vạch đứt là trung bình 57,3%</div><div id="trend"></div></div>
+    <div class="card"><h3>Tỷ lệ trễ theo thị trường</h3><div class="sub">Gần như đồng đều: chênh lệch dưới 2,2 điểm %</div><div id="markets" style="margin-top:10px"></div></div>
+  </div>
+</div>
+
+<!-- ===================== RỦI RO ===================== -->
+<div class="page" id="p2">
+  <div class="head">
+    <div><h1>Rủi ro giao trễ</h1><p>Tập kiểm tra · 13.071 đơn · 07/2017 – 01/2018</p></div>
+    <span class="pill">Ngưỡng cảnh báo 0,50</span>
+  </div>
+  <div class="filters">
+    <span class="lab">Bộ lọc</span>
+    <div class="sel"><span>Ngưỡng: 0,50</span></div>
+    <div class="sel"><span>Phương thức: Tất cả</span></div>
+    <div class="sel"><span>Vùng giao: Tất cả</span></div>
+    <span class="clear">Xóa bộ lọc</span>
+  </div>
+  <div class="row" style="grid-template-columns:1.25fr 1fr 1fr 1fr">
+    <div class="card kpi hero"><div class="t">Độ chính xác cảnh báo</div><div class="v num">89,0%</div><div class="d">Trong số đơn được cảnh báo, tỷ lệ thật sự trễ</div><div class="bar"><b style="width:89%"></b></div></div>
+    <div class="card kpi warn"><div class="t">Độ bao phủ đơn trễ</div><div class="v num">53,9%</div><div class="d">Tỷ lệ đơn trễ được phát hiện</div></div>
+    <div class="card kpi"><div class="t">Đơn được cảnh báo</div><div class="v num">4.560</div><div class="d">4.057 đúng · 503 sai</div></div>
+    <div class="card kpi warn"><div class="t">Đơn trễ bị bỏ sót</div><div class="v num">3.467</div><div class="d">Mô hình chưa cảnh báo</div></div>
+  </div>
+  <div class="row"><div class="insight"><span class="tag">NHẬN ĐỊNH</span>
+    <p>Cảnh báo <b>rất đáng tin</b> (89% đúng) nhưng <b>còn bỏ sót gần một nửa</b> đơn trễ. Standard Class chiếm phần lớn đơn bị bỏ sót (3.073 / 3.467).</p></div></div>
+  <div class="row" style="grid-template-columns:1.55fr 1fr">
+    <div class="card"><h3>Cảnh báo và bỏ sót theo phương thức</h3><div class="sub">Số đơn trên tập kiểm tra</div><div id="stack" style="margin-top:14px"></div>
+      <div class="legend"><span style="--c:var(--teal)">Cảnh báo đúng</span><span style="--c:#D8A25A">Cảnh báo sai</span><span style="--c:var(--risk)">Bỏ sót</span></div></div>
+    <div class="card"><h3>Chất lượng mô hình</h3><div class="sub">Toàn tập kiểm tra, không đổi theo bộ lọc vùng</div>
+      <table><tr><th>Mô hình</th><th>ROC-AUC</th><th>AP</th><th>Log loss</th></tr>
+      <tr><td>Hồi quy logistic</td><td class="num">0,751</td><td class="num"><b>0,840</b></td><td class="num">0,538</td></tr>
+      <tr><td>Gradient boosting</td><td class="num">0,745</td><td class="num">0,838</td><td class="num">0,540</td></tr>
+      <tr><td>Theo phương thức</td><td class="num">0,746</td><td class="num">0,788</td><td class="num">0,536</td></tr></table></div>
+  </div>
+</div>
+<div class="note">Mockup v1 – số liệu lấy từ data/dashboard; các nhận định ở dải “Nhận định” cần measure động khi chuyển sang Power BI.</div>
+
+<script>
+const AVG=.5731, RISK='#B5533C', TEAL='#087E7C';
+document.querySelectorAll('.tab[data-p]').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===t.dataset.p));});
+const pct=v=>(v*100).toFixed(1).replace('.',',')+'%', num=v=>v.toLocaleString('vi-VN');
+// by mode
+const modes=[['First Class',1,9602],['Second Class',.7999,12256],['Same Day',.4837,3407],['Standard Class',.3985,37632]];
+document.getElementById('modes').innerHTML=modes.map(([n,v,c])=>`<div class="hb"><div class="nm">${n}<small>${num(c)} đơn</small></div>
+ <div class="tr"><i style="width:${v*100}%;background:${v>AVG?RISK:TEAL}"></i><u style="left:${AVG*100}%"></u></div><div class="vl num">${pct(v)}</div></div>`).join('');
+// markets
+const mk=[['Pacific Asia',.5768],['USCA',.5752],['Europe',.5742],['LATAM',.5690],['Africa',.5655]];
+document.getElementById('markets').innerHTML=mk.map(([n,v])=>`<div class="hb" style="grid-template-columns:96px 1fr 52px;height:34px"><div class="nm">${n}</div>
+ <div class="tr" style="height:16px"><i style="width:${v*100}%;background:var(--slate)"></i><u style="left:${AVG*100}%"></u></div><div class="vl num">${pct(v)}</div></div>`).join('');
+// stacked
+const st=[['Standard Class',0,0,3073],['Second Class',2083,503,0],['First Class',1974,0,0],['Same Day',0,0,394]];
+const mx=3100;
+document.getElementById('stack').innerHTML=st.map(([n,a,b,c])=>`<div class="hb" style="grid-template-columns:118px 1fr 8px"><div class="nm">${n}</div>
+ <div class="tr" style="background:none;display:flex;gap:2px">${[[a,TEAL],[b,'#D8A25A'],[c,RISK]].filter(x=>x[0]).map(([v,col])=>`<i style="position:static;height:22px;width:${v/mx*100}%;background:${col};color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;border-radius:4px" class="num">${num(v)}</i>`).join('')}</div><span></span></div>`).join('');
+// trend (synthetic-free: use real monthly values)
+</script>
+<script>
+const M=[["2015-01-01", 0.5622], ["2015-02-01", 0.5787], ["2015-03-01", 0.5746], ["2015-04-01", 0.5656], ["2015-05-01", 0.5754], ["2015-06-01", 0.57], ["2015-07-01", 0.5651], ["2015-08-01", 0.5757], ["2015-09-01", 0.582], ["2015-10-01", 0.5737], ["2015-11-01", 0.5676], ["2015-12-01", 0.5708], ["2016-01-01", 0.586], ["2016-02-01", 0.5673], ["2016-03-01", 0.5806], ["2016-04-01", 0.5675], ["2016-05-01", 0.5797], ["2016-06-01", 0.5986], ["2016-07-01", 0.5548], ["2016-08-01", 0.5789], ["2016-09-01", 0.5703], ["2016-10-01", 0.5731], ["2016-11-01", 0.5705], ["2016-12-01", 0.5858], ["2017-01-01", 0.5579], ["2017-02-01", 0.5715], ["2017-03-01", 0.5754], ["2017-04-01", 0.5504], ["2017-05-01", 0.5772], ["2017-06-01", 0.5676], ["2017-07-01", 0.5706], ["2017-08-01", 0.5788], ["2017-09-01", 0.5738], ["2017-10-01", 0.5632], ["2017-11-01", 0.5787], ["2017-12-01", 0.5771], ["2018-01-01", 0.5866]];
+(function(){
+  const w=640,h=200,l=44,r=14,t=10,b=26,lo=.50,hi=.62;
+  const x=i=>l+i*(w-l-r)/(M.length-1), y=v=>t+(hi-v)/(hi-lo)*(h-t-b);
+  let s=`<svg viewBox="0 0 ${w} ${h}" width="100%">`;
+  [.50,.54,.58,.62].forEach(v=>s+=`<line x1="${l}" x2="${w-r}" y1="${y(v)}" y2="${y(v)}" stroke="#E7EEEE"/><text x="${l-8}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="#627780">${Math.round(v*100)}%</text>`);
+  s+=`<line x1="${l}" x2="${w-r}" y1="${y(AVG)}" y2="${y(AVG)}" stroke="#142D3B" stroke-dasharray="4 4" opacity=".5"/>`;
+  s+=`<path d="${M.map((m,i)=>(i?'L':'M')+x(i)+' '+y(m[1])).join('')}" fill="none" stroke="${TEAL}" stroke-width="2.2" stroke-linejoin="round"/>`;
+  [0,12,24,36].forEach(i=>s+=`<text x="${x(i)}" y="${h-6}" text-anchor="${i===36?'end':'middle'}" font-size="10" fill="#627780">${M[i][0].slice(0,7)}</text>`);
+  const hiI=M.reduce((a,m,i)=>m[1]>M[a][1]?i:a,0), loI=M.reduce((a,m,i)=>m[1]<M[a][1]?i:a,0);
+  [[hiI,'cao nhất'],[loI,'thấp nhất']].forEach(([i,n])=>s+=`<circle cx="${x(i)}" cy="${y(M[i][1])}" r="4" fill="#fff" stroke="${RISK}" stroke-width="2"/><text x="${x(i)}" y="${y(M[i][1])+(n==='cao nhất'?-9:17)}" text-anchor="middle" font-size="10.5" font-weight="600" fill="${RISK}">${pct(M[i][1])} ${n}</text>`);
+  document.getElementById('trend').innerHTML=s+'</svg>';
+})();
+</script>
+</body>
+</html>
