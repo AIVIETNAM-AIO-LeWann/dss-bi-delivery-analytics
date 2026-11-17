@@ -43,3 +43,6 @@ __pycache__/
 **/.pbi/localSettings.json
 **/.pbi/cache.abf
 **/.pbi/unappliedChanges.json
+
+# Local knowledge-graph output (generated, 30 MB, contains machine paths)
+/graphify-out/

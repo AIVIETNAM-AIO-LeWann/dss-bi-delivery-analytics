@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Delivery Insights – Mockup v2</title>
+<style>
+:root{
+  --bg:#F1F5F6; --surface:#FFFFFF; --surface2:#F4F8F8; --line:#E1E9EA; --ink:#102A37; --ink2:#42606C; --muted:#6B828C;
+  --teal:#0A8F8B; --teal-hi:#0A8F8B; --risk:#D4573A; --amber:#C98A1B; --slate:#8FA6B0;
+  --track:#E8EFF0; --hero1:#0F2D3C; --hero2:#13495A; --heroink:#fff; --heromuted:#A9C6CE;
+  --risk-soft:#FBEAE5; --teal-soft:#E0F3F1; --shadow:0 1px 2px rgba(16,42,55,.05),0 8px 24px -12px rgba(16,42,55,.12);
+  --scale-lo:#7FC9C3; --scale-mid:#EEF2F2; --scale-hi:#D4573A; --cellink:#102A37;
+}
+[data-theme=dark]{
+  --bg:#07151D; --surface:#0E2330; --surface2:#12303F; --line:#1C3B4B; --ink:#EAF4F6; --ink2:#B7CDD4; --muted:#7F9AA5;
+  --teal:#2CC9BC; --teal-hi:#5FE3D6; --risk:#FF7B5C; --amber:#F5B94D; --slate:#5F7F90;
+  --track:#173443; --hero1:#0F3B4A; --hero2:#0B2430; --heroink:#fff; --heromuted:#9CC1C9;
+  --risk-soft:#33211F; --teal-soft:#10353A; --shadow:0 0 0 1px rgba(255,255,255,.02),0 14px 30px -18px #000;
+  --scale-lo:#1E7F7A; --scale-mid:#1A3342; --scale-hi:#FF7B5C; --cellink:#fff;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:13px/1.45 "Segoe UI",system-ui,sans-serif;width:1440px;margin:0 auto;padding:0 0 28px;
+  background-image:radial-gradient(900px 340px at 85% -80px,color-mix(in srgb,var(--teal) 16%,transparent),transparent);background-repeat:no-repeat}
+.num{font-variant-numeric:tabular-nums}
+svg text{font-family:"Segoe UI",system-ui,sans-serif}
+/* ---------- top bar ---------- */
+.top{height:68px;display:flex;align-items:center;padding:0 28px;gap:28px}
+.logo{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.12em;font-size:13px}
+.logo i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--teal-hi),#0A6F7A);display:grid;place-items:center}
+.logo i:after{content:"";width:12px;height:12px;border:2.5px solid #fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg)}
+.logo small{display:block;font-weight:500;letter-spacing:.02em;color:var(--muted);font-size:10.5px;margin-top:-1px}
+.tabs{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:2px;margin-left:auto;box-shadow:var(--shadow)}
+.tab{padding:8px 20px;border-radius:9px;color:var(--muted);cursor:pointer;font-weight:500;transition:.15s}
+.tab:hover{color:var(--ink)}
+.tab.on{background:linear-gradient(135deg,var(--teal),#0A7C86);color:#fff;font-weight:600}
+.tog{width:38px;height:38px;border-radius:11px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;cursor:pointer;color:var(--ink2);font-size:16px;box-shadow:var(--shadow)}
+.page{display:none}.page.on{display:block}
+/* ---------- layout ---------- */
+.row{display:grid;gap:16px;margin:0 28px 16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 22px;position:relative;box-shadow:var(--shadow)}
+.card h3{font-size:14px;font-weight:700;letter-spacing:.005em}
+.card .sub{color:var(--muted);font-size:11.5px;margin-top:2px}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-hi);font-weight:700}
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:1fr 360px;gap:20px;padding:30px 34px;border:0;overflow:hidden;
+  background:radial-gradient(520px 260px at 90% 0,color-mix(in srgb,var(--teal) 35%,transparent),transparent),linear-gradient(135deg,var(--hero1),var(--hero2));color:var(--heroink)}
+[data-theme=dark] .hero{border:1px solid var(--line)}
+.hero .eyebrow{color:#7FE9DD}
+.hero h1{font-size:56px;line-height:1.02;letter-spacing:-.03em;margin:10px 0 10px;font-weight:700}
+.hero h1 span{font-size:26px;font-weight:500;letter-spacing:-.01em;color:var(--heromuted);margin-left:6px}
+.hero p{color:#C9DEE3;font-size:14.5px;max-width:640px}
+.hero p b{color:#fff}
+.heroChips{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.hc{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:9px 14px}
+.hc b{display:block;font-size:19px;font-weight:650}
+.hc span{font-size:11px;color:var(--heromuted)}
+.ring{display:grid;place-items:center}
+/* ---------- filters ---------- */
+.filters{display:flex;align-items:center;gap:12px;margin:0 28px 16px}
+.lab{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;height:38px;padding:0 14px;display:flex;align-items:center;gap:10px;color:var(--ink2);box-shadow:var(--shadow)}
+.sel b{color:var(--ink);font-weight:600}
+.sel:after{content:"";width:6px;height:6px;border:solid var(--muted);border-width:0 1.5px 1.5px 0;transform:rotate(45deg) translateY(-2px)}
+.clear{margin-left:auto;color:var(--teal-hi);font-weight:600;padding:8px 14px;border:1px dashed var(--line);border-radius:10px}
+/* ---------- kpi ---------- */
+.kpi{padding:18px 20px 16px;overflow:hidden}
+.kpi .t{font-size:12px;font-weight:600;color:var(--muted)}
+.kpi .v{font-size:34px;font-weight:650;letter-spacing:-.025em;margin-top:4px}
+.kpi .v small{font-size:15px;font-weight:500;color:var(--muted);margin-left:4px;letter-spacing:0}
+.kpi .d{font-size:11.5px;color:var(--muted);margin-top:2px}
+.kpi svg.sp{position:absolute;right:14px;bottom:12px;opacity:.95}
+.kpi:before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:0 3px 3px 0;background:var(--c,var(--teal))}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:650}
+.chip.r{background:var(--risk-soft);color:var(--risk)} .chip.g{background:var(--teal-soft);color:var(--teal-hi)} .chip.n{background:var(--track);color:var(--ink2)}
+/* ---------- bars ---------- */
+.hb{display:grid;grid-template-columns:130px 1fr 66px;align-items:center;gap:14px;height:62px}
+.hb .nm{font-weight:600} .hb .nm small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.hb .tr{height:26px;background:var(--track);border-radius:7px;position:relative}
+.hb .tr i{font-style:normal;position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--c);box-shadow:0 0 18px -4px var(--c)}
+.hb .tr u{position:absolute;top:-7px;bottom:-7px;border-left:2px dashed var(--ink2);opacity:.6}
+.hb .vl{text-align:right;font-size:17px;font-weight:700}
+.avgtag{position:absolute;top:-22px;font-size:10px;color:var(--ink2);transform:translateX(-50%);white-space:nowrap}
+.legend{display:flex;gap:18px;color:var(--muted);font-size:11.5px}
+.legend span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c);vertical-align:-1px}
+/* ---------- heat matrix ---------- */
+.heat{display:grid;grid-template-columns:104px repeat(5,1fr);gap:5px;margin-top:14px}
+.heat div{display:grid;place-items:center;height:48px;border-radius:9px;font-weight:650;font-size:13px}
+.heat .hd{height:30px;color:var(--muted);font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;text-align:center}
+.heat .rl{justify-items:start;font-weight:600;color:var(--ink2);font-size:12.5px}
+/* ---------- table ---------- */
+table{width:100%;border-collapse:collapse}
+th{font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:right}
+tr:last-child td{border-bottom:0}
+.dbar{position:relative;display:inline-block;min-width:150px;text-align:right}
+.dbar i{position:absolute;right:0;top:50%;height:22px;transform:translateY(-50%);background:color-mix(in srgb,var(--teal) 28%,transparent);border-radius:5px}
+.dbar b{position:relative;padding:0 8px;font-weight:650}
+.note{margin:6px 28px 0;color:var(--muted);font-size:11px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="logo"><i></i><div>DELIVERY INSIGHTS<small>Phân tích hiệu suất giao hàng</small></div></div>
+  <div class="tabs">
+    <div class="tab on" data-p="p1">Tổng quan</div><div class="tab" data-p="p2">Rủi ro</div><div class="tab">Cam kết</div><div class="tab">Tuyến giao</div>
+  </div>
+  <div class="tog" id="tog" title="Đổi giao diện sáng / tối">◐</div>
+</div>
+
+<!-- =============== TỔNG QUAN =============== -->
+<div class="page on" id="p1">
+  <div class="row"><div class="card hero">
+    <div>
+      <div class="eyebrow">Hiệu suất giao hàng · DataCo 01/2015 – 01/2018</div>
+      <h1 style="font-size:40px;max-width:720px;line-height:1.08">Phương thức giao quyết định đơn có bị trễ hạn hay không</h1>
+      <p>First Class trễ <b>100%</b> và Second Class <b>80%</b>, còn thị trường (<b>56,5–57,7%</b>) và từng tháng (<b>55,0–59,9%</b>) gần như không khác biệt. Standard Class có nhiều đơn nhất nhưng chỉ trễ <b>39,8%</b>.</p>
+      <div class="heroChips">
+        <div class="hc"><b class="num">36.048</b><span>đơn giao trễ</span></div>
+        <div class="hc"><b class="num">26.849</b><span>đơn đúng hạn</span></div>
+        <div class="hc"><b class="num">62.897</b><span>đơn phân tích</span></div>
+      </div>
+    </div>
+    <div class="ring" id="ring"></div>
+  </div></div>
+
+  <div class="filters"><span class="lab">Bộ lọc</span>
+    <div class="sel">Phương thức <b>Tất cả</b></div><div class="sel">Thị trường <b>Tất cả</b></div><div class="sel">Vùng giao <b>Tất cả</b></div>
+    <span class="clear">Xóa bộ lọc</span></div>
+
+  <div class="row" style="grid-template-columns:repeat(4,1fr)" id="kpis"></div>
+
+  <div class="row" style="grid-template-columns:1.1fr 1fr">
+    <div class="card">
+      <div class="ch"><div><h3>Tỷ lệ trễ theo phương thức giao</h3><div class="sub">Vạch đứt là mức trung bình 57,3% · số đơn ghi dưới tên</div></div>
+      <div class="legend"><span style="--c:var(--risk)">Trên trung bình</span><span style="--c:var(--teal)">Dưới trung bình</span></div></div>
+      <div style="margin-top:22px;position:relative" id="modes"></div>
+    </div>
+    <div class="card">
+      <h3>Phương thức × thị trường</h3><div class="sub">Mỗi hàng gần như một màu: thị trường không làm đổi kết quả</div>
+      <div class="heat" id="heat"></div>
+      <div class="legend" style="margin-top:14px"><span style="--c:var(--scale-lo)">Thấp</span><span style="--c:var(--scale-hi)">Cao</span></div>
+    </div>
+  </div>
+
+  <div class="row" style="grid-template-columns:1fr 1.1fr">
+    <div class="card"><h3>Cam kết và thực tế</h3><div class="sub">Số ngày trung bình · chấm rỗng là cam kết, chấm đặc là thực tế</div><div id="dumb" style="margin-top:6px"></div></div>
+    <div class="card"><h3>Diễn biến tỷ lệ trễ theo tháng</h3><div class="sub">Trục thu hẹp 50–62% · vạch đứt là trung bình 57,3%</div><div id="trend"></div></div>
+  </div>
+</div>
+
+<!-- =============== RỦI RO =============== -->
+<div class="page" id="p2">
+  <div class="row"><div class="card hero" style="grid-template-columns:1fr 330px 330px">
+    <div>
+      <div class="eyebrow">Rủi ro giao trễ · tập kiểm tra 13.071 đơn · 07/2017 – 01/2018</div>
+      <h1 style="font-size:44px">Cảnh báo chính xác,<br>nhưng còn bỏ sót</h1>
+      <p>Khi mô hình báo trễ, <b>89% là đúng</b>. Tuy vậy mới phát hiện <b>53,9%</b> đơn trễ; <b>3.467</b> đơn trễ chưa được cảnh báo, phần lớn ở Standard Class.</p>
+      <div class="heroChips"><div class="hc"><b>0,50</b><span>ngưỡng cảnh báo</span></div><div class="hc"><b class="num">4.560</b><span>đơn được cảnh báo</span></div></div>
+    </div>
+    <div class="ring" id="g1"></div><div class="ring" id="g2"></div>
+  </div></div>
+  <div class="filters"><span class="lab">Bộ lọc</span>
+    <div class="sel">Ngưỡng <b>0,50</b></div><div class="sel">Phương thức <b>Tất cả</b></div><div class="sel">Vùng giao <b>Tất cả</b></div><span class="clear">Xóa bộ lọc</span></div>
+  <div class="row" style="grid-template-columns:repeat(4,1fr)">
+    <div class="card kpi" style="--c:var(--teal)"><div class="t">Cảnh báo đúng</div><div class="v num">4.057</div><div class="d">Đơn được báo và thật sự trễ</div></div>
+    <div class="card kpi" style="--c:var(--amber)"><div class="t">Cảnh báo sai</div><div class="v num">503</div><div class="d">Đơn được báo nhưng giao đúng hạn</div></div>
+    <div class="card kpi" style="--c:var(--risk)"><div class="t">Đơn trễ bị bỏ sót</div><div class="v num">3.467</div><div class="d">Mô hình chưa cảnh báo</div></div>
+    <div class="card kpi" style="--c:var(--slate)"><div class="t">Đơn trễ thực tế</div><div class="v num">7.524</div><div class="d">Trên 13.071 đơn kiểm tra</div></div>
+  </div>
+  <div class="row" style="grid-template-columns:1.25fr 1fr">
+    <div class="card"><div class="ch"><div><h3>Cảnh báo và bỏ sót theo phương thức</h3><div class="sub">Số đơn trên tập kiểm tra</div></div>
+      <div class="legend"><span style="--c:var(--teal)">Cảnh báo đúng</span><span style="--c:var(--amber)">Cảnh báo sai</span><span style="--c:var(--risk)">Bỏ sót</span></div></div>
+      <div id="stack" style="margin-top:18px"></div></div>
+    <div class="card"><h3>Chất lượng mô hình</h3><div class="sub">Toàn tập kiểm tra · thanh nền thể hiện AP</div>
+      <table style="margin-top:8px"><tr><th>Mô hình</th><th>ROC-AUC</th><th>AP</th><th>Log loss</th></tr>
+      <tr><td>Hồi quy logistic</td><td class="num">0,751</td><td><span class="dbar"><i style="width:84%"></i><b class="num">0,840</b></span></td><td class="num">0,538</td></tr>
+      <tr><td>Gradient boosting</td><td class="num">0,745</td><td><span class="dbar"><i style="width:83.8%"></i><b class="num">0,838</b></span></td><td class="num">0,540</td></tr>
+      <tr><td>Theo phương thức</td><td class="num">0,746</td><td><span class="dbar"><i style="width:78.8%"></i><b class="num">0,788</b></span></td><td class="num">0,536</td></tr></table></div>
+  </div>
+</div>
+<div class="note">Mockup v2 · số liệu từ data/dashboard · bấm ◐ để đổi sáng/tối · dải nhận định cần measure động khi chuyển sang Power BI.</div>
+
+<script>
+const D={"months": [["2015-01-01", 0.5622, 1713, 3.5546, 0.5452], ["2015-02-01", 0.5787, 1505, 3.5136, 0.5973], ["2015-03-01", 0.5746, 1702, 3.4577, 0.577], ["2015-04-01", 0.5656, 1639, 3.5656, 0.5491], ["2015-05-01", 0.5754, 1684, 3.4685, 0.5451], ["2015-06-01", 0.57, 1651, 3.5536, 0.5651], ["2015-07-01", 0.5651, 1704, 3.466, 0.5604], ["2015-08-01", 0.5757, 1678, 3.4642, 0.5852], ["2015-09-01", 0.582, 1634, 3.5435, 0.5575], ["2015-10-01", 0.5737, 1696, 3.477, 0.5466], ["2015-11-01", 0.5676, 1658, 3.5151, 0.5639], ["2015-12-01", 0.5708, 1731, 3.4622, 0.5661], ["2016-01-01", 0.586, 1703, 3.5173, 0.6048], ["2016-02-01", 0.5673, 1574, 3.5902, 0.5724], ["2016-03-01", 0.5806, 1700, 3.4894, 0.5694], ["2016-04-01", 0.5675, 1630, 3.5, 0.5663], ["2016-05-01", 0.5797, 1675, 3.4937, 0.5964], ["2016-06-01", 0.5986, 1617, 3.5665, 0.6543], ["2016-07-01", 0.5548, 1662, 3.4525, 0.5174], ["2016-08-01", 0.5789, 1698, 3.5088, 0.5601], ["2016-09-01", 0.5703, 1664, 3.4838, 0.5601], ["2016-10-01", 0.5731, 1703, 3.4404, 0.5678], ["2016-11-01", 0.5705, 1639, 3.5333, 0.5741], ["2016-12-01", 0.5858, 1690, 3.4728, 0.5615], ["2017-01-01", 0.5579, 1685, 3.5484, 0.524], ["2017-02-01", 0.5715, 1538, 3.4811, 0.5819], ["2017-03-01", 0.5754, 1710, 3.4637, 0.5561], ["2017-04-01", 0.5504, 1666, 3.53, 0.539], ["2017-05-01", 0.5772, 1672, 3.4468, 0.5532], ["2017-06-01", 0.5676, 1605, 3.5377, 0.5389], ["2017-07-01", 0.5706, 1693, 3.4554, 0.5511], ["2017-08-01", 0.5788, 1695, 3.5091, 0.59], ["2017-09-01", 0.5738, 1640, 3.511, 0.5476], ["2017-10-01", 0.5632, 2019, 3.477, 0.53], ["2017-11-01", 0.5787, 1956, 3.5266, 0.5777], ["2017-12-01", 0.5771, 2031, 3.4958, 0.5731], ["2018-01-01", 0.5866, 2037, 3.5017, 0.6117]], "matrix": {"rows": ["First Class", "Same Day", "Second Class", "Standard Class"], "cols": ["Africa", "Europe", "LATAM", "Pacific Asia", "USCA"], "v": [[1.0, 1.0, 1.0, 1.0, 1.0], [0.4709, 0.4816, 0.508, 0.4793, 0.4564], [0.8044, 0.8017, 0.7943, 0.8029, 0.7986], [0.3982, 0.3977, 0.3934, 0.4035, 0.4002]], "n": [[536, 2753, 2498, 2543, 1272], [223, 949, 870, 918, 447], [685, 3459, 3160, 3338, 1614], [2245, 10602, 9886, 10054, 4845]]}, "modes": [["First Class", 9602, 1.0, 1.0, 2.0], ["Same Day", 3407, 0.4837, 0.0, 0.4837], ["Second Class", 12256, 0.7999, 2.0, 4.0029], ["Standard Class", 37632, 0.3985, 4.0, 3.9946]]};
+const AVG=.5731;
+const cs=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const pct=v=>(v*100).toFixed(1).replace('.',',')+'%', num=v=>v.toLocaleString('vi-VN');
+document.querySelectorAll('.tab[data-p]').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===t.dataset.p));});
+document.getElementById('tog').onclick=()=>{const h=document.documentElement;h.dataset.theme=h.dataset.theme==='dark'?'light':'dark';draw();};
+
+function gauge(el,val,label,sub,color){
+  const R=62,C=2*Math.PI*R;
+  document.getElementById(el).innerHTML=`<svg width="250" height="250" viewBox="0 0 160 160">
+   <circle cx="80" cy="80" r="${R}" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="14"/>
+   <circle cx="80" cy="80" r="${R}" fill="none" stroke="${color}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${C*val} ${C}" transform="rotate(-90 80 80)"/>
+   <text x="80" y="82" text-anchor="middle" font-size="30" font-weight="700" fill="#fff">${pct(val)}</text>
+   <text x="80" y="100" text-anchor="middle" font-size="9.5" fill="#A9C6CE">${label}</text>
+   ${sub?`<text x="80" y="114" text-anchor="middle" font-size="8.5" fill="#7FA3AC">${sub}</text>`:''}</svg>`;
+}
+function spark(vals,color,w=110,h=34){
+  const lo=Math.min(...vals),hi=Math.max(...vals),x=i=>2+i*(w-4)/(vals.length-1),y=v=>3+(hi-v)/(hi-lo||1)*(h-8);
+  const d=vals.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join('');
+  return `<svg class="sp" width="${w}" height="${h}"><path d="${d}L${x(vals.length-1)} ${h}L2 ${h}Z" fill="${color}" opacity=".12"/><path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linejoin="round"/><circle cx="${x(vals.length-1)}" cy="${y(vals[vals.length-1])}" r="2.8" fill="${color}"/></svg>`;
+}
+function mix(a,b,t){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),B=p(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');}
+function draw(){
+  const teal=cs('--teal'),risk=cs('--risk'),amber=cs('--amber'),slate=cs('--slate');
+  gauge('ring',AVG,'tỷ lệ giao trễ','',cs('--teal-hi')==='#0A8F8B'?'#5FE3D6':cs('--teal-hi'));
+  gauge('g1',.890,'Độ chính xác cảnh báo','đúng / số cảnh báo','#5FE3D6');
+  gauge('g2',.539,'Độ bao phủ đơn trễ','bắt được / đơn trễ','#FF9A80');
+  const M=D.months, col=i=>M.map(m=>m[i]);
+  const last=a=>a[a.length-1], first=a=>a[0];
+  const K=[['Tỷ lệ giao trễ',pct(AVG),'',col(1),risk,`<span class="chip n">${pct(Math.min(...col(1)))} – ${pct(Math.max(...col(1)))} theo tháng</span>`],
+           ['Đơn mỗi tháng','1.700','',col(2),teal,`<span class="chip n">${num(Math.min(...col(2)))} – ${num(Math.max(...col(2)))} theo tháng</span>`],
+           ['Giao thực tế trung bình','3,50','ngày',col(3),slate,`<span class="chip n">${Math.min(...col(3)).toFixed(2).replace('.',',')} – ${Math.max(...col(3)).toFixed(2).replace('.',',')} theo tháng</span>`],
+           ['Chênh so với cam kết','+0,57','ngày',col(4),risk,`<span class="chip r">${Math.min(...col(4)).toFixed(2).replace('.',',')} – ${Math.max(...col(4)).toFixed(2).replace('.',',')} theo tháng</span>`]];
+  document.getElementById('kpis').innerHTML=K.map(k=>`<div class="card kpi" style="--c:${k[4]}"><div class="t">${k[0]}</div><div class="v num">${k[1]}<small>${k[2]}</small></div><div class="d" style="margin-top:8px">${k[5]}</div>${spark(k[3],k[4])}</div>`).join('');
+  const order=['First Class','Second Class','Same Day','Standard Class'];
+  const md=Object.fromEntries(D.modes.map(m=>[m[0],m]));
+  document.getElementById('modes').innerHTML=`<div class="avgtag" style="left:calc(144px + (100% - 144px - 80px)*${AVG})">TB ${pct(AVG)}</div>`+
+   order.map(n=>{const m=md[n],v=m[2];return `<div class="hb"><div class="nm">${n}<small>${num(m[1])} đơn</small></div>
+    <div class="tr"><i style="width:${v*100}%;--c:${v>AVG?risk:teal}"></i><u style="left:${AVG*100}%"></u></div><div class="vl num" style="color:${v>AVG?risk:teal}">${pct(v)}</div></div>`}).join('');
+  // heat
+  const H=D.matrix, ord=order.map(n=>H.rows.indexOf(n));
+  let h='<div class="hd"></div>'+H.cols.map(c=>`<div class="hd">${c}</div>`).join('');
+  ord.forEach(ri=>{h+=`<div class="rl">${H.rows[ri]}</div>`;H.v[ri].forEach(v=>{
+    const t=v<AVG?mix(cs('--scale-mid'),cs('--scale-lo'),(AVG-v)/(AVG-.38)):mix(cs('--scale-mid'),cs('--scale-hi'),(v-AVG)/(1-AVG));
+    h+=`<div style="background:${t};color:${v>.7||v<.45?(cs('--cellink')):cs('--ink')}" class="num">${(v*100).toFixed(0)}%</div>`})});
+  document.getElementById('heat').innerHTML=h;
+  // dumbbell
+  const W=560,Hh=64*4+28,l=118,r=30,x=v=>l+v/4.6*(W-l-r);
+  let s=`<svg viewBox="0 0 ${W} ${Hh}" width="100%">`;
+  [0,1,2,3,4].forEach(v=>s+=`<line x1="${x(v)}" x2="${x(v)}" y1="6" y2="${Hh-26}" stroke="${cs('--line')}"/><text x="${x(v)}" y="${Hh-8}" text-anchor="middle" font-size="10.5" fill="${cs('--muted')}">${v} ngày</text>`);
+  order.forEach((n,i)=>{const m=md[n],y=34+i*64,g=m[4]-m[3],c=g>.5?risk:g<0.02&&g>-0.02?teal:slate;
+    s+=`<text x="0" y="${y+4}" font-size="12.5" font-weight="600" fill="${cs('--ink')}">${n}</text>
+    <line x1="${x(m[3])}" x2="${x(m[4])}" y1="${y}" y2="${y}" stroke="${c}" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+    <circle cx="${x(m[3])}" cy="${y}" r="7" fill="${cs('--surface')}" stroke="${cs('--ink2')}" stroke-width="2.2"/>
+    <circle cx="${x(m[4])}" cy="${y}" r="8" fill="${c}"/>
+    <text x="${x(Math.max(m[3],m[4]))+16}" y="${y+4}" font-size="12" font-weight="700" fill="${c}">${g>0?'+':''}${g.toFixed(2).replace('.',',')}</text>`});
+  document.getElementById('dumb').innerHTML=s+'</svg>';
+  // trend
+  const w=640,hh=276,L=44,R=14,T=14,B=28,lo=.50,hi=.62,X=i=>L+i*(w-L-R)/(M.length-1),Y=v=>T+(hi-v)/(hi-lo)*(hh-T-B);
+  let t=`<svg viewBox="0 0 ${w} ${hh}" width="100%">`;
+  [.50,.54,.58,.62].forEach(v=>t+=`<line x1="${L}" x2="${w-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${cs('--line')}"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end" font-size="10" fill="${cs('--muted')}">${Math.round(v*100)}%</text>`);
+  const path=M.map((m,i)=>(i?'L':'M')+X(i)+' '+Y(m[1])).join('');
+  t+=`<path d="${path}L${X(M.length-1)} ${Y(lo)}L${X(0)} ${Y(lo)}Z" fill="${teal}" opacity=".13"/><line x1="${L}" x2="${w-R}" y1="${Y(AVG)}" y2="${Y(AVG)}" stroke="${cs('--ink2')}" stroke-dasharray="4 4" opacity=".6"/>
+   <path d="${path}" fill="none" stroke="${teal}" stroke-width="2.4" stroke-linejoin="round"/>`;
+  [0,12,24,36].forEach(i=>t+=`<text x="${X(i)}" y="${hh-8}" text-anchor="${i===36?'end':i===0?'start':'middle'}" font-size="10" fill="${cs('--muted')}">${M[i][0].slice(0,7)}</text>`);
+  const hiI=M.reduce((a,m,i)=>m[1]>M[a][1]?i:a,0), loI=M.reduce((a,m,i)=>m[1]<M[a][1]?i:a,0);
+  [[hiI,'cao nhất',-11],[loI,'thấp nhất',19]].forEach(([i,n,dy])=>t+=`<circle cx="${X(i)}" cy="${Y(M[i][1])}" r="5" fill="${cs('--surface')}" stroke="${risk}" stroke-width="2.2"/><text x="${X(i)}" y="${Y(M[i][1])+dy}" text-anchor="middle" font-size="11" font-weight="700" fill="${risk}">${pct(M[i][1])} ${n}</text>`);
+  document.getElementById('trend').innerHTML=t+'</svg>';
+  // stack
+  const st=[['Standard Class',0,0,3073],['Second Class',2083,503,0],['First Class',1974,0,0],['Same Day',0,0,394]],mx=3100;
+  document.getElementById('stack').innerHTML=st.map(([n,a,b,c])=>`<div class="hb" style="grid-template-columns:130px 1fr;height:58px"><div class="nm">${n}</div>
+   <div style="display:flex;gap:3px">${[[a,teal],[b,amber],[c,risk]].filter(z=>z[0]).map(([v,k])=>`<i style="height:30px;width:${v/mx*100}%;background:${k};border-radius:7px;color:#fff;font-style:normal;font-weight:650;font-size:12px;display:grid;place-items:center;min-width:40px;box-shadow:0 0 16px -5px ${k}" class="num">${num(v)}</i>`).join('')}</div></div>`).join('');
+}
+draw();
+</script>
+</body>
+</html>
