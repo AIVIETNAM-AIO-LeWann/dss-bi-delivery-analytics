@@ -5,6 +5,10 @@ thiết kế theo luồng xem kết quả, xác định rủi ro, cân nhắc ca
 Điều hướng nằm trong thanh ngang trên cùng. Giao diện chỉ giữ chỉ số, phạm vi và đơn vị
 cần thiết; không hiển thị thông tin tác giả hoặc đoạn hướng dẫn dài.
 
+## Bản web
+
+Bản chạy trong trình duyệt nằm ở [web/index.html](web/index.html): một file, mở trực tiếp hoặc đưa lên GitHub Pages. Bộ lọc chạy thật, số liệu khớp Power BI. Xem [web/README.md](web/README.md).
+
 ## Bắt đầu
 
 Mở `powerbi/delivery_dashboard.pbip`. Đọc [hướng dẫn mở và bảo trì](powerbi/README.md),
