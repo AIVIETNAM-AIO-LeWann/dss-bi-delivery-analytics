@@ -10,6 +10,7 @@
 *.zip binary
 *.joblib binary
 *.pbix binary
+deliverables/report/figures/story_*.svg text eol=lf
 
 # Preserve the exact bytes and intentional whitespace of supplied handoffs.
 workstreams/** -text -whitespace

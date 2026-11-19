@@ -1,0 +1,38 @@
+{
+  "evidence_sha256": "6ffa75ea9851df4524746022d9e51380e2c910cd52273d72f66068a65a17c9c1",
+  "matplotlib_version": "3.10.9",
+  "outputs": {
+    "deliverables/report/figures/story_01_priority.png": {
+      "sha256": "534a151746fa95ac01a3b202df1253219ebd99f6a7d75b6362fab82b9347531c",
+      "bytes": 184838
+    },
+    "deliverables/report/figures/story_01_priority.svg": {
+      "sha256": "4233aa34240fd1f46dc0d95395b7ed089ed989cf0dc49a84cdc2d1ba7466d371",
+      "bytes": 15808
+    },
+    "deliverables/report/figures/story_02_alerts.png": {
+      "sha256": "5d4c0c3b2ce45d12dfce4afdf565b310019c541f3b433bdcb163cf87e31bba17",
+      "bytes": 129395
+    },
+    "deliverables/report/figures/story_02_alerts.svg": {
+      "sha256": "e6d71838f5e1b6ea6d23a9d2f683493ed14ae4062c379187d9012553d0538ac3",
+      "bytes": 10725
+    },
+    "deliverables/report/figures/story_03_promise_tradeoff.png": {
+      "sha256": "ca25727e1aa77231f61077911de36b532c6763d1b9da137e84a1c637d5e0adf3",
+      "bytes": 168179
+    },
+    "deliverables/report/figures/story_03_promise_tradeoff.svg": {
+      "sha256": "4db429006ea096992c6580eda8a208579e63ee8cd717f5b017c67158d6cf311a",
+      "bytes": 13845
+    },
+    "deliverables/report/figures/story_04_routing.png": {
+      "sha256": "09ad46d208da188bd8b086f4f40745bb9f50c169751fc6e0a008080757ab9156",
+      "bytes": 157035
+    },
+    "deliverables/report/figures/story_04_routing.svg": {
+      "sha256": "265cd3e5c678028d58cb3a0142d97b1cbe42919e3448fd58b5079b4a9d865438",
+      "bytes": 12485
+    }
+  }
+}

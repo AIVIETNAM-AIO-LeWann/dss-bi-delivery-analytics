@@ -39,6 +39,10 @@ Dự án dùng **DataCo Smart Supply Chain** để phân tích giao hàng, và b
 
 ## Kết quả trong một cái nhìn
 
+Để bàn giao phần kể chuyện và nối phát hiện với quyết định logistics, đọc
+[flow viết phần VI](deliverables/report/storytelling_handoff.md): dàn ý P0–P5,
+bốn hình có nguồn và các lựa chọn để người nhận hoàn thiện ≥2 khuyến nghị.
+
 <table>
 <tr>
 <td align="center" width="25%"><h2>57,3%</h2>đơn giao trễ<br><sub>36.048 / 62.897 đơn không hủy</sub></td>

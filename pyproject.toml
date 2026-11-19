@@ -18,3 +18,4 @@ where = ["src"]
 
 [project.optional-dependencies]
 dashboard = ["jsonschema==4.26.0"]
+storytelling = ["matplotlib==3.10.9"]

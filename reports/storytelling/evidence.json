@@ -1,0 +1,148 @@
+{
+  "scope": "Reconciliation of saved aggregate handoffs, not a rerun of training/solving or a per-order join audit",
+  "source_sha256": {
+    "reports/data_quality/baseline_kpis.csv": "7f8780037d314ad5d1362bd3abf2eb97a79bea103db515153451297c281b1cb4",
+    "workstreams/descriptive/tables/01_shipping_mode_detailed.csv": "0b56130dea74fd096a8c8eb8913131f2ef5dbf3eb36acd3022f86311d105444b",
+    "workstreams/descriptive/tables/11_chi2_independence_tests.csv": "83dcf9d632efae6d585f0034b0357230ce9e5791113805b7ea5879013cc4c8a5",
+    "workstreams/forecasting/results/model_selection.json": "4ecab6e523d04aa53c4d17823cc9866b77f1cd6040c82d04c2290130da60b464",
+    "workstreams/forecasting/results/model_comparison.csv": "d271d7effb52237c365c841c9f0c83763d7dcd4911e665a998b857e77d704354",
+    "workstreams/forecasting/results/mode_baseline_train.csv": "d8652ac630f5053e3443b78fc847bf36ff4fd29c2f54e81bb228cfd4ca9a33de",
+    "workstreams/forecasting/results/subgroups_test.csv": "49b195fe3a59f649773a9fc4b4e119a6585fb90da70d7c5187265027455ff0d2",
+    "workstreams/prescriptive/results/promise_summary.csv": "a9bceea46bd68486c93f1626855940e3288ffc77aef465a7bbd609415407a963",
+    "workstreams/prescriptive/results/pilot_by_mode_test.csv": "973b48f2669dc032a414830819f74791f82c7ab29179206d81cccd9499987d63",
+    "workstreams/prescriptive/results/routing_summary.csv": "91463256da149ae91df4c31977cbf68ec3c609d96b61d51bc453b64739f6b5d0",
+    "workstreams/prescriptive/results/fleet_sizing_bounds.csv": "26ab6f8b44b819e9e2874a883db4f3286c529d3835fcd83e28d9048a135f0daa"
+  },
+  "population": {
+    "non_canceled_orders": 62897,
+    "late_orders": 36048,
+    "late_rate": 0.5731274941571141,
+    "model_policy_test_orders": 13071,
+    "test_late_orders": 7524
+  },
+  "shipping_modes": [
+    {
+      "shipping_mode": "First Class",
+      "orders": 9602,
+      "late_count": 9602,
+      "late_rate": 1.0,
+      "share_of_all_late_orders": 0.2663670661340435,
+      "scheduled_mean_days": 1.0,
+      "actual_mean_days_rounded": 2.0
+    },
+    {
+      "shipping_mode": "Second Class",
+      "orders": 12256,
+      "late_count": 9803,
+      "late_rate": 0.799853133159269,
+      "share_of_all_late_orders": 0.27194296493564135,
+      "scheduled_mean_days": 2.0,
+      "actual_mean_days_rounded": 4.0
+    },
+    {
+      "shipping_mode": "Same Day",
+      "orders": 3407,
+      "late_count": 1648,
+      "late_rate": 0.48371000880540066,
+      "share_of_all_late_orders": 0.04571682201509099,
+      "scheduled_mean_days": 0.0,
+      "actual_mean_days_rounded": 0.48
+    },
+    {
+      "shipping_mode": "Standard Class",
+      "orders": 37632,
+      "late_count": 14995,
+      "late_rate": 0.3984640731292517,
+      "share_of_all_late_orders": 0.41597314691522413,
+      "scheduled_mean_days": 4.0,
+      "actual_mean_days_rounded": 3.99
+    }
+  ],
+  "association_tests": {
+    "shipping_mode": {
+      "p_value": 0.0,
+      "cramers_v": 0.4807
+    },
+    "order_region": {
+      "p_value": 0.10314414282542374,
+      "cramers_v": 0.0221
+    },
+    "market": {
+      "p_value": 0.5289306219550841,
+      "cramers_v": 0.0071
+    }
+  },
+  "forecast": {
+    "selected_model": "mode_baseline",
+    "selection_criterion": "minimum validation log_loss; exact ties prefer earlier simpler model",
+    "roc_auc_test": 0.745970732727,
+    "threshold": 0.5,
+    "alerts": 4560,
+    "true_alerts": 4057,
+    "false_alerts": 503,
+    "missed_late": 3467,
+    "precision": 0.8896929824561404,
+    "recall": 0.5392078681552366,
+    "alert_share_of_test": 0.3488638971769566,
+    "group_risk_levels": {
+      "First Class": 1.0,
+      "Same Day": 0.460317460317,
+      "Second Class": 0.80085514382,
+      "Standard Class": 0.400541043199
+    }
+  },
+  "bounded_promise": {
+    "test_orders": 13071,
+    "current_exceedance_rate": 0.5756254303419784,
+    "proposed_exceedance_count": 3505,
+    "proposed_exceedance_rate": 0.26815086833448093,
+    "reduction_percentage_points": 30.747456200749752,
+    "added_mean_promise_days": 0.9440746691148343,
+    "unchanged_mean_actual_days": 3.496825032514727,
+    "second_class_remaining_exceedance_rate": 0.6051817478731631
+  },
+  "routing_c101": {
+    "scope": "Solomon C101, capacity 200, 100 benchmark customers; independent of DataCo",
+    "nearest_distance_units": 1870.6937996225547,
+    "ortools_distance_units": 828.936866942834,
+    "distance_reduction_pct": 55.688265652557,
+    "nearest_vehicles": 21,
+    "ortools_vehicles": 10,
+    "vehicle_lower_bound": 10,
+    "distance_optimality_proven": false
+  },
+  "checks": [
+    "mode order counts reconcile to main cohort",
+    "mode late counts reconcile to main cohort",
+    "main late rate matches numerator/denominator",
+    "First Class rounded late percentage matches counts",
+    "Second Class rounded late percentage matches counts",
+    "Same Day rounded late percentage matches counts",
+    "Standard Class rounded late percentage matches counts",
+    "selected model minimizes validation log loss",
+    "test confusion matrix sums to population",
+    "test confusion matrix sums to late orders",
+    "test precision matches confusion counts",
+    "test recall matches confusion counts",
+    "baseline training counts match main training split",
+    "model mode subgroup counts sum to test",
+    "model mode subgroup misses sum to test misses",
+    "policy and model use equal test population counts",
+    "policy baseline rate equals model test label rate",
+    "duration is unchanged by promise scenario",
+    "policy mode counts sum to test",
+    "policy exceedances reconcile across mode/summary",
+    "First Class policy/model subgroup counts agree",
+    "First Class policy/model late counts agree",
+    "Same Day policy/model subgroup counts agree",
+    "Same Day policy/model late counts agree",
+    "Second Class policy/model subgroup counts agree",
+    "Second Class policy/model late counts agree",
+    "Standard Class policy/model subgroup counts agree",
+    "Standard Class policy/model late counts agree",
+    "C101 comparison has two feasible results",
+    "C101 comparison uses identical capacity/fleet constraints",
+    "C101 vehicle lower bound agrees with feasible fleet"
+  ],
+  "checks_passed": 31
+}
