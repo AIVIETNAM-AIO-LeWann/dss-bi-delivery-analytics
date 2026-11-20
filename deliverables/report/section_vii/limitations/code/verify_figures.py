@@ -1,4 +1,4 @@
-"""Kiểm tra lại mọi con số được trích trong mục 7.1 từ file nguồn đã được Git theo dõi.
+"""Đối chiếu file nguồn trong repo với giá trị kỳ vọng của các con số được trích trong mục 7.1.
 
 Chạy từ gốc repo:
     python deliverables/report/section_vii/limitations/code/verify_figures.py
@@ -152,6 +152,12 @@ def main():
     check('base_recall', pct(float(base['recall'])), '53,92%', src)
     check('base_tp_fp_fn', f"{vn(int(base['tp']))}/{vn(int(base['fp']))}/{vn(int(base['fn']))}", '4.057/503/3.467', src)
     check('logistic_ap_auc', f"{vn(float(logi['average_precision']), 3)}/{vn(float(logi['roc_auc']), 3)}", '0,840/0,751', src)
+    src_split = 'reports/data_quality/analysis_readiness_report.md'
+    readiness = (root / src_split).read_text(encoding='utf-8')
+    check('two_purge_windows_before_cutoffs',
+          f"{sp['validation']['start'][:10]}/{sp['test']['start'][:10]}/"
+          f"{'| purged_boundary | 761 | 2016-12-25 00:02:00 | 2017-06-30 23:25:00 |' in readiness}",
+          '2017-01-01/2017-07-01/True', 'workstreams/forecasting/results/split_summary.csv; ' + src_split)
     vlog = {r['model']: float(r['log_loss']) for r in mc if r['partition'] == 'validation'}
     check('val_logloss', '/'.join(vn(vlog[m], 4) for m in ['mode_baseline', 'logistic_regression', 'hist_gradient_boosting']),
           '0,5418/0,5452/0,5456', src)
@@ -304,7 +310,7 @@ def main():
     bad = [c for c in checks if not c['ok']]
     for c in bad:
         print('MISMATCH', c['key'], 'actual =', c['value'], 'expected =', c['expected'], '|', c['source'])
-    print(f'{len(checks) - len(bad)}/{len(checks)} kiểm tra số liệu đạt.')
+    print(f'{len(checks) - len(bad)}/{len(checks)} phép đối chiếu với nguồn đạt.')
     raise SystemExit(1 if bad else 0)
 
 

@@ -4,7 +4,7 @@ Bộ này thuộc phần việc của Ngọc Quang trong Phần VII. Mục 7.2 H
 
 - [Báo cáo Markdown](section_vii_limitations.md) dùng để đọc và rà trên GitHub.
 - [Báo cáo Word](section_vii_limitations.docx) dùng để ghép báo cáo nhóm. Khổ Letter, Times New Roman 13, chữ đen; các bảng nhiều cột dùng cỡ 11. Bản hiện tại dài 10 trang.
-- [code/verify_figures.py](code/verify_figures.py) kiểm tra lại mọi con số được trích, so với file nguồn trong repo.
+- [code/verify_figures.py](code/verify_figures.py) đối chiếu file nguồn trong repo với giá trị kỳ vọng ghi trong mã (100 phép đối chiếu). Script không tự đọc con số trong bài, nên khi sửa bài cần sửa cả giá trị kỳ vọng.
 - [code/build_docx.py](code/build_docx.py) tạo bản Word từ bản Markdown.
 - `tables/figure_checks.csv` là kết quả của lần kiểm tra số liệu gần nhất: mỗi dòng gồm khóa, giá trị, giá trị mong đợi và file nguồn.
 
@@ -17,7 +17,7 @@ Có 13 hạn chế (H1–H13), xếp theo bảy nhóm: nguồn và mẫu; nhãn 
 1. Đọc README, CONTRIBUTING, `docs/project/context.md`; repo không có AGENTS.md hay CLAUDE.md.
 2. Đọc tài liệu chuẩn bị dữ liệu (01, 03, 05, 07), báo cáo chất lượng dữ liệu, bảng và báo cáo mô tả, kết quả và nhật ký dự báo, kết quả và mã của phần đề xuất, Phần VI và mục 7.2.
 3. Đọc phần "Hạn chế và dữ liệu cần bổ sung" trong `workstreams/forecasting/Bao_cao_Ngoc_Quang_Chu_de_18.docx` (05/11/2026) rồi mở rộng ra toàn bộ nghiên cứu. File Word cũ được giữ nguyên.
-4. Viết mã kiểm tra 99 con số và mệnh đề với file nguồn; cả 99 đều đạt.
+4. Viết mã thực hiện 100 phép đối chiếu giữa file nguồn và giá trị kỳ vọng của các con số, mệnh đề được trích; cả 100 đều đạt.
 5. Tạo bản Word, xuất PDF bằng Microsoft Word và xem lần lượt cả 10 trang: chữ không tràn khung, bảng không vỡ dòng giữa trang, tiêu đề bảng lặp lại khi bảng sang trang mới.
 
 Không sửa dữ liệu, không huấn luyện lại mô hình, không chạy lại bộ giải, không sửa dashboard, không ghi đè `results/` hay mục 7.2.

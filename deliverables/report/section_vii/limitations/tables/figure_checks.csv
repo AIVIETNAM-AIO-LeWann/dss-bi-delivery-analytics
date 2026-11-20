@@ -41,6 +41,7 @@ base_precision,"88,97%","88,97%",True,workstreams/forecasting/results/model_comp
 base_recall,"53,92%","53,92%",True,workstreams/forecasting/results/model_comparison.csv
 base_tp_fp_fn,4.057/503/3.467,4.057/503/3.467,True,workstreams/forecasting/results/model_comparison.csv
 logistic_ap_auc,"0,840/0,751","0,840/0,751",True,workstreams/forecasting/results/model_comparison.csv
+two_purge_windows_before_cutoffs,2017-01-01/2017-07-01/True,2017-01-01/2017-07-01/True,True,workstreams/forecasting/results/split_summary.csv; reports/data_quality/analysis_readiness_report.md
 val_logloss,"0,5418/0,5452/0,5456","0,5418/0,5452/0,5456",True,workstreams/forecasting/results/model_comparison.csv
 distinct_scores_per_mode,True,True,True,workstreams/prescriptive/results/risk_groups_test.csv
 risk_group_count,4,4,True,workstreams/prescriptive/results/risk_groups_test.csv
