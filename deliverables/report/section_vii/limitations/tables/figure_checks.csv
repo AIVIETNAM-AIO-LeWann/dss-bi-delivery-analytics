@@ -1,0 +1,92 @@
+﻿key,value,expected,ok,source
+source_lines,180.519,180.519,True,reports/data_quality/baseline_kpis.csv
+source_orders,65.752,65.752,True,reports/data_quality/baseline_kpis.csv
+main_orders,62.897,62.897,True,reports/data_quality/baseline_kpis.csv
+main_late,36.048,36.048,True,reports/data_quality/baseline_kpis.csv
+main_late_rate,"57,31%","57,31%",True,reports/data_quality/baseline_kpis.csv
+all_source_late_rate,"54,82%","54,82%",True,reports/data_quality/baseline_kpis.csv
+complete_closed_orders,28.965,28.965,True,reports/data_quality/baseline_kpis.csv
+complete_closed_late_rate,"57,42%","57,42%",True,reports/data_quality/baseline_kpis.csv
+canceled_orders,2.855,2.855,True,reports/data_quality/analysis_exclusion_summary.csv
+canceled_lines_label0_daysLate,4.423,4.423,True,reports/data_quality/label_consistency.csv
+timestamp_consistent_orders,59.490,59.490,True,reports/data_quality/analysis_sensitivity.csv
+same_day_orders_main,3.407,3.407,True,reports/data_quality/analysis_sensitivity.csv
+mismatch_equals_all_same_day,True,True,True,reports/data_quality/analysis_sensitivity.csv
+months_observed,37,37,True,workstreams/descriptive/tables/06_temporal_year_month.csv
+monthly_late_rate_min,"55,0%","55,0%",True,workstreams/descriptive/tables/06_temporal_year_month.csv
+monthly_late_rate_max,"59,9%","59,9%",True,workstreams/descriptive/tables/06_temporal_year_month.csv
+market_late_rate_range,"56,55–57,68%","56,55–57,68%",True,workstreams/descriptive/tables/03_market_performance.csv
+first_class_all_2_days,True,True,True,workstreams/descriptive/tables/02_mode_actual_days_distribution.csv
+Second Class_days_2_to_6,2.453/2.422/2.473/2.452/2.456,2.453/2.422/2.473/2.452/2.456,True,workstreams/descriptive/tables/02_mode_actual_days_distribution.csv
+Second Class_share_range,"19,8%–20,2%","19,8%–20,2%",True,workstreams/descriptive/tables/02_mode_actual_days_distribution.csv
+Standard Class_days_2_to_6,7.610/7.517/7.510/7.458/7.537,7.610/7.517/7.510/7.458/7.537,True,workstreams/descriptive/tables/02_mode_actual_days_distribution.csv
+Standard Class_share_range,"19,8%–20,2%","19,8%–20,2%",True,workstreams/descriptive/tables/02_mode_actual_days_distribution.csv
+same_day_only_0_or_1_day,True,True,True,workstreams/descriptive/tables/02_mode_actual_days_distribution.csv
+max_actual_days,6,6,True,workstreams/descriptive/tables/02_mode_actual_days_distribution.csv
+scheduled_days_constant_within_mode,True,True,True,workstreams/descriptive/tables/01_shipping_mode_detailed.csv
+first_class_late_rate,100.0,100.0,True,workstreams/descriptive/tables/01_shipping_mode_detailed.csv
+same_day_late_rate,48.37,48.37,True,workstreams/descriptive/tables/01_shipping_mode_detailed.csv
+chi2_tests_count,9,9,True,workstreams/descriptive/tables/11_chi2_independence_tests.csv
+mode_cramers_v,0.4807,0.4807,True,workstreams/descriptive/tables/11_chi2_independence_tests.csv
+max_v_non_mode,"0,0221","0,0221",True,workstreams/descriptive/tables/11_chi2_independence_tests.csv
+non_mode_all_p_ge_005,True,True,True,workstreams/descriptive/tables/11_chi2_independence_tests.csv
+order_month_not_tested,True,True,True,workstreams/descriptive/tables/11_chi2_independence_tests.csv
+wording_line:workstreams/descriptive/BAO_CAO_MO_TA_VA_CHAN_DOAN.md,144,144,True,workstreams/descriptive/BAO_CAO_MO_TA_VA_CHAN_DOAN.md
+wording_line:workstreams/descriptive/README.md,66,66,True,workstreams/descriptive/README.md
+split_sizes,39.568/9.497/13.071/761,39.568/9.497/13.071/761,True,workstreams/forecasting/results/split_summary.csv
+test_window,2017-07-01..2018-01-31,2017-07-01..2018-01-31,True,workstreams/forecasting/results/split_summary.csv
+test_late,7.524,7.524,True,workstreams/forecasting/results/model_comparison.csv
+base_auc,"0,746","0,746",True,workstreams/forecasting/results/model_comparison.csv
+base_precision,"88,97%","88,97%",True,workstreams/forecasting/results/model_comparison.csv
+base_recall,"53,92%","53,92%",True,workstreams/forecasting/results/model_comparison.csv
+base_tp_fp_fn,4.057/503/3.467,4.057/503/3.467,True,workstreams/forecasting/results/model_comparison.csv
+logistic_ap_auc,"0,840/0,751","0,840/0,751",True,workstreams/forecasting/results/model_comparison.csv
+val_logloss,"0,5418/0,5452/0,5456","0,5418/0,5452/0,5456",True,workstreams/forecasting/results/model_comparison.csv
+distinct_scores_per_mode,True,True,True,workstreams/prescriptive/results/risk_groups_test.csv
+risk_group_count,4,4,True,workstreams/prescriptive/results/risk_groups_test.csv
+fn_standard,3.073,3.073,True,workstreams/forecasting/results/subgroups_test.csv
+fn_same_day,394,394,True,workstreams/forecasting/results/subgroups_test.csv
+fn_sum,3467,3467,True,workstreams/forecasting/results/subgroups_test.csv
+alerts_equal_first_plus_second,True,True,True,workstreams/forecasting/results/subgroups_test.csv
+within_mode_auc_0_5,True,True,True,workstreams/forecasting/results/subgroups_test.csv
+thr_0.2_0.4_alert_all,True,True,True,workstreams/forecasting/results/thresholds_validation.csv
+thr_0.5_to_0.8_identical,1,1,True,workstreams/forecasting/results/thresholds_validation.csv
+thr_0.9_tp,1.429,1.429,True,workstreams/forecasting/results/thresholds_validation.csv
+auc_without_first_class,"0,656","0,656",True,workstreams/forecasting/results/sensitivity.csv
+auc_ablation_test,"0,499","0,499",True,workstreams/forecasting/results/sensitivity.csv
+auc_ablation_val,"0,501","0,501",True,workstreams/forecasting/results/sensitivity.csv
+first_class_train,6.050/6.050,6.050/6.050,True,workstreams/forecasting/results/mode_baseline_train.csv
+test_mean_actual_constant,[3.4968],[3.4968],True,workstreams/prescriptive/results/promise_summary.csv
+policy_count,11,11,True,workstreams/prescriptive/results/promise_summary.csv
+plus1_test,"57,56%→26,82%","57,56%→26,82%",True,workstreams/prescriptive/results/promise_summary.csv
+plus1_days,"0,94","0,94",True,workstreams/prescriptive/results/promise_summary.csv
+q90_test_exceed_and_days,"0,00%/5,12","0,00%/5,12",True,workstreams/prescriptive/results/promise_summary.csv
+q80_val_test_exceed,"7,20%/5,11%","7,20%/5,11%",True,workstreams/prescriptive/results/promise_summary.csv
+pilot_modes,"[""First Class"", ""Same Day"", ""Second Class"", ""Standard Class""]","[""First Class"", ""Same Day"", ""Second Class"", ""Standard Class""]",True,workstreams/prescriptive/results/pilot_by_mode_test.csv
+first_class_new_promise_exceed,"('2', '0')","('2', '0')",True,workstreams/prescriptive/results/pilot_by_mode_test.csv
+standard_test_n,7.780,7.780,True,workstreams/prescriptive/results/pilot_by_mode_test.csv
+q95_test_exceed,"0,00%","0,00%",True,workstreams/prescriptive/results/pilot_by_mode_test.csv
+first_class_test_p_late,1.0,1.0,True,workstreams/prescriptive/results/risk_groups_test.csv
+readme_153_comparisons,True,True,True,README.md
+verify_checks_capacity_window_all_customers,True,True,True,workstreams/prescriptive/code/run_analysis.py
+homogeneous_fleet,True,True,True,workstreams/prescriptive/code/run_analysis.py
+guided_local_search,True,True,True,workstreams/prescriptive/code/run_analysis.py
+first_class_37_of_37_months,True,True,True,reports/data_quality/analysis_readiness_report.md
+c101_or,"10/828,94","10/828,94",True,workstreams/prescriptive/results/routing_summary.csv
+c101_nf,"21/1.870,69","21/1.870,69",True,workstreams/prescriptive/results/routing_summary.csv
+c101_reduction,"55,69%","55,69%",True,workstreams/prescriptive/results/routing_summary.csv
+nearest_failures,"[""c101/fleet10"", ""r101/base"", ""rc101/base""]","[""c101/fleet10"", ""r101/base"", ""rc101/base""]",True,workstreams/prescriptive/results/routing_summary.csv
+nf_same_at_q200_q240,True,True,True,workstreams/prescriptive/results/routing_summary.csv
+certified_configs,"[""c101/base"", ""c101/fleet10""]","[""c101/base"", ""c101/fleet10""]",True,workstreams/prescriptive/results/fleet_sizing_bounds.csv
+r101_gap,8–21,8–21,True,workstreams/prescriptive/results/fleet_sizing_bounds.csv
+rc101_gap,9–17,9–17,True,workstreams/prescriptive/results/fleet_sizing_bounds.csv
+time_limit_s,8,8,True,workstreams/prescriptive/results/run_manifest.json
+no_vehicle_fixed_cost,True,True,True,workstreams/prescriptive/results/run_manifest.json
+mirror_not_verified,True,True,True,workstreams/prescriptive/results/run_manifest.json
+replay_rc101,"17/1.700,09→16/1.718,55","17/1.700,09→16/1.718,55",True,workstreams/prescriptive/results/replay_validation.json
+warm_start_from_greedy,True,True,True,workstreams/prescriptive/code/run_analysis.py
+single_time_limit_8,1,1,True,workstreams/prescriptive/code/run_analysis.py
+fuel_combos_c101_or,27,27,True,workstreams/prescriptive/results/fuel_scenarios.csv
+fuel_range_vnd,596.835–6.896.755,596.835–6.896.755,True,workstreams/prescriptive/results/fuel_scenarios.csv
+fuel_ratio,"11,56","11,56",True,workstreams/prescriptive/results/fuel_scenarios.csv
+kaggle_identity_verified,False,False,True,workstreams/prescriptive/results/context_manifest.json
