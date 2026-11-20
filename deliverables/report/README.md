@@ -11,3 +11,8 @@ Nơi lưu báo cáo tổng hợp của Phương Quỳnh. Chưa nhận bản tổ
 
 - [storytelling_handoff.md](storytelling_handoff.md): bàn giao kể chuyện dữ liệu và thông điệp từ Lê Quang (luồng P0–P5, bốn phát hiện F1–F4, hình `figures/story_01` đến `story_04` PNG/SVG kiểm chứng qua `reports/storytelling/`).
 - [section_vi_dashboard.md](section_vi_dashboard.md): nháp nội dung Dashboard bàn giao ban đầu từ Anh Quốc.
+
+## Phần VII – Hạn chế và hướng phát triển (hạn 24/11)
+
+- [section_vii/limitations/](section_vii/limitations/README.md): mục 7.1 Hạn chế và dữ liệu cần bổ sung của Ngọc Quang (Markdown, Word, mã kiểm tra số liệu).
+- [section_vii/future_work/](section_vii/future_work/README.md): mục 7.2 Hướng phát triển của Hoài Phú.
