@@ -1,0 +1,2 @@
+﻿model,partition,n,threshold,tp,fp,fn,tn,precision,recall
+mode_baseline,test,13071,0.5,4057,503,3467,5044,0.889692982456,0.539207868155

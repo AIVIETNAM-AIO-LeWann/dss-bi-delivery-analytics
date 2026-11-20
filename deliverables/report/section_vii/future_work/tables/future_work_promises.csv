@@ -1,0 +1,5 @@
+﻿shipping_mode,n,current_days,proposed_days,current_late_count,proposed_exceedance_count,current_late_rate,proposed_exceedance_rate
+First Class,1974,1,2,1974,0,1.0,0.0
+Same Day,731,0,0,394,394,0.5389876880984952,0.5389876880984952
+Second Class,2586,2,3,2083,1565,0.8054911059551431,0.6051817478731631
+Standard Class,7780,4,5,3073,1546,0.39498714652956296,0.1987146529562982
