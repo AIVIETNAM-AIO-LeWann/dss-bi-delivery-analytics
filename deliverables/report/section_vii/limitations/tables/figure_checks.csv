@@ -67,6 +67,14 @@ first_class_new_promise_exceed,"('2', '0')","('2', '0')",True,workstreams/prescr
 standard_test_n,7.780,7.780,True,workstreams/prescriptive/results/pilot_by_mode_test.csv
 q95_test_exceed,"0,00%","0,00%",True,workstreams/prescriptive/results/pilot_by_mode_test.csv
 first_class_test_p_late,1.0,1.0,True,workstreams/prescriptive/results/risk_groups_test.csv
+second_class_precision,"2.083/2.586=80,55%","2.083/2.586=80,55%",True,workstreams/forecasting/results/subgroups_test.csv
+first_class_auc_undefined,,,True,workstreams/forecasting/results/subgroups_test.csv
+second_standard_late_rates,79.99/39.85,79.99/39.85,True,workstreams/descriptive/tables/01_shipping_mode_detailed.csv
+q90_days_equal_max_per_mode,"[[""First Class"", ""2""], [""Same Day"", ""1""], [""Second Class"", ""6""], [""Standard Class"", ""6""]]","[[""First Class"", ""2""], [""Same Day"", ""1""], [""Second Class"", ""6""], [""Standard Class"", ""6""]]",True,workstreams/prescriptive/results/promise_by_mode_region_test.csv
+q95_days_equal_q90,"[[""First Class"", ""2""], [""Same Day"", ""1""], [""Second Class"", ""6""], [""Standard Class"", ""6""]]","[[""First Class"", ""2""], [""Same Day"", ""1""], [""Second Class"", ""6""], [""Standard Class"", ""6""]]",True,workstreams/prescriptive/results/promise_by_mode_region_test.csv
+only_rc101_varied_on_replay,"[""rc101""]","[""rc101""]",True,workstreams/prescriptive/results/replay_validation.json
+section_vi_pages_scope,True,True,True,deliverables/report/section_vi_results_and_recommendations.md
+section_vi_no_independence_wording,False,False,True,deliverables/report/section_vi_results_and_recommendations.md
 readme_153_comparisons,True,True,True,README.md
 verify_checks_capacity_window_all_customers,True,True,True,workstreams/prescriptive/code/run_analysis.py
 homogeneous_fleet,True,True,True,workstreams/prescriptive/code/run_analysis.py

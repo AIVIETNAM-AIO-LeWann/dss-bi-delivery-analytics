@@ -210,6 +210,29 @@ def main():
     check('q95_test_exceed', pct(float(q95['proposed_exceedance_rate'])), '0,00%', src)
     check('first_class_test_p_late', one(rg, shipping_mode='First Class')['p_late'], '1.0', 'workstreams/prescriptive/results/risk_groups_test.csv')
 
+    sec = sg['Second Class']
+    check('second_class_precision', f"{vn(int(sec['tp']))}/{vn(int(sec['tp']) + int(sec['fp']))}={pct(float(sec['precision']))}",
+          '2.083/2.586=80,55%', 'workstreams/forecasting/results/subgroups_test.csv')
+    check('first_class_auc_undefined', sg['First Class']['roc_auc'], '', 'workstreams/forecasting/results/subgroups_test.csv')
+    check('second_standard_late_rates', f"{md['Second Class']['late_rate_pct']}/{md['Standard Class']['late_rate_pct']}",
+          '79.99/39.85', 'workstreams/descriptive/tables/01_shipping_mode_detailed.csv')
+
+    src = 'workstreams/prescriptive/results/promise_by_mode_region_test.csv'
+    q90days = sorted({(r['shipping_mode'], r['proposed_days']) for r in rows(root, src) if r['policy'] == 'q90_min100'})
+    check('q90_days_equal_max_per_mode', q90days,
+          [('First Class', '2'), ('Same Day', '1'), ('Second Class', '6'), ('Standard Class', '6')], src)
+    q95days = sorted({(r['shipping_mode'], r['proposed_days']) for r in rows(root, src) if r['policy'] == 'q95_min100'})
+    check('q95_days_equal_q90', q95days, q90days, src)
+
+    src = 'workstreams/prescriptive/results/replay_validation.json'
+    variations = json.loads((root / src).read_text(encoding='utf-8'))['timed_heuristic_variations']
+    check('only_rc101_varied_on_replay', [v['instance'] for v in variations], ['rc101'], src)
+
+    src = 'deliverables/report/section_vi_results_and_recommendations.md'
+    sec6 = (root / src).read_text(encoding='utf-8')
+    check('section_vi_pages_scope', all(s in sec6 for s in ['**02 · Rủi ro**', '**03 · Cam kết**', '`13.071` đơn tập test']), True, src)
+    check('section_vi_no_independence_wording', 'hoàn toàn độc lập với rủi ro' in sec6 or 'đều độc lập với rủi ro' in sec6, False, src)
+
     src = 'README.md'
     check('readme_153_comparisons', '153 phép so sánh' in (root / src).read_text(encoding='utf-8'), True, src)
     src = 'workstreams/prescriptive/code/run_analysis.py'
